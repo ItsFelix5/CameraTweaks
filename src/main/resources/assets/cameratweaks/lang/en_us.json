@@ -1,0 +1,24 @@
+{
+  "category.cameratweaks.cameratweaks": "Camera Tweaks",
+
+  "key.cameratweaks.freecam": "Freecam",
+  "cameratweaks.freecam.on": "Freecam toggled on",
+  "cameratweaks.freecam.off": "Freecam toggled off",
+
+  "key.cameratweaks.freecam.movement": "Toggle Freecam/Player Movement",
+  "cameratweaks.freecam.movement.on": "Controlling player",
+  "cameratweaks.freecam.movement.off": "Controlling camera",
+
+  "cameratweaks.freecam.camera.unknown": "Camera slot %s is empty, Press %s + %s to save your current freecam position",
+  "cameratweaks.freecam.camera.incorrect_dimension": "Camera %s is in %s.",
+  "cameratweaks.freecam.camera.saved": "Saved camera %s.",
+
+  "key.cameratweaks.fullbright": "Fullbright",
+  "cameratweaks.fullbright.on": "Enabled fullbright",
+  "cameratweaks.fullbright.off": "Disabled fullbright",
+
+  "key.cameratweaks.zoom": "Zoom",
+  "cameratweaks.zoom.set": "x%s",
+
+  "options.disableFog": "Disable Fog"
+}

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "cameratweaks",
+  "version": "${version}",
+  "name": "Camera Tweaks",
+  "icon": "assets/cameratweaks/icon.png",
+  "authors": [
+    "ItsFelix5"
+  ],
+  "contact": {
+    "website": "https://modrinth.com/project/shuttfup",
+    "repo": "https://github.com/ItsFelix5/stfu"
+  },
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "main": ["cameratweaks.Main"]
+  },
+  "mixins": [
+    "cameratweaks.mixins.json"
+  ],
+  "accessWidener": "cameratweaks.accesswidener",
+  "depends": {
+    "fabricloader": "*",
+    "minecraft": "*",
+    "fabric": "*"
+  }
+}

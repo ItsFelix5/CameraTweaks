@@ -1,0 +1,66 @@
+plugins {
+    id 'fabric-loom' version '1.9-SNAPSHOT'
+    id 'maven-publish'
+    id "com.modrinth.minotaur" version "2.+"
+}
+
+version = project.mod_version
+group = "io.github.itsfelix5"
+
+base {
+    archivesName = "CameraTweaks"
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+
+loom {
+    accessWidenerPath = file("src/main/resources/cameratweaks.accesswidener")
+}
+
+processResources {
+    inputs.property "version", project.version
+    filteringCharset "UTF-8"
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.encoding = "UTF-8"
+    it.options.release.set(21)
+}
+
+java {
+    if (JavaVersion.current() < JavaVersion.toVersion(21)) toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_CameraTweaks" }
+    }
+}
+
+publishing {
+    publications {
+        create("mavenJava", MavenPublication) {
+            artifactId = "CameraTweaks"
+            from components.java
+        }
+    }
+}
+
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "T1E4i1qj"
+    uploadFile = remapJar
+    loaders = ["fabric", "quilt"]
+    syncBodyFrom = rootProject.file("README.md").text
+}
+
+tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
