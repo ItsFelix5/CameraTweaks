@@ -29,6 +29,6 @@ public class MouseMixin {
     private Object changeSensitivity(SimpleOption<Double> instance) {
         double sensitivity = instance.getValue();
         if (!Keybinds.zoom.enabled()) return sensitivity;
-        return sensitivity * Math.tan(Math.toRadians(70 / Zoom.currZoom)) / 1.74747474;
+        return sensitivity * Math.tan(Math.PI / 4 / Zoom.currZoom);
     }
 }

@@ -11,11 +11,11 @@ public class Keybinds {
     public static final BetterKeybind fullBright = (BetterKeybind) KeyBindingHelper.registerKeyBinding(new BetterKeybind(
             "fullbright",
             GLFW.GLFW_KEY_Y,
-            ()->{
+            () -> {
                 Main.fullBright.setValue(true);
                 client.options.write();
             },
-            ()->{
+            () -> {
                 Main.fullBright.setValue(false);
                 client.options.write();
             },
@@ -76,7 +76,7 @@ public class Keybinds {
         }
 
         public void setEnabled(boolean enabled) {
-            if(enabled == this.enabled) return;
+            if (enabled == this.enabled) return;
             this.enabled = enabled;
             if (enabled) press.run();
             else release.run();
