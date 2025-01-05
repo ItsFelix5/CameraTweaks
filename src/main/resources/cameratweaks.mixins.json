@@ -14,8 +14,10 @@
     "MouseMixin",
     "PacketHandlerMixin",
     "RendererMixin",
-    "VideoOptionsScreenMixin"
+    "VideoOptionsScreenMixin",
+    "SodiumOptionsMixin"
   ],
+  "plugin": "cameratweaks.mixin.SodiumOnlyMixinPlugin",
   "injectors": {
     "defaultRequire": 1
   }

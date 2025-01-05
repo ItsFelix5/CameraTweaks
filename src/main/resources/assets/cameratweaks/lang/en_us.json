@@ -20,5 +20,6 @@
   "key.cameratweaks.zoom": "Zoom",
   "cameratweaks.zoom.set": "x%s",
 
-  "options.disableFog": "Disable Fog"
+  "options.disableFog": "Disable Fog",
+  "options.disableFog.tooltip": "Disable terrain fog allowing you to see further"
 }
