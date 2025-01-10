@@ -21,5 +21,8 @@
   "cameratweaks.zoom.set": "x%s",
 
   "options.disableFog": "Disable Fog",
-  "options.disableFog.tooltip": "Disable terrain fog allowing you to see further"
+  "options.disableFog.tooltip": "Disable terrain fog allowing you to see further",
+
+  "key.cameratweaks.thirdPersonModifier": "Third Person Distance Modifier",
+  "cameratweaks.thirdperson.distance": "Third person distance: %s blocks"
 }

@@ -40,6 +40,8 @@ public class Keybinds {
 
     public static final BetterKeybind zoom = (BetterKeybind) KeyBindingHelper.registerKeyBinding(new BetterKeybind("zoom", GLFW.GLFW_KEY_C, Zoom::start, Zoom::stop));
 
+    public static final BetterKeybind thirdPersonModifier = (BetterKeybind) KeyBindingHelper.registerKeyBinding(new BetterKeybind("thirdPersonModifier", GLFW.GLFW_KEY_J, ()->{}, ()->{}));
+
     @SuppressWarnings("EmptyMethod")
     public static void init() {}
 

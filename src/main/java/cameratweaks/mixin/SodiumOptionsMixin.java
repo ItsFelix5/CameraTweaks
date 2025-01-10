@@ -14,6 +14,7 @@ import java.util.function.Function;
 
 @Mixin(value = SodiumGameOptionPages.class, remap = false)
 public class SodiumOptionsMixin {
+    @SuppressWarnings("unchecked")
     @Redirect(method = "general", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/ImmutableList;copyOf(Ljava/util/Collection;)Lcom/google/common/collect/ImmutableList;"))
     private static <E> ImmutableList<E> addOptions(Collection<E> list) throws Exception {
         Class<?> Option = Class.forName("net.caffeinemc.mods.sodium.client.gui.options.Option");

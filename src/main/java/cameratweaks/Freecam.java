@@ -20,7 +20,6 @@ public class Freecam {
         client.gameRenderer.setRenderHand(false);
         speed = .5f;
         setPosition();
-        prev = pos;
         if (!Keybinds.playerMovement.enabled()) cameraMovement();
     }
 
@@ -51,7 +50,7 @@ public class Freecam {
             return;
         }
         if (!Keybinds.freecam.enabled()) Keybinds.freecam.setEnabled(true);
-        prev = pos = cameras[i];
+        pos = cameras[i];
     }
 
     public static void saveCamera(int i) {
@@ -62,7 +61,7 @@ public class Freecam {
 
     private static void setPosition() {
         Camera camera = client.gameRenderer.getCamera();
-        pos = new Util.Pos(client.world.getRegistryKey(), camera.getPos(), camera.getPitch(), camera.getYaw());
+        prev = pos = new Util.Pos(client.world.getRegistryKey(), camera.getPos(), camera.getPitch(), camera.getYaw());
     }
 
     public static void tick() {

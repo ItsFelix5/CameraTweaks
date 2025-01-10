@@ -7,19 +7,6 @@ import net.minecraft.world.World;
 
 public class Util {
     public static final MinecraftClient client = MinecraftClient.getInstance();
-//
-//    public static void subtitle(String subtitle) {
-//        if(client.inGameHud.overlayRemaining != 0) return;
-//        client.inGameHud.setCanShowChatDisabledScreen(false);
-//        client.inGameHud.overlayMessage = Text.translatable(subtitle);
-//        client.inGameHud.overlayRemaining = 30;
-//        client.inGameHud.overlayTinted = false;
-//    }
-//
-//    public static void clearSubtitle() {
-//        client.inGameHud.overlayMessage = null;
-//        client.inGameHud.overlayRemaining = 0;
-//    }
 
     @FunctionalInterface
     public interface Callback {

@@ -2,6 +2,7 @@ package cameratweaks.mixin;
 
 import cameratweaks.Freecam;
 import cameratweaks.Keybinds;
+import cameratweaks.ThirdPerson;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
@@ -10,7 +11,9 @@ import net.minecraft.world.BlockView;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Camera.class)
@@ -43,5 +46,10 @@ public abstract class CameraMixin {
         this.lastTickDelta = tickDelta;
         setRotation(MathHelper.lerpAngleDegrees(tickDelta, Freecam.prev.yaw, Freecam.pos.yaw), MathHelper.lerp(tickDelta, Freecam.prev.pitch, Freecam.pos.pitch));
         setPos(Freecam.prev.pos.lerp(Freecam.pos.pos, tickDelta));
+    }
+
+    @ModifyConstant(method = "update", constant = @Constant(floatValue = 4.0F))
+    private float changeDistance(float distance) {
+        return ThirdPerson.distance;
     }
 }
