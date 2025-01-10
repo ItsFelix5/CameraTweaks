@@ -13,10 +13,12 @@ public class Keybinds {
             GLFW.GLFW_KEY_Y,
             () -> {
                 Main.fullBright.setValue(true);
+                client.gameRenderer.getLightmapTextureManager().dirty = true; // Required for Bad Optimizations
                 client.options.write();
             },
             () -> {
                 Main.fullBright.setValue(false);
+                client.gameRenderer.getLightmapTextureManager().dirty = true;
                 client.options.write();
             },
             true

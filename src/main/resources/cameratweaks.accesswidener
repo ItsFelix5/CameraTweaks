@@ -1,3 +1,4 @@
 accessWidener v2 named
 accessible class net/minecraft/client/option/GameOptions$Visitor
 accessible field net/minecraft/client/option/KeyBinding KEY_TO_BINDINGS Ljava/util/Map;
+accessible field net/minecraft/client/render/LightmapTextureManager dirty Z
