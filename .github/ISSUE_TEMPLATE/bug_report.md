@@ -1,0 +1,40 @@
+name: Bug
+description: Report an issue.
+title: '[Bug] '
+labels:
+  - bug
+assignees:
+  - itsfelix5
+body:
+  - type: checkboxes
+    attributes:
+      label: Please confirm the following.
+      options:
+        - label: I have checked there is no [existing issue](https://github.com/ItsFelix5/CameraTweaks/issues?q=is%3Aissue+is%3Aopen+label%3A%22bug%22) for this
+          required: true
+        - label: I have checked the mod is up to date
+          required: true
+        - label: I have checked I am not using any mods that do the same thing
+          required: true
+  - type: dropdown
+    attributes:
+      label: What kind of issue is this
+      options:
+        - Crash
+        - Visual Issue
+        - Other
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Minecraft version
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Describe the bug
+      placeholder: >-
+        A clear and concise description of what the bug is, including steps to
+        reproduce, screenshots if a visual issue etc.
+    validations:
+      required: true

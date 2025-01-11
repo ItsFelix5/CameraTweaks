@@ -1,7 +1,7 @@
 # Camera Tweaks
-<img alt="Requires fabric api" height="56" style="margin-right:10px" src="badges/requires_fabricapi.svg">
-<img alt="Requires mod menu" height="56" style="margin-right:10px" src="badges/requires_modmenu.svg">
-<img alt="Requires YACL" height="56" style="margin-right:10px" src="badges/requires_YACL.svg">
+<span><img alt="Requires fabric api" height="56" style="margin-right:10px" src="https://raw.githubusercontent.com/ItsFelix5/CameraTweaks/refs/heads/master/.github/badges/requires_fabricapi.svg">
+<img alt="Requires mod menu" height="56" style="margin-right:10px" src="https://raw.githubusercontent.com/ItsFelix5/CameraTweaks/refs/heads/master/.github/badges/requires_modmenu.svg">
+<img alt="Requires YACL" height="56" style="margin-right:10px" src="https://raw.githubusercontent.com/ItsFelix5/CameraTweaks/refs/heads/master/.github/badges/requires_YACL.svg"></span>
 
 This mod adds a few new features to your camera in the game:
 ## ☀️ Fullbright
@@ -30,3 +30,20 @@ No fog removes the terrain fog from the game, this is very useful for in the net
 <img src="https://cdn.modrinth.com/data/T1E4i1qj/images/2906619879662a1cde731b25753eff8a35c9b465_350.webp" width="100%"/>
 
 No fog can be toggled in camera tweaks config, accessible via modmenu.
+
+
+## ❓ Faq
+#### I have a suggestion for this mod!
+If you have any suggestions, feel free to tell me!
+
+#### Is this mod compatible with X?
+Probably, I am trying to make this mod as compatible as I can. If there is a problematic conflict you can open an issue.
+
+#### Can I use this in my modpack?
+Yes, of course as long as it stays on modrinth!
+
+#### Can I upload this mod somewhere else?
+No, you can't redistribute this mod without my permission. You can only link back to this page.
+
+#### Can you port this to (Neo)Forge?
+No, but you might be able to use Sinytra Connector.
