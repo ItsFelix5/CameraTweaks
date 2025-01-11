@@ -1,6 +1,6 @@
 package cameratweaks.mixin;
 
-import cameratweaks.Main;
+import cameratweaks.Config;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.Fog;
@@ -14,6 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class BackgroundRendererMixin {
     @Inject(method = "applyFog", at = @At("HEAD"), cancellable = true)
     private static void applyFog(Camera camera, BackgroundRenderer.FogType fogType, Vector4f color, float viewDistance, boolean thickenFog, float tickDelta, CallbackInfoReturnable<Fog> cir) {
-        if (Main.disableFog.getValue() && fogType == BackgroundRenderer.FogType.FOG_TERRAIN) cir.setReturnValue(Fog.DUMMY);
+        if (Config.HANDLER.instance().disableFog && fogType == BackgroundRenderer.FogType.FOG_TERRAIN) cir.setReturnValue(Fog.DUMMY);
     }
 }

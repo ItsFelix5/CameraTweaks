@@ -3,7 +3,6 @@
   "id": "cameratweaks",
   "version": "${version}",
   "name": "Camera Tweaks",
-  "icon": "assets/cameratweaks/icon.png",
   "authors": [
     "ItsFelix5"
   ],
@@ -14,7 +13,8 @@
   "license": "MIT",
   "environment": "client",
   "entrypoints": {
-    "main": ["cameratweaks.Main"]
+    "main": ["cameratweaks.Main"],
+    "modmenu": ["cameratweaks.Config"]
   },
   "mixins": [
     "cameratweaks.mixins.json"
@@ -22,7 +22,9 @@
   "accessWidener": "cameratweaks.accesswidener",
   "depends": {
     "fabricloader": "*",
-    "minecraft": "*",
-    "fabric": "*"
+    "minecraft": ">=1.21.4",
+    "fabric": "*",
+    "yet_another_config_lib_v3": ">=3.6.2",
+    "modmenu": ">=13.0.0"
   }
 }

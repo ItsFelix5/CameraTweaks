@@ -13,7 +13,10 @@ base {
 
 repositories {
     maven {
-        url = uri("https://api.modrinth.com/maven")
+        url 'https://maven.isxander.dev/releases'
+    }
+    maven {
+        url = "https://maven.terraformersmc.com/"
     }
 }
 
@@ -22,7 +25,8 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.minecraft_version}+build.${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}+${project.minecraft_version}"
-    compileOnly "maven.modrinth:sodium:mc${project.minecraft_version}-${project.sodium_version}-fabric"
+    modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}+${project.minecraft_version}-fabric"
+    modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 }
 
 loom {

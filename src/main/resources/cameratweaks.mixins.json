@@ -13,11 +13,8 @@
     "LightmapTextureManagerMixin",
     "MouseMixin",
     "PacketHandlerMixin",
-    "RendererMixin",
-    "VideoOptionsScreenMixin",
-    "SodiumOptionsMixin"
+    "RendererMixin"
   ],
-  "plugin": "cameratweaks.mixin.SodiumOnlyMixinPlugin",
   "injectors": {
     "defaultRequire": 1
   }

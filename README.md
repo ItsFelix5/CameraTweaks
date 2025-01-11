@@ -1,7 +1,11 @@
 # Camera Tweaks
+<img alt="Requires fabric api" height="56" style="margin-right:10px" src="badges/requires_fabricapi.svg">
+<img alt="Requires mod menu" height="56" style="margin-right:10px" src="badges/requires_modmenu.svg">
+<img alt="Requires YACL" height="56" style="margin-right:10px" src="badges/requires_YACL.svg">
+
 This mod adds a few new features to your camera in the game:
 ## ☀️ Fullbright
-Fullbright makes the game always render at full brightness, this is very practical when mining in the dark.
+Fullbright makes the game always render at full brightness, this is very useful when mining in the dark.
 
 <img src="https://cdn.modrinth.com/data/T1E4i1qj/images/eaa3c2514bf56cdc450c91a8e30cad99eac125e2.png" width="100%"/>
 
@@ -25,4 +29,4 @@ No fog removes the terrain fog from the game, this is very useful for in the net
 
 <img src="https://cdn.modrinth.com/data/T1E4i1qj/images/2906619879662a1cde731b25753eff8a35c9b465_350.webp" width="100%"/>
 
-No fog can be toggled in your video settings.
+No fog can be toggled in camera tweaks config, accessible via modmenu.

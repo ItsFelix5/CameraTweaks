@@ -13,6 +13,8 @@
   "cameratweaks.freecam.camera.incorrect_dimension": "Camera %s is in %s.",
   "cameratweaks.freecam.camera.saved": "Saved camera %s.",
 
+  "options.fullbright": "Fullbright",
+  "options.fullbright.tooltip": "Makes everything bright, regardless of light level",
   "key.cameratweaks.fullbright": "Fullbright",
   "cameratweaks.fullbright.on": "Enabled fullbright",
   "cameratweaks.fullbright.off": "Disabled fullbright",

@@ -12,14 +12,14 @@ public class Keybinds {
             "fullbright",
             GLFW.GLFW_KEY_Y,
             () -> {
-                Main.fullBright.setValue(true);
+                Config.HANDLER.instance().fullbright = true;
                 client.gameRenderer.getLightmapTextureManager().dirty = true; // Required for Bad Optimizations
-                client.options.write();
+                Config.HANDLER.save();
             },
             () -> {
-                Main.fullBright.setValue(false);
+                Config.HANDLER.instance().fullbright = false;
                 client.gameRenderer.getLightmapTextureManager().dirty = true;
-                client.options.write();
+                Config.HANDLER.save();
             },
             true
     ));
@@ -84,10 +84,6 @@ public class Keybinds {
             this.enabled = enabled;
             if (enabled) press.run();
             else release.run();
-        }
-
-        public void setEnabled(boolean enabled, boolean b) {
-            this.enabled = enabled;
         }
     }
 }
