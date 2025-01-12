@@ -1,13 +1,17 @@
 # Camera Tweaks
 <span>
-<a href="https://modrinth.com/mod/fabric-api"><img alt="Requires fabric api" height="56" style="margin-right:10px" src="https://raw.githubusercontent.com/ItsFelix5/CameraTweaks/refs/heads/master/.github/badges/requires_fabricapi.
-svg"></a>
-<a href="https://modrinth.com/mod/modmenu"><img alt="Requires mod menu" height="56" style="margin-right:10px" src="https://raw.githubusercontent.com/ItsFelix5/CameraTweaks/refs/heads/master/.
-github/badges/requires_modmenu.svg"></a>
-<a href="https://modrinth.com/mod/yacl"><img alt="Requires YACL" height="56" style="margin-right:10px" src="https://raw.githubusercontent.com/ItsFelix5/CameraTweaks/refs/heads/master/.
-github/badges/requires_YACL.svg"></a>
-<img alt="Recommends STFU" height="56" style="margin-right:10px" src="https://raw.githubusercontent.com/ItsFelix5/CameraTweaks/refs/heads/master/.
-github/badges/recommends_STFU.svg">
+<a href="https://modrinth.com/mod/fabric-api">
+<img alt="Requires fabric api" height="56" style="margin-right:10px" src="https://raw.githubusercontent.com/ItsFelix5/CameraTweaks/refs/heads/master/.github/badges/requires_fabricapi.svg">
+</a>
+<a href="https://modrinth.com/mod/modmenu">
+<img alt="Requires mod menu" height="56" style="margin-right:10px" src="https://raw.githubusercontent.com/ItsFelix5/CameraTweaks/refs/heads/master/.github/badges/requires_modmenu.svg">
+</a>
+<a href="https://modrinth.com/mod/yacl">
+<img alt="Requires YACL" height="56" style="margin-right:10px" src="https://raw.githubusercontent.com/ItsFelix5/CameraTweaks/refs/heads/master/.github/badges/requires_YACL.svg">
+</a>
+<a href="https://modrinth.com/mod/shuttfup">
+<img alt="Recommends STFU" height="56" style="margin-right:10px" src="https://raw.githubusercontent.com/ItsFelix5/CameraTweaks/refs/heads/master/.github/badges/recommends_STFU.svg">
+</a>
 </span>
 
 This mod adds a few new features to your camera in the game:
