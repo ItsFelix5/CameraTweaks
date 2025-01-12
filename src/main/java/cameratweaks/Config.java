@@ -14,6 +14,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+import static cameratweaks.Util.client;
+
 public class Config implements ModMenuApi {
     public static ConfigClassHandler<Config> HANDLER = ConfigClassHandler.createBuilder(Config.class)
             .id(Identifier.of("cameratweaks", "config"))
@@ -45,8 +47,11 @@ public class Config implements ModMenuApi {
                         .option(Option.<Boolean>createBuilder()
                                 .name(Text.translatable("options.fullbright"))
                                 .description(OptionDescription.of(Text.translatable("options.fullbright.tooltip")))
-                                .binding(false, Keybinds.fullBright::enabled, Keybinds.fullBright::setEnabled)
-                                .controller(TickBoxControllerBuilder::create)
+                                .binding(false, Keybinds.fullBright::enabled, enabled->{
+                                    Keybinds.fullBright.setEnabledNoCB(enabled);
+                                    Config.HANDLER.instance().fullbright = false;
+                                    client.gameRenderer.getLightmapTextureManager().dirty = true;
+                                }).controller(TickBoxControllerBuilder::create)
                                 .build())
                         .build())
                 .build()

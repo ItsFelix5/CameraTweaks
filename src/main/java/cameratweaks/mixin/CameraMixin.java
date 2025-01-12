@@ -1,6 +1,7 @@
 package cameratweaks.mixin;
 
 import cameratweaks.Freecam;
+import cameratweaks.Freelook;
 import cameratweaks.Keybinds;
 import cameratweaks.ThirdPerson;
 import net.minecraft.client.render.Camera;
@@ -10,10 +11,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockView;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Camera.class)
@@ -46,6 +44,23 @@ public abstract class CameraMixin {
         this.lastTickDelta = tickDelta;
         setRotation(MathHelper.lerpAngleDegrees(tickDelta, Freecam.prev.yaw, Freecam.pos.yaw), MathHelper.lerp(tickDelta, Freecam.prev.pitch, Freecam.pos.pitch));
         setPos(Freecam.prev.pos.lerp(Freecam.pos.pos, tickDelta));
+    }
+
+    @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Camera;setRotation(FF)V", ordinal = 1))
+    private void changeRotation(Camera instance, float yaw, float pitch) {
+        if (Freelook.enabled) {
+            System.out.println(yaw + " " + pitch);
+            this.setRotation(Freelook.yaw, Freelook.pitch);
+        }
+        else this.setRotation(yaw, pitch);
+    }
+
+    @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Camera;setRotation(FF)V", ordinal = 2))
+    private void heeh(Camera instance, float yaw, float pitch) {
+        if (Freelook.enabled) {
+            System.out.println(yaw + " a " + pitch);
+        }
+        this.setRotation(yaw, pitch);
     }
 
     @ModifyConstant(method = "update", constant = @Constant(floatValue = 4.0F))

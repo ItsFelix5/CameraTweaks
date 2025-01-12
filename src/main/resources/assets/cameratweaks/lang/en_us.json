@@ -26,5 +26,10 @@
   "options.disableFog.tooltip": "Disable terrain fog allowing you to see further",
 
   "key.cameratweaks.thirdPersonModifier": "Third Person Distance Modifier",
-  "cameratweaks.thirdperson.distance": "Third person distance: %s blocks"
+  "cameratweaks.thirdperson.distance": "Third person distance: %s blocks",
+
+  "key.cameratweaks.freelook": "Freelook",
+  "key.cameratweaks.freelook.hold": "Freelook (Hold)",
+  "cameratweaks.freelook.on": "Freelooking",
+  "cameratweaks.freelook.off": "Stopped freelooking"
 }

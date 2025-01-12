@@ -44,8 +44,13 @@ public class Keybinds {
 
     public static final BetterKeybind thirdPersonModifier = (BetterKeybind) KeyBindingHelper.registerKeyBinding(new BetterKeybind("thirdPersonModifier", GLFW.GLFW_KEY_J, ()->{}, ()->{}));
 
-    @SuppressWarnings("EmptyMethod")
-    public static void init() {}
+    public static final BetterKeybind freelook = (BetterKeybind) KeyBindingHelper.registerKeyBinding(new BetterKeybind("freelook", GLFW.GLFW_KEY_UNKNOWN, Freelook::start, Freelook::stop, true));
+    private static final BetterKeybind freelook_hold = (BetterKeybind) KeyBindingHelper.registerKeyBinding(new BetterKeybind("freelook.hold", GLFW.GLFW_KEY_UNKNOWN,
+            ()->freelook.setEnabled(true), ()->freelook.setEnabled(false)));
+
+    public static void init() {
+        fullBright.setEnabledNoCB(Config.HANDLER.instance().fullbright);
+    }
 
     public static class BetterKeybind extends KeyBinding {
         private final Util.Callback press;
@@ -84,6 +89,10 @@ public class Keybinds {
             this.enabled = enabled;
             if (enabled) press.run();
             else release.run();
+        }
+
+        public void setEnabledNoCB(boolean enabled) {
+            this.enabled = enabled;
         }
     }
 }

@@ -1,13 +1,12 @@
 package cameratweaks.mixin;
 
-import cameratweaks.Freecam;
-import cameratweaks.Keybinds;
-import cameratweaks.ThirdPerson;
-import cameratweaks.Zoom;
+import cameratweaks.*;
 import net.minecraft.client.Mouse;
 import net.minecraft.client.input.Scroller;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.client.option.SimpleOption;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import org.joml.Vector2i;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,5 +32,23 @@ public class MouseMixin {
         double sensitivity = instance.getValue();
         if (!Keybinds.zoom.enabled()) return sensitivity;
         return sensitivity * Math.tan(Math.PI / 4 / Zoom.currZoom);
+    }
+
+    @Redirect(method = "updateMouse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;changeLookDirection(DD)V"))
+    private void rotateFreelook(ClientPlayerEntity instance, double cursorDeltaX, double cursorDeltaY) {
+        if(Keybinds.freelook.enabled()) {
+            Freelook.pitch += (float) cursorDeltaY * 0.15F;
+            Freelook.yaw += (float) cursorDeltaX * 0.15F;
+        } else {
+            instance.changeLookDirection(cursorDeltaX, cursorDeltaY);
+            if(Freelook.enabled) {
+                Entity entity = client.getCameraEntity();
+                if(entity == null) return;
+                Freelook.pitch = MathHelper.wrapDegrees(MathHelper.lerpAngleDegrees(0.3f, Freelook.pitch, entity.getPitch()));
+                Freelook.yaw = MathHelper.wrapDegrees(MathHelper.lerpAngleDegrees(0.3f, Freelook.yaw, entity.getYaw()));
+
+                if (Math.abs((MathHelper.wrapDegrees(entity.getPitch()) - Freelook.pitch) + (MathHelper.wrapDegrees(entity.getYaw()) - Freelook.yaw)) < 0.3f) Freelook.enabled = false;
+            }
+        }
     }
 }

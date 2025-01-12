@@ -8,7 +8,7 @@ public class Zoom {
     public static float prevZoom = 1F, currZoom = 1F, zoom = 1F;
 
     public static void start() {
-        zoom = 3F;
+        zoom = 5F;
     }
 
     public static void stop() {
@@ -16,6 +16,7 @@ public class Zoom {
     }
 
     public static void zoom(float zoom) {
+        if(zoom < 0.25f) return;
         Zoom.zoom = zoom;
         client.player.sendMessage(Text.translatable("cameratweaks.zoom.set", (int) zoom), true);
     }
