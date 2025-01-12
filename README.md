@@ -32,6 +32,11 @@ No fog removes the terrain fog from the game, this is very useful for in the net
 No fog can be toggled in camera tweaks config, accessible via modmenu.
 
 
+## 🎥 Freelook
+Freelook allows you to look around without changing the direction you are walking in, this is very useful for looking around while flying.
+
+You can set either hold or toggle keybinds for this in controls.
+
 ## ❓ Faq
 #### I have a suggestion for this mod!
 If you have any suggestions, feel free to tell me!
