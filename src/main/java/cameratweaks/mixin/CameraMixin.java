@@ -48,19 +48,8 @@ public abstract class CameraMixin {
 
     @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Camera;setRotation(FF)V", ordinal = 1))
     private void changeRotation(Camera instance, float yaw, float pitch) {
-        if (Freelook.enabled) {
-            System.out.println(yaw + " " + pitch);
-            this.setRotation(Freelook.yaw, Freelook.pitch);
-        }
+        if (Freelook.enabled) this.setRotation(Freelook.yaw, Freelook.pitch);
         else this.setRotation(yaw, pitch);
-    }
-
-    @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Camera;setRotation(FF)V", ordinal = 2))
-    private void heeh(Camera instance, float yaw, float pitch) {
-        if (Freelook.enabled) {
-            System.out.println(yaw + " a " + pitch);
-        }
-        this.setRotation(yaw, pitch);
     }
 
     @ModifyConstant(method = "update", constant = @Constant(floatValue = 4.0F))
