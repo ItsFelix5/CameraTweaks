@@ -8,11 +8,6 @@ import net.minecraft.world.World;
 public class Util {
     public static final MinecraftClient client = MinecraftClient.getInstance();
 
-    @FunctionalInterface
-    public interface Callback {
-        void run();
-    }
-
     public static class Pos {
         public final RegistryKey<World> dimension;
         public Vec3d pos;

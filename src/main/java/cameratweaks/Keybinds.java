@@ -42,27 +42,29 @@ public class Keybinds {
 
     public static final BetterKeybind zoom = (BetterKeybind) KeyBindingHelper.registerKeyBinding(new BetterKeybind("zoom", GLFW.GLFW_KEY_C, Zoom::start, Zoom::stop));
 
-    public static final BetterKeybind thirdPersonModifier = (BetterKeybind) KeyBindingHelper.registerKeyBinding(new BetterKeybind("thirdPersonModifier", GLFW.GLFW_KEY_J, ()->{}, ()->{}));
+    public static final BetterKeybind thirdPersonModifier = (BetterKeybind) KeyBindingHelper.registerKeyBinding(new BetterKeybind("thirdPersonModifier", GLFW.GLFW_KEY_UNKNOWN, ()->{}, ()->{}));
 
     public static final BetterKeybind freelook = (BetterKeybind) KeyBindingHelper.registerKeyBinding(new BetterKeybind("freelook", GLFW.GLFW_KEY_UNKNOWN, Freelook::start, Freelook::stop, true));
-    private static final BetterKeybind freelook_hold = (BetterKeybind) KeyBindingHelper.registerKeyBinding(new BetterKeybind("freelook.hold", GLFW.GLFW_KEY_UNKNOWN,
-            ()->freelook.setEnabled(true), ()->freelook.setEnabled(false)));
+
+    static {
+        KeyBindingHelper.registerKeyBinding(new BetterKeybind("freelook.hold", GLFW.GLFW_KEY_UNKNOWN, () -> freelook.setEnabled(true), () -> freelook.setEnabled(false)));
+    }
 
     public static void init() {
         fullBright.setEnabledNoCB(Config.HANDLER.instance().fullbright);
     }
 
     public static class BetterKeybind extends KeyBinding {
-        private final Util.Callback press;
-        private final Util.Callback release;
+        private final Runnable press;
+        private final Runnable release;
         private final boolean toggle;
         private boolean enabled = false;
 
-        private BetterKeybind(String translationKey, int keyCode, Util.Callback press, Util.Callback release) {
+        private BetterKeybind(String translationKey, int keyCode, Runnable press, Runnable release) {
             this(translationKey, keyCode, press, release, false);
         }
 
-        private BetterKeybind(String translationKey, int keyCode, Util.Callback press, Util.Callback release, boolean toggle) {
+        private BetterKeybind(String translationKey, int keyCode, Runnable press, Runnable release, boolean toggle) {
             super("key.cameratweaks." + translationKey, keyCode, "category.cameratweaks.cameratweaks");
             this.press = press;
             this.release = release;

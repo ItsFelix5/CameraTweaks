@@ -8,13 +8,15 @@
     "CameraMixin",
     "ClientMixin",
     "EntityMixin",
-    "GameOptionsMixin",
     "HeldItemRendererMixin",
     "KeyboardMixin",
     "LightmapTextureManagerMixin",
     "MouseMixin",
+    "OptionListWidgetMixin",
+    "OptionListWidgetMixin$GroupSeparatorEntryMixin",
     "PacketHandlerMixin",
-    "RendererMixin"
+    "RendererMixin",
+    "YACLScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

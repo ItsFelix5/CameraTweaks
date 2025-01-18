@@ -1,6 +1,10 @@
 {
   "category.cameratweaks.cameratweaks": "Camera Tweaks",
 
+  "cameratweaks.options.general": "General",
+  "cameratweaks.options.thirdperson": "Third Person",
+  "cameratweaks.options.new": "Add new",
+
   "key.cameratweaks.freecam": "Freecam",
   "cameratweaks.freecam.on": "Freecam toggled on",
   "cameratweaks.freecam.off": "Freecam toggled off",
@@ -13,8 +17,8 @@
   "cameratweaks.freecam.camera.incorrect_dimension": "Camera %s is in %s.",
   "cameratweaks.freecam.camera.saved": "Saved camera %s.",
 
-  "options.fullbright": "Fullbright",
-  "options.fullbright.tooltip": "Makes everything bright, regardless of light level",
+  "cameratweaks.options.fullbright": "Fullbright",
+  "cameratweaks.options.fullbright.description": "Makes everything bright, regardless of light level",
   "key.cameratweaks.fullbright": "Fullbright",
   "cameratweaks.fullbright.on": "Enabled fullbright",
   "cameratweaks.fullbright.off": "Disabled fullbright",
@@ -22,8 +26,8 @@
   "key.cameratweaks.zoom": "Zoom",
   "cameratweaks.zoom.set": "x%s",
 
-  "options.disableFog": "Disable Fog",
-  "options.disableFog.tooltip": "Disable terrain fog allowing you to see further",
+  "cameratweaks.options.disableFog": "Disable Fog",
+  "cameratweaks.options.disableFog.description": "Disable terrain fog allowing you to see further",
 
   "key.cameratweaks.thirdPersonModifier": "Third Person Distance Modifier",
   "cameratweaks.thirdperson.distance": "Third person distance: %s blocks",
@@ -31,5 +35,30 @@
   "key.cameratweaks.freelook": "Freelook",
   "key.cameratweaks.freelook.hold": "Freelook (Hold)",
   "cameratweaks.freelook.on": "Freelooking",
-  "cameratweaks.freelook.off": "Stopped freelooking"
+  "cameratweaks.freelook.off": "Stopped freelooking",
+
+  "cameratweaks.options.thirdperson.back": "Vanilla Back",
+  "cameratweaks.options.thirdperson.front": "Vanilla Front",
+  "cameratweaks.options.thirdperson.custom": "Custom Third Person %s",
+
+  "cameratweaks.options.thirdperson.key": "Keybind",
+  "cameratweaks.options.thirdperson.key.description": "The key used to trigger this",
+
+  "cameratweaks.options.thirdperson.x": "Distance",
+  "cameratweaks.options.thirdperson.x.description": "The camera's X offset",
+  "cameratweaks.options.thirdperson.y": "Vertical Offset",
+  "cameratweaks.options.thirdperson.y.description": "The camera's Y offset",
+  "cameratweaks.options.thirdperson.z": "Horizontal Offset",
+  "cameratweaks.options.thirdperson.z.description": "The camera's Z offset",
+
+  "cameratweaks.options.thirdperson.pitch": "Pitch",
+  "cameratweaks.options.thirdperson.pitch.description": "The camera's vertical rotation offset",
+  "cameratweaks.options.thirdperson.yaw": "Yaw",
+  "cameratweaks.options.thirdperson.yaw.description": "The camera's horizontal rotation offset",
+
+  "cameratweaks.options.thirdperson.invert": "Invert",
+  "cameratweaks.options.thirdperson.invert.description": "If the camera should be looking at the players face",
+  "cameratweaks.options.thirdperson.collision": "Collision",
+  "cameratweaks.options.thirdperson.collision.description": "If the camera should collide with blocks\nWARNING: Some things may not be visible because of smartcull"
+
 }

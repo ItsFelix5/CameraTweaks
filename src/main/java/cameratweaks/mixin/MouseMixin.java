@@ -4,7 +4,6 @@ import cameratweaks.*;
 import net.minecraft.client.Mouse;
 import net.minecraft.client.input.Scroller;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.option.Perspective;
 import net.minecraft.client.option.SimpleOption;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
@@ -21,7 +20,7 @@ public class MouseMixin {
     private Vector2i onScroll(Scroller instance, double horizontal, double vertical) {
         Vector2i vector2i = instance.update(horizontal, vertical);
         if (Keybinds.zoom.enabled()) Zoom.zoom(Zoom.zoom + vector2i.y * 0.1F * Zoom.zoom);
-        else if (client.options.getPerspective() != Perspective.FIRST_PERSON && Keybinds.thirdPersonModifier.enabled()) ThirdPerson.modifyDistance(vector2i.y * 0.1F);
+        else if (ThirdPerson.current != null && Keybinds.thirdPersonModifier.enabled()) ThirdPerson.modifyDistance(vector2i.y * 0.1F);
         else if (Keybinds.freecam.enabled() && !Keybinds.playerMovement.enabled()) Freecam.speed = MathHelper.clamp(Freecam.speed + (float) vector2i.y * 0.05F, 0.0F, 6F);
         else return vector2i;
         return new Vector2i(0, 0);

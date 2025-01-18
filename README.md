@@ -1,17 +1,9 @@
 # Camera Tweaks
 <span>
-<a href="https://modrinth.com/mod/fabric-api">
-<img alt="Requires fabric api" height="56" style="margin-right:10px" src="https://raw.githubusercontent.com/ItsFelix5/CameraTweaks/refs/heads/master/.github/badges/requires_fabricapi.svg">
-</a>
-<a href="https://modrinth.com/mod/modmenu">
-<img alt="Requires mod menu" height="56" style="margin-right:10px" src="https://raw.githubusercontent.com/ItsFelix5/CameraTweaks/refs/heads/master/.github/badges/requires_modmenu.svg">
-</a>
-<a href="https://modrinth.com/mod/yacl">
-<img alt="Requires YACL" height="56" style="margin-right:10px" src="https://raw.githubusercontent.com/ItsFelix5/CameraTweaks/refs/heads/master/.github/badges/requires_YACL.svg">
-</a>
-<a href="https://modrinth.com/mod/shuttfup">
-<img alt="Recommends STFU" height="56" style="margin-right:10px" src="https://raw.githubusercontent.com/ItsFelix5/CameraTweaks/refs/heads/master/.github/badges/recommends_STFU.svg">
-</a>
+<a href="https://modrinth.com/mod/fabric-api"><img alt="Requires fabric api" src="https://raw.githubusercontent.com/ItsFelix5/CameraTweaks/refs/heads/master/.github/badges/requires_fabricapi.svg"></a>
+<a href="https://modrinth.com/mod/modmenu"><img alt="Requires mod menu" src="https://raw.githubusercontent.com/ItsFelix5/CameraTweaks/refs/heads/master/.github/badges/requires_modmenu.svg"></a>
+<a href="https://modrinth.com/mod/yacl"><img alt="Requires YACL" src="https://raw.githubusercontent.com/ItsFelix5/CameraTweaks/refs/heads/master/.github/badges/requires_YACL.svg"></a>
+<a href="https://modrinth.com/mod/shuttfup"><img alt="Recommends STFU" src="https://raw.githubusercontent.com/ItsFelix5/CameraTweaks/refs/heads/master/.github/badges/recommends_STFU.svg"></a>
 </span>
 
 This mod adds a few new features to your camera in the game:
@@ -42,11 +34,17 @@ No fog removes the terrain fog from the game, this is very useful for in the net
 
 No fog can be toggled in camera tweaks config, accessible via modmenu.
 
-
 ## 🎥 Freelook
 Freelook allows you to look around without changing the direction you are walking in, this is very useful for looking around while flying.
 
 You can set either hold or toggle keybinds for this in controls.
+
+## Custom Third Persons
+You can set custom third person views and modify the existing ones in the config, allowing for better overviews and preventing the middle of your screen being blocked by the player.
+
+<img src="https://cdn.modrinth.com/data/T1E4i1qj/images/72cefbef552b526e812862853c92f7181d30b3d5.png" width="100%"/>
+
+You can also set a key to temporarily modify the third person distance.
 
 ## ❓ Faq
 #### I have a suggestion for this mod!

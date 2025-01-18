@@ -1,9 +1,13 @@
 package cameratweaks.mixin;
 
+import cameratweaks.Config;
 import cameratweaks.Freecam;
 import cameratweaks.Keybinds;
+import cameratweaks.ThirdPerson;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.option.Perspective;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,6 +21,14 @@ public class ClientMixin {
     @Redirect(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBinding;wasPressed()Z", ordinal = 0))
     private boolean preventPerspectiveChange(KeyBinding instance) {
         return !Keybinds.freecam.enabled() && instance.wasPressed();
+    }
+
+    @Redirect(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/GameOptions;setPerspective(Lnet/minecraft/client/option/Perspective;)V"))
+    private void preventPerspectiveChange(GameOptions instance, Perspective perspective) {
+        ThirdPerson.distanceOffset = 0.0F;
+        if(perspective == Perspective.THIRD_PERSON_BACK) ThirdPerson.current = Config.HANDLER.instance().thirdPersons.get(0);
+        else if(perspective == Perspective.THIRD_PERSON_FRONT) ThirdPerson.current = Config.HANDLER.instance().thirdPersons.get(1);
+        instance.setPerspective(perspective);
     }
 
     @Redirect(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBinding;wasPressed()Z", ordinal = 2))
