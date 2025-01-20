@@ -81,7 +81,7 @@ public abstract class OptionListWidgetMixin extends ElementListWidgetExt<OptionL
             });
         }
 
-        @Inject(method = "render", at = @At("TAIL"))
+        @Inject(method = "render", at = @At("TAIL"), remap = true)
         public void render(DrawContext graphics, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta, CallbackInfo ci) {
             if(removeListButton != null) {
                 removeListButton.setY(expandMinimizeButton.getY());
@@ -89,7 +89,7 @@ public abstract class OptionListWidgetMixin extends ElementListWidgetExt<OptionL
             }
         }
 
-        @Inject(method = "children", at = @At("HEAD"), cancellable = true)
+        @Inject(method = "children", at = @At("HEAD"), cancellable = true, remap = true)
         public void children(CallbackInfoReturnable<List<? extends Element>> cir) {
             if(removeListButton != null) cir.setReturnValue(ImmutableList.of(expandMinimizeButton, removeListButton));
         }

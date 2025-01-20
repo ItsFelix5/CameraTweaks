@@ -39,7 +39,7 @@ Freelook allows you to look around without changing the direction you are walkin
 
 You can set either hold or toggle keybinds for this in controls.
 
-## Custom Third Persons
+## 🚶 Custom Third Persons
 You can set custom third person views and modify the existing ones in the config, allowing for better overviews and preventing the middle of your screen being blocked by the player.
 
 <img src="https://cdn.modrinth.com/data/T1E4i1qj/images/72cefbef552b526e812862853c92f7181d30b3d5.png" width="100%"/>
