@@ -48,7 +48,7 @@ You can also set a key to temporarily modify the third person distance.
 
 ## ❓ Faq
 #### I have a suggestion for this mod!
-If you have any suggestions, feel free to [tell me](https://github.com/ItsFelix5/CameraTweaks/issues/new?assignees=itsfelix5&labels=Incompatibility&projects=&template=feature_request.yml&title=%5BSuggestion%5D+)!
+If you have any suggestions, feel free to [tell me](https://github.com/ItsFelix5/CameraTweaks/issues/new?assignees=itsfelix5&labels=enhancement&projects=&template=feature_request.yml&title=%5BSuggestion%5D+)!
 
 #### Is this mod compatible with X?
 Probably, I am trying to make this mod as compatible as I can. If there is a problematic conflict you can [open an issue](https://github.com/ItsFelix5/CameraTweaks/issues/new?assignees=itsfelix5&labels=Incompatibility&projects=&template=feature_request.yml&title=%5BSuggestion%5D+).

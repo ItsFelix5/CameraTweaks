@@ -31,6 +31,7 @@ public abstract class YACLScreenMixin implements Runnable {
 
     @Redirect(method = "onOptionChanged", at = @At(value = "INVOKE", target = "Ldev/isxander/yacl3/api/utils/OptionUtils;consumeOptions(Ldev/isxander/yacl3/api/YetAnotherConfigLib;Ljava/util/function/Function;)V", ordinal = 0))
     private void onOptionChanged(YetAnotherConfigLib yacl, Function<Option<?>, Boolean> func) {
+        if(ThirdPerson.pending == null) return;
         if(ThirdPerson.pending.size() != Config.HANDLER.instance().thirdPersons.size()) {
             pendingChanges = true;
             return;
