@@ -10,7 +10,7 @@ body:
       attributes:
           label: Please confirm the following.
           options:
-              - label: I have checked there is no [existing issue](https://github.com/ItsFelix5/CameraTweaks/issues?q=is%3Aissue+is%3Aopen+label%3A%22bug%22) for this
+              - label: I have checked there is no [existing issue](https://github.com/ItsFelix5/CameraTweaks/issues?q=is%3Aissue+label%3A%22bug%22) for this
                 required: true
               - label: I have checked the mod is up to date
                 required: true

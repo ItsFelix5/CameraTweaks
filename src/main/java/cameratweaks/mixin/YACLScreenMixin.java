@@ -31,20 +31,22 @@ public abstract class YACLScreenMixin implements Runnable {
 
     @Redirect(method = "onOptionChanged", at = @At(value = "INVOKE", target = "Ldev/isxander/yacl3/api/utils/OptionUtils;consumeOptions(Ldev/isxander/yacl3/api/YetAnotherConfigLib;Ljava/util/function/Function;)V", ordinal = 0))
     private void onOptionChanged(YetAnotherConfigLib yacl, Function<Option<?>, Boolean> func) {
-        if(ThirdPerson.pending == null) return;
-        if(ThirdPerson.pending.size() != Config.HANDLER.instance().thirdPersons.size()) {
-            pendingChanges = true;
-            return;
+        if(ThirdPerson.pending != null) {
+            if(ThirdPerson.pending.size() != Config.HANDLER.instance().thirdPersons.size()) {
+                pendingChanges = true;
+                return;
+            }
+            AtomicBoolean val = new AtomicBoolean(false);
+            if(tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab tab && tab.getTitle().equals(Text.translatable("cameratweaks.options.thirdperson")))
+                tab.forEachChild(child -> {
+                    if(child instanceof ListHolderWidget<?> holder)
+                        ((OptionListWidget) holder.getList()).children().forEach(entry -> {
+                            if(entry instanceof OptionListWidget.OptionEntry optionEntry && !val.get()) val.set(func.apply(optionEntry.option));
+                        });
+                });
+            if(val.get()) return;
         }
-        AtomicBoolean val = new AtomicBoolean(false);
-        if(tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab tab && tab.getTitle().equals(Text.translatable("cameratweaks.options.thirdperson")))
-            tab.forEachChild(child -> {
-                if(child instanceof ListHolderWidget<?> holder)
-                    ((OptionListWidget) holder.getList()).children().forEach(entry -> {
-                        if(entry instanceof OptionListWidget.OptionEntry optionEntry && !val.get()) val.set(func.apply(optionEntry.option));
-                    });
-            });
-        if(!val.get()) OptionUtils.consumeOptions(yacl, func);
+        OptionUtils.consumeOptions(yacl, func);
     }
 
     @Redirect(method = "finishOrSave", at = @At(value = "INVOKE", target = "Ldev/isxander/yacl3/api/utils/OptionUtils;forEachOptions(Ldev/isxander/yacl3/api/YetAnotherConfigLib;" +
