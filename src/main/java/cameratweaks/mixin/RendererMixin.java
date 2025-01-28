@@ -20,7 +20,7 @@ public class RendererMixin {
     }
 
     @Inject(method = "getFov", at = @At("RETURN"), cancellable = true)
-    private void applyZoom(Camera camera, float tickDelta, boolean changingFov, CallbackInfoReturnable<Float> cir) {
+    private void applyZoom(Camera camera, float tickDelta, boolean changingFov, CallbackInfoReturnable<Double> cir) {
         cir.setReturnValue(cir.getReturnValue() / MathHelper.lerp(tickDelta, Zoom.prevZoom, Zoom.currZoom));
     }
 }

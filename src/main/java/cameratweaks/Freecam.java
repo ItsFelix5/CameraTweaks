@@ -66,11 +66,11 @@ public class Freecam {
 
     public static void tick() {
         if (!Keybinds.freecam.enabled() || Keybinds.playerMovement.enabled()) return;
-        input.tick();
+        input.tick(false, 0);
         prev = pos;
-        final double forward = input.movementForward * speed * (input.playerInput.sprint() ? 2 : 1);
+        final double forward = input.movementForward * speed * (client.options.sprintKey.isPressed() ? 2 : 1);
         final double sideways = input.movementSideways * speed;
-        final double vertical = (((input.playerInput.jump() ? 1 : 0) - (input.playerInput.sneak() ? 1 : 0))) * 1.5 * speed;
+        final double vertical = (((input.jumping ? 1 : 0) - (input.sneaking ? 1 : 0))) * 1.5 * speed;
         if (forward == 0 && sideways == 0 && vertical == 0) return;
         final double sin = Math.sin(Math.toRadians(pos.yaw));
         final double cos = Math.cos(Math.toRadians(pos.yaw));

@@ -22,9 +22,9 @@
   "accessWidener": "cameratweaks.accesswidener",
   "depends": {
     "fabricloader": "*",
-    "minecraft": ">=1.21.4",
+    "minecraft": "*",
     "fabric": "*",
-    "yet_another_config_lib_v3": ">=3.6.2",
-    "modmenu": ">=13.0.0"
+    "yet_another_config_lib_v3": "*",
+    "modmenu": "*"
   }
 }
