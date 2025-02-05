@@ -18,7 +18,7 @@ public class Freecam {
     public static void enable() {
         client.chunkCullingEnabled = false;
         client.gameRenderer.setRenderHand(false);
-        speed = .5f;
+        speed = 1f;
         setPosition();
         if (!Keybinds.playerMovement.enabled()) cameraMovement();
     }
@@ -64,13 +64,14 @@ public class Freecam {
         prev = pos = new Util.Pos(client.world.getRegistryKey(), camera.getPos(), camera.getPitch(), camera.getYaw());
     }
 
-    public static void tick() {
+    public static void update(float delta) {
         if (!Keybinds.freecam.enabled() || Keybinds.playerMovement.enabled()) return;
         input.tick();
         prev = pos;
-        final double forward = input.movementForward * speed * (input.playerInput.sprint() ? 2 : 1);
-        final double sideways = input.movementSideways * speed;
-        final double vertical = (((input.playerInput.jump() ? 1 : 0) - (input.playerInput.sneak() ? 1 : 0))) * 1.5 * speed;
+        delta *= speed;
+        final double forward = input.movementForward * (input.playerInput.sprint() ? 2 : 1) * delta;
+        final double sideways = input.movementSideways * delta;
+        final double vertical = (((input.playerInput.jump() ? 1 : 0) - (input.playerInput.sneak() ? 1 : 0))) * delta;
         if (forward == 0 && sideways == 0 && vertical == 0) return;
         final double sin = Math.sin(Math.toRadians(pos.yaw));
         final double cos = Math.cos(Math.toRadians(pos.yaw));

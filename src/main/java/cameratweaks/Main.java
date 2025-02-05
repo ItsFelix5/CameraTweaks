@@ -8,9 +8,6 @@ public class Main implements ModInitializer {
     public void onInitialize() {
         Config.HANDLER.load();
         Keybinds.init();
-        ClientTickEvents.END_CLIENT_TICK.register(c -> {
-            Freecam.tick();
-            Zoom.tick();
-        });
+        ClientTickEvents.END_CLIENT_TICK.register(c -> Zoom.tick());
     }
 }

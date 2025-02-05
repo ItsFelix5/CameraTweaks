@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class RendererMixin {
     @Redirect(method = "renderWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/SimpleOption;getValue()Ljava/lang/Object;", ordinal = 0))
     private Object disableViewBobbing(SimpleOption<?> instance) {
-        return Keybinds.freecam.enabled() ? false : instance.getValue();
+        return Keybinds.freecam.enabled() || Zoom.zoom > 5 ? false : instance.getValue();
     }
 
     @Inject(method = "getFov", at = @At("RETURN"), cancellable = true)
