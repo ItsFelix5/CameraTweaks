@@ -28,7 +28,7 @@ public class MouseMixin {
 
     @Redirect(method = "updateMouse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/SimpleOption;getValue()Ljava/lang/Object;", ordinal = 0))
     private Object changeSensitivity(SimpleOption<Double> instance) {
-        return instance.getValue() * Zoom.zoom > 1? Math.tan(0.785398163397 / Zoom.zoom) : 1f;
+        return instance.getValue() * (Zoom.currZoom <= 1?1:Math.tan(Math.PI / 4 / Zoom.currZoom));
     }
 
     @Redirect(method = "updateMouse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;changeLookDirection(DD)V"))
