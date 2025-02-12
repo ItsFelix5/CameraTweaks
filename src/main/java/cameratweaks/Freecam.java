@@ -50,7 +50,7 @@ public class Freecam {
             return;
         }
         if (!Keybinds.freecam.enabled()) Keybinds.freecam.setEnabled(true);
-        pos = cameras[i];
+        prev = pos = cameras[i];
     }
 
     public static void saveCamera(int i) {
@@ -61,7 +61,8 @@ public class Freecam {
 
     private static void setPosition() {
         Camera camera = client.gameRenderer.getCamera();
-        prev = pos = new Util.Pos(client.world.getRegistryKey(), camera.getPos(), camera.getPitch(), camera.getYaw());
+        int fov = ThirdPerson.current == null || !ThirdPerson.current.changedFov? client.options.getFov().getValue() : ThirdPerson.current.fov;
+        prev = pos = new Util.Pos(client.world.getRegistryKey(), camera.getPos(), camera.getPitch(), camera.getYaw(), fov);
     }
 
     public static void update(float delta) {

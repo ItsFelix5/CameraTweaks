@@ -13,12 +13,14 @@ public class Util {
         public Vec3d pos;
         public float pitch;
         public float yaw;
+        public int fov;
 
-        public Pos(RegistryKey<World> dimension, Vec3d pos, float pitch, float yaw) {
+        public Pos(RegistryKey<World> dimension, Vec3d pos, float pitch, float yaw, int fov) {
             this.dimension = dimension;
             this.pos = pos;
             this.pitch = pitch;
             this.yaw = yaw;
+            this.fov = fov;
         }
     }
 }

@@ -56,6 +56,9 @@
   "cameratweaks.options.thirdperson.yaw": "Yaw",
   "cameratweaks.options.thirdperson.yaw.description": "The camera's horizontal rotation offset",
 
+  "cameratweaks.options.thirdperson.fov": "Field of View",
+  "cameratweaks.options.thirdperson.fov.description": "The camera's fov in degrees",
+
   "cameratweaks.options.thirdperson.invert": "Invert",
   "cameratweaks.options.thirdperson.invert.description": "If the camera should be looking at the players face",
   "cameratweaks.options.thirdperson.collision": "Collision",
