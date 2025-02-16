@@ -13,6 +13,7 @@
   "cameratweaks.freecam.movement.on": "Controlling player",
   "cameratweaks.freecam.movement.off": "Controlling camera",
 
+  "key.cameratweaks.freecam.save": "Save freecam position (+ Number)",
   "cameratweaks.freecam.camera.unknown": "Camera slot %s is empty, Press %s + %s to save your current freecam position",
   "cameratweaks.freecam.camera.incorrect_dimension": "Camera %s is in %s.",
   "cameratweaks.freecam.camera.saved": "Saved camera %s.",

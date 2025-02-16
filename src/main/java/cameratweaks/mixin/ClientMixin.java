@@ -44,13 +44,15 @@ public class ClientMixin {
             for (int i = 0; i < client.options.hotbarKeys.length; i++)
                 if (client.options.hotbarKeys[i].equals(instance)) {
                     Freecam.loadCamera(i);
+                    Keybinds.freecam.setUsed();
                     return false;
                 }
         }
-        if (Keybinds.playerMovement.isPressed()) {
+        if (Keybinds.saveFreecam.isPressed()) {
             for (int i = 0; i < client.options.hotbarKeys.length; i++)
                 if (client.options.hotbarKeys[i].equals(instance)) {
                     Freecam.saveCamera(i);
+                    Keybinds.saveFreecam.setUsed();
                     return false;
                 }
         }
