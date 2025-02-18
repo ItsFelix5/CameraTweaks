@@ -3,6 +3,7 @@ package cameratweaks;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
 import net.minecraft.client.render.Camera;
+import net.minecraft.entity.Entity;
 import net.minecraft.text.Text;
 
 import static cameratweaks.Util.client;
@@ -42,7 +43,10 @@ public class Freecam {
 
     public static void loadCamera(int i) {
         if (cameras[i] == null) {
-            client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.unknown", i + 1, Keybinds.playerMovement.getBoundKeyLocalizedText(), i + 1), true);
+            if(Config.HANDLER.instance().alternateFreecam) {
+                cameras[i] = pos.clone();
+                client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.saved", i + 1), true);
+            } else client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.unknown", i + 1, Keybinds.playerMovement.getBoundKeyLocalizedText(), i + 1), true);
             return;
         }
         if (cameras[i].dimension != client.world.getRegistryKey()) {
@@ -50,13 +54,23 @@ public class Freecam {
             return;
         }
         if (!Keybinds.freecam.enabled()) Keybinds.freecam.setEnabled(true);
-        prev = pos = cameras[i];
+        prev = pos = cameras[i].clone();
     }
 
     public static void saveCamera(int i) {
-        setPosition();
-        cameras[i] = pos;
-        client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.saved", i + 1), true);
+        if(Config.HANDLER.instance().alternateFreecam) {
+            if(pos.equals(cameras[i])) {
+                Entity camera = client.cameraEntity;
+                int fov = ThirdPerson.current == null || !ThirdPerson.current.changedFov? client.options.getFov().getValue() : ThirdPerson.current.fov;
+                cameras[i] = new Util.Pos(client.world.getRegistryKey(), camera.getEyePos(), camera.getPitch(), camera.getYaw(), fov);
+            } else if (cameras[i] != null){
+                cameras[i] = null;
+                client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.removed", i + 1), true);
+            }
+        } else {
+            cameras[i] = pos.clone();
+            client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.saved", i + 1), true);
+        }
     }
 
     private static void setPosition() {

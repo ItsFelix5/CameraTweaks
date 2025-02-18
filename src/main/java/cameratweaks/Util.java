@@ -5,10 +5,12 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import java.util.Objects;
+
 public class Util {
     public static final MinecraftClient client = MinecraftClient.getInstance();
 
-    public static class Pos {
+    public static class Pos implements Cloneable {
         public final RegistryKey<World> dimension;
         public Vec3d pos;
         public float pitch;
@@ -21,6 +23,22 @@ public class Util {
             this.pitch = pitch;
             this.yaw = yaw;
             this.fov = fov;
+        }
+
+        @Override
+        public Pos clone() {
+            try {
+                return (Pos) super.clone();
+            } catch (CloneNotSupportedException e) {
+                throw new AssertionError();
+            }
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Pos pos1)) return false;
+            return Float.compare(pitch, pos1.pitch) == 0 && Float.compare(yaw, pos1.yaw) == 0 && fov == pos1.fov && Objects.equals(dimension, pos1.dimension) && Objects.equals(pos, pos1.pos);
         }
     }
 }

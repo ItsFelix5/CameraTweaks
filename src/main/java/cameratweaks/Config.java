@@ -34,6 +34,8 @@ public class Config implements ModMenuApi {
     public boolean fullbright;
     @SerialEntry
     public List<ThirdPerson> thirdPersons = List.of(new ThirdPerson(), new ThirdPerson());
+    @SerialEntry
+    public boolean alternateFreecam;
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
@@ -63,6 +65,12 @@ public class Config implements ModMenuApi {
                                     fullbright = enabled;
                                     client.gameRenderer.getLightmapTextureManager().dirty = true;
                                 }).controller(TickBoxControllerBuilder::create)
+                                .build())
+                        .option(Option.<Boolean>createBuilder()
+                                .name(Text.translatable("cameratweaks.options.freecam_save_behaviour"))
+                                .description(OptionDescription.of(Text.translatable("cameratweaks.options.freecam_save_behaviour.description")))
+                                .binding(false, ()-> alternateFreecam, enabled-> alternateFreecam = enabled)
+                                .controller(TickBoxControllerBuilder::create)
                                 .build())
                         .build())
                 .category(ConfigCategory.createBuilder()

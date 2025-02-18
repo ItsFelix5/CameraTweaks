@@ -8,6 +8,7 @@
   "key.cameratweaks.freecam": "Freecam",
   "cameratweaks.freecam.on": "Freecam toggled on",
   "cameratweaks.freecam.off": "Freecam toggled off",
+  "cameratweaks.freecam.speed": "%s m/s",
 
   "key.cameratweaks.freecam.movement": "Toggle Freecam/Player Movement",
   "cameratweaks.freecam.movement.on": "Controlling player",
@@ -17,9 +18,13 @@
   "cameratweaks.freecam.camera.unknown": "Camera slot %s is empty, Press %s + %s to save your current freecam position",
   "cameratweaks.freecam.camera.incorrect_dimension": "Camera %s is in %s.",
   "cameratweaks.freecam.camera.saved": "Saved camera %s.",
+  "cameratweaks.freecam.camera.removed": "Removed camera %s.",
+
+  "cameratweaks.options.freecam_save_behaviour": "Use Alternate Freecam Keymap",
+  "cameratweaks.options.freecam_save_behaviour.description": "This setting rebinds the save freecam button to delete or place at the players position when that slot is active and creates a new freecam when trying to load a empty slot.",
 
   "cameratweaks.options.fullbright": "Fullbright",
-  "cameratweaks.options.fullbright.description": "Makes everything bright, regardless of light level",
+  "cameratweaks.options.fullbright.description": "Makes everything bright, regardless of light level.",
   "key.cameratweaks.fullbright": "Fullbright",
   "cameratweaks.fullbright.on": "Enabled fullbright",
   "cameratweaks.fullbright.off": "Disabled fullbright",
@@ -28,7 +33,7 @@
   "cameratweaks.zoom.set": "x%s",
 
   "cameratweaks.options.disableFog": "Disable Fog",
-  "cameratweaks.options.disableFog.description": "Disable terrain fog allowing you to see further",
+  "cameratweaks.options.disableFog.description": "Disable terrain fog allowing you to see further.",
 
   "key.cameratweaks.thirdPersonModifier": "Third Person Distance Modifier",
   "cameratweaks.thirdperson.distance": "Third person distance: %s blocks",

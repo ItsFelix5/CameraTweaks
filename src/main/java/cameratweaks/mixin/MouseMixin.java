@@ -6,6 +6,7 @@ import net.minecraft.client.input.Scroller;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.SimpleOption;
 import net.minecraft.entity.Entity;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import org.joml.Vector2i;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,7 +22,8 @@ public class MouseMixin {
         Vector2i vector2i = instance.update(horizontal, vertical);
         if (Keybinds.zoom.enabled()) Zoom.zoom(Zoom.zoom + vector2i.y * 0.1F * Zoom.zoom);
         else if (ThirdPerson.current != null && Keybinds.thirdPersonModifier.enabled()) ThirdPerson.modifyDistance(vector2i.y * 0.1F);
-        else if (Keybinds.freecam.enabled() && !Keybinds.playerMovement.enabled()) Freecam.speed = MathHelper.clamp(Freecam.speed + (float) vector2i.y * 0.05F, 0.0F, 6F);
+        else if (Keybinds.freecam.enabled() && !Keybinds.playerMovement.enabled()) client.player.sendMessage(Text.translatable("cameratweaks.freecam.speed",
+                (int) (20 * (Freecam.speed = MathHelper.clamp(Freecam.speed + (float) vector2i.y * 0.05F, 0.0F, 6F)))), true);
         else return vector2i;
         return new Vector2i(0, 0);
     }
