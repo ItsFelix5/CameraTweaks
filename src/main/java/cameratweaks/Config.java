@@ -60,8 +60,7 @@ public class Config implements ModMenuApi {
                         .option(Option.<Boolean>createBuilder()
                                 .name(Text.translatable("cameratweaks.options.fullbright"))
                                 .description(OptionDescription.of(Text.translatable("cameratweaks.options.fullbright.description")))
-                                .binding(false, Keybinds.fullBright::enabled, enabled->{
-                                    Keybinds.fullBright.setEnabledNoCB(enabled);
+                                .binding(false, ()->fullbright, enabled->{
                                     fullbright = enabled;
                                     client.gameRenderer.getLightmapTextureManager().dirty = true;
                                 }).controller(TickBoxControllerBuilder::create)

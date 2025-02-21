@@ -44,6 +44,7 @@ public class Freecam {
     public static void loadCamera(int i) {
         if (cameras[i] == null) {
             if(Config.HANDLER.instance().alternateFreecam) {
+                setPosition();
                 cameras[i] = pos.clone();
                 client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.saved", i + 1), true);
             } else client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.unknown", i + 1, Keybinds.playerMovement.getBoundKeyLocalizedText(), i + 1), true);
@@ -68,6 +69,7 @@ public class Freecam {
                 client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.removed", i + 1), true);
             }
         } else {
+            setPosition();
             cameras[i] = pos.clone();
             client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.saved", i + 1), true);
         }

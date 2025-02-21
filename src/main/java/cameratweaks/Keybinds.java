@@ -13,22 +13,6 @@ import java.util.Set;
 import static cameratweaks.Util.client;
 
 public class Keybinds {
-    public static final BetterKeybind fullBright = (BetterKeybind) KeyBindingHelper.registerKeyBinding(new BetterKeybind(
-            "fullbright",
-            GLFW.GLFW_KEY_Y,
-            () -> {
-                Config.HANDLER.instance().fullbright = true;
-                client.gameRenderer.getLightmapTextureManager().dirty = true;
-                Config.HANDLER.save();
-            },
-            () -> {
-                Config.HANDLER.instance().fullbright = false;
-                client.gameRenderer.getLightmapTextureManager().dirty = true;
-                Config.HANDLER.save();
-            },
-            true
-    ));
-
     public static final BetterKeybind freecam = (BetterKeybind) KeyBindingHelper.registerKeyBinding(new BetterKeybind(
             "freecam",
             GLFW.GLFW_KEY_G,
@@ -58,11 +42,24 @@ public class Keybinds {
 
     static {
         KeyBindingHelper.registerKeyBinding(new BetterKeybind("freelook.hold", GLFW.GLFW_KEY_UNKNOWN, () -> freelook.setEnabled(true), () -> freelook.setEnabled(false)));
+        KeyBindingHelper.registerKeyBinding(new BetterKeybind(
+                "fullbright",
+                GLFW.GLFW_KEY_Y,
+                () -> {
+                    Config.HANDLER.instance().fullbright = true;
+                    client.gameRenderer.getLightmapTextureManager().dirty = true;
+                    Config.HANDLER.save();
+                },
+                () -> {
+                    Config.HANDLER.instance().fullbright = false;
+                    client.gameRenderer.getLightmapTextureManager().dirty = true;
+                    Config.HANDLER.save();
+                },
+                true
+        ));
     }
 
-    public static void init() {
-        fullBright.setEnabledNoCB(Config.HANDLER.instance().fullbright);
-    }
+    public static void init() {}
 
     public static class BetterKeybind extends KeyBinding {
         private final Runnable press;
@@ -108,10 +105,6 @@ public class Keybinds {
             this.enabled = enabled;
             if (enabled) press.run();
             else release.run();
-        }
-
-        public void setEnabledNoCB(boolean enabled) {
-            this.enabled = enabled;
         }
 
         @SuppressWarnings("unchecked")
