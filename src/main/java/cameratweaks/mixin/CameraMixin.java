@@ -60,7 +60,7 @@ public abstract class CameraMixin {
         setPos(Freecam.prev.pos.lerp(Freecam.pos.pos, tickDelta));
     }
 
-    @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Camera;setRotation(FF)V", ordinal = 1))
+    @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Camera;setRotation(FF)V", ordinal = 0))
     private void changeRotation(Camera instance, float yaw, float pitch) {
         if (Freelook.enabled) this.setRotation(Freelook.yaw, Freelook.pitch);
         else this.setRotation(yaw, pitch);

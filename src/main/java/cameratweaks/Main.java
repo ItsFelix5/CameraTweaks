@@ -12,7 +12,7 @@ public class Main implements ModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(c -> {
             if(Config.HANDLER.instance().zoomAnimation) Zoom.tick();
             Freelook.tick();
-            Util.input.tick();
+            Util.input.tick(false, 1);
         });
     }
 }

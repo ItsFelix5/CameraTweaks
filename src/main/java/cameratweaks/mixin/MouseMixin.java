@@ -8,11 +8,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
-import org.joml.Vector2i;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+
+import static cameratweaks.Util.client;
 
 @Mixin(Mouse.class)
 public class MouseMixin {
@@ -21,7 +21,7 @@ public class MouseMixin {
         if (Keybinds.zoom.enabled()) Zoom.zoom(Zoom.zoom + (float) scrollAmount * 0.1F * Zoom.zoom);
         else if (ThirdPerson.current != null && Keybinds.thirdPersonModifier.enabled()) ThirdPerson.modifyDistance((float) scrollAmount * 0.1F);
         else if (Keybinds.freecam.enabled() && !Keybinds.playerMovement.enabled()) client.player.sendMessage(Text.translatable("cameratweaks.freecam.speed",
-                (int) (20 * (Freecam.speed = MathHelper.clamp(Freecam.speed + (float) vector2i.y * 0.05F, 0.0F, 6F)))), true);
+                (int) (20 * (Freecam.speed = MathHelper.clamp(Freecam.speed + (float) scrollAmount * 0.05F, 0.0F, 6F)))), true);
         else instance.scrollInHotbar(scrollAmount);
     }
 

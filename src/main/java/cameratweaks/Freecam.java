@@ -84,7 +84,7 @@ public class Freecam {
     public static void update(float delta) {
         if (!Keybinds.freecam.enabled() || Keybinds.playerMovement.enabled()) return;
         prev = pos;
-        double vertical = (((input.jumping ? 1 : 0) - (input.playerInput.sneaking ? 1 : 0)));
+        double vertical = (((input.jumping ? 1 : 0) - (input.sneaking ? 1 : 0)));
         if(!isMoving() && vertical == 0) return;
         pos.pos = pos.pos.add(Util.rotate(new Vec3d(input.movementSideways, vertical, input.movementForward * (client.options.sprintKey.isPressed() ? 2 : 1)).multiply(delta * speed), pos.yaw));
     }

@@ -14,7 +14,7 @@ public class Util {
     public static final Input input = new KeyboardInput(client.options);
 
     public static boolean isMoving() {
-        return input.playerInput.forward() || input.playerInput.backward() || input.playerInput.left() || input.playerInput.right();
+        return input.pressingForward || input.pressingBack || input.pressingLeft || input.pressingRight;
     }
 
     public static Vec3d rotate(Vec3d vec, double yaw) {

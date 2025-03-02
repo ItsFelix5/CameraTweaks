@@ -47,9 +47,9 @@ public class Keybinds {
     }
 
     public static class BetterKeybind extends KeyBinding {
-        private Runnable press;
-        private Runnable release;
-        private boolean toggle;
+        private Runnable press = ()->{};
+        private Runnable release = ()->{};
+        private boolean toggle = false;
         private Supplier<Boolean> condition = ()->true;
         private boolean enabled = false;
         private boolean used = false;
