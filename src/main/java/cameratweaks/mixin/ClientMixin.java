@@ -1,9 +1,10 @@
 package cameratweaks.mixin;
 
-import cameratweaks.Config;
 import cameratweaks.Freecam;
+import cameratweaks.Freelook;
 import cameratweaks.Keybinds;
 import cameratweaks.ThirdPerson;
+import cameratweaks.config.Config;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.KeyBinding;
@@ -13,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static cameratweaks.Util.client;
 
@@ -32,8 +34,8 @@ public class ClientMixin {
     @Redirect(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/GameOptions;setPerspective(Lnet/minecraft/client/option/Perspective;)V"))
     private void preventPerspectiveChange(GameOptions instance, Perspective perspective) {
         ThirdPerson.distanceOffset = 0.0F;
-        if(perspective == Perspective.THIRD_PERSON_BACK) ThirdPerson.current = Config.HANDLER.instance().thirdPersons.get(0);
-        else if(perspective == Perspective.THIRD_PERSON_FRONT) ThirdPerson.current = Config.HANDLER.instance().thirdPersons.get(1);
+        if(perspective == Perspective.THIRD_PERSON_BACK) ThirdPerson.setCurrent(Config.HANDLER.instance().thirdPersons.get(0));
+        else if(perspective == Perspective.THIRD_PERSON_FRONT) ThirdPerson.setCurrent(Config.HANDLER.instance().thirdPersons.get(1));
         instance.setPerspective(perspective);
     }
 
@@ -62,5 +64,15 @@ public class ClientMixin {
     @Inject(method = "disconnect(Lnet/minecraft/client/gui/screen/Screen;Z)V", at = @At("HEAD"))
     private void onDisconnect(CallbackInfo ci) {
         Freecam.reset();
+    }
+
+    @Inject(method = {"doItemUse", "doItemPick"}, at = @At("HEAD"))
+    private void doItemUse(CallbackInfo ci) {
+        Freelook.pause();
+    }
+
+    @Inject(method = "doAttack", at = @At("HEAD"))
+    private void doAttack(CallbackInfoReturnable<Boolean> cir) {
+        Freelook.pause();
     }
 }

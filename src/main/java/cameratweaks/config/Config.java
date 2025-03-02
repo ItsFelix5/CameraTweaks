@@ -1,7 +1,6 @@
-package cameratweaks;
+package cameratweaks.config;
 
-import com.terraformersmc.modmenu.api.ConfigScreenFactory;
-import com.terraformersmc.modmenu.api.ModMenuApi;
+import cameratweaks.ThirdPerson;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
@@ -19,7 +18,7 @@ import java.util.List;
 
 import static cameratweaks.Util.client;
 
-public class Config implements ModMenuApi {
+public class Config {
     public static ConfigClassHandler<Config> HANDLER = ConfigClassHandler.createBuilder(Config.class)
             .id(Identifier.of("cameratweaks", "config"))
             .serializer(config -> GsonConfigSerializerBuilder.create(config)
@@ -33,16 +32,13 @@ public class Config implements ModMenuApi {
     @SerialEntry
     public boolean fullbright;
     @SerialEntry
-    public List<ThirdPerson> thirdPersons = List.of(new ThirdPerson(), new ThirdPerson());
-    @SerialEntry
     public boolean alternateFreecam;
+    @SerialEntry
+    public boolean zoomAnimation;
+    @SerialEntry
+    public List<ThirdPerson> thirdPersons = List.of(new ThirdPerson(), new ThirdPerson());
 
-    @Override
-    public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return HANDLER.instance()::generateScreen;
-    }
-
-    private Screen generateScreen(Screen parentScreen) {
+    Screen generateScreen(Screen parentScreen) {
         return YetAnotherConfigLib.createBuilder()
                 .save(()->{
                     HANDLER.instance().thirdPersons = ThirdPerson.pending.stream().map(ThirdPerson::clone).toList();
@@ -64,6 +60,12 @@ public class Config implements ModMenuApi {
                                     fullbright = enabled;
                                     client.gameRenderer.getLightmapTextureManager().dirty = true;
                                 }).controller(TickBoxControllerBuilder::create)
+                                .build())
+                        .option(Option.<Boolean>createBuilder()
+                                .name(Text.translatable("cameratweaks.options.zoomAnimation"))
+                                .description(OptionDescription.of(Text.translatable("cameratweaks.options.zoomAnimation.description")))
+                                .binding(true, ()->zoomAnimation, enabled->zoomAnimation = enabled)
+                                .controller(TickBoxControllerBuilder::create)
                                 .build())
                         .option(Option.<Boolean>createBuilder()
                                 .name(Text.translatable("cameratweaks.options.freecam_save_behaviour"))

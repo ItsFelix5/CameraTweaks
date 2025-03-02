@@ -1,16 +1,16 @@
 package cameratweaks;
 
+import cameratweaks.config.Config;
 import net.minecraft.client.input.Input;
-import net.minecraft.client.input.KeyboardInput;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.Vec3d;
 
-import static cameratweaks.Util.client;
+import static cameratweaks.Util.*;
 
 @SuppressWarnings("DataFlowIssue")
 public class Freecam {
-    private static final Input input = new KeyboardInput(client.options);
     private static final Util.Pos[] cameras = new Util.Pos[9];
     public static Util.Pos prev;
     public static Util.Pos pos;
@@ -83,16 +83,10 @@ public class Freecam {
 
     public static void update(float delta) {
         if (!Keybinds.freecam.enabled() || Keybinds.playerMovement.enabled()) return;
-        input.tick();
         prev = pos;
-        delta *= speed;
-        final double forward = input.movementForward * (input.playerInput.sprint() ? 2 : 1) * delta;
-        final double sideways = input.movementSideways * delta;
-        final double vertical = (((input.playerInput.jump() ? 1 : 0) - (input.playerInput.sneak() ? 1 : 0))) * delta;
-        if (forward == 0 && sideways == 0 && vertical == 0) return;
-        final double sin = Math.sin(Math.toRadians(pos.yaw));
-        final double cos = Math.cos(Math.toRadians(pos.yaw));
-        pos.pos = pos.pos.add(cos * sideways - sin * forward, vertical, cos * forward + sin * sideways);
+        double vertical = (((input.playerInput.jump() ? 1 : 0) - (input.playerInput.sneak() ? 1 : 0)));
+        if(!isMoving() && vertical == 0) return;
+        pos.pos = pos.pos.add(Util.rotate(new Vec3d(input.movementSideways, vertical, input.movementForward * (input.playerInput.sprint() ? 2 : 1)).multiply(delta * speed), pos.yaw));
     }
 
     public static void reset() {

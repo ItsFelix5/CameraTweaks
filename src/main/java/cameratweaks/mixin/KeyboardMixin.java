@@ -1,8 +1,8 @@
 package cameratweaks.mixin;
 
-import cameratweaks.Config;
 import cameratweaks.Keybinds;
 import cameratweaks.ThirdPerson;
+import cameratweaks.config.Config;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.option.Perspective;
@@ -25,12 +25,12 @@ public class KeyboardMixin {
                 if (thirdPerson.keyCode == key) {
                     if(ThirdPerson.current == thirdPerson) {
                         client.options.setPerspective(Perspective.FIRST_PERSON);
-                        ThirdPerson.current = null;
+                        ThirdPerson.setCurrent(null);
                         break;
                     }
                     client.options.setPerspective(thirdPerson.invert?Perspective.THIRD_PERSON_FRONT:Perspective.THIRD_PERSON_BACK);
                     ThirdPerson.distanceOffset = 0.0F;
-                    ThirdPerson.current = thirdPerson;
+                    ThirdPerson.setCurrent(thirdPerson);
                     break;
                 }
             }

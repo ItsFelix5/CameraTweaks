@@ -1,5 +1,6 @@
 package cameratweaks;
 
+import cameratweaks.config.KeybindController;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;
 import dev.isxander.yacl3.api.OptionFlag;
@@ -36,6 +37,8 @@ public class ThirdPerson implements Cloneable {
     @SerialEntry
     public int fov;
     @SerialEntry
+    public boolean rotatePlayer = true;
+    @SerialEntry
     public boolean invert = false;
     @SerialEntry
     public boolean collision = true;
@@ -55,6 +58,15 @@ public class ThirdPerson implements Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    public static void setCurrent(ThirdPerson current) {
+        if(ThirdPerson.current != null && !ThirdPerson.current.rotatePlayer) {
+            Keybinds.freelook.setEnabled(false);
+            Freelook.enabled = false;// Bye bye animation :(
+        }
+        if(current != null && !current.rotatePlayer) Keybinds.freelook.setEnabled(true);
+        ThirdPerson.current = current;
     }
 
     public static void modifyDistance(float amount) {
@@ -115,6 +127,13 @@ public class ThirdPerson implements Cloneable {
                 .description(OptionDescription.of(Text.translatable("cameratweaks.options.thirdperson.fov.description")))
                 .binding(client.options.getFov().getValue(), ()->changedFov?fov:client.options.getFov().getValue(), val->{fov = val; changedFov = fov != client.options.getFov().getValue();})
                 .controller(o-> IntegerSliderControllerBuilder.create(o).range(10, 135).step(1))
+                .build());
+
+        builder.option(Option.<Boolean>createBuilder()
+                .name(Text.translatable("cameratweaks.options.thirdperson.rotatePlayer"))
+                .description(OptionDescription.of(Text.translatable("cameratweaks.options.thirdperson.rotatePlayer.description")))
+                .binding(true, ()->rotatePlayer, val->rotatePlayer = val)
+                .controller(BooleanControllerBuilder::create)
                 .build());
 
         if(i > 1) builder.option(Option.<Boolean>createBuilder()

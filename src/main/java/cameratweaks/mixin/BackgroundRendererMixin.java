@@ -1,6 +1,6 @@
 package cameratweaks.mixin;
 
-import cameratweaks.Config;
+import cameratweaks.config.Config;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.Fog;

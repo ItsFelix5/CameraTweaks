@@ -1,7 +1,7 @@
 package cameratweaks.mixin;
 
-import cameratweaks.Config;
 import cameratweaks.ThirdPerson;
+import cameratweaks.config.Config;
 import com.google.common.collect.ImmutableList;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.Option;
