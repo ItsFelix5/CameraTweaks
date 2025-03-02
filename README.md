@@ -28,7 +28,7 @@ You can zoom in and out by scrolling, this is very useful for looking at things 
 Press `C` to zoom and scroll to change how much.
 
 ## 🌫️ No Fog
-No fog removes the terrain fog from the game, this is very useful for in the nether and underwater.
+No fog removes the terrain fog from the game, this is very useful for in the nether or in liquid.
 
 <img src="https://cdn.modrinth.com/data/T1E4i1qj/images/2906619879662a1cde731b25753eff8a35c9b465_350.webp" width="100%"/>
 
@@ -38,6 +38,8 @@ No fog can be toggled in camera tweaks config, accessible via modmenu.
 Freelook allows you to look around without changing the direction you are walking in, this is very useful for looking around while flying.
 
 You can set either hold or toggle keybinds for this in controls.
+
+There is also an option for in third person to allow you to look around the player in third person similar to the better third person mod.
 
 ## 🚶 Custom Third Persons
 You can set custom third person views and modify the existing ones in the config, allowing for better overviews and preventing the middle of your screen being blocked by the player.
@@ -63,4 +65,4 @@ Yes, of course as long as it stays on modrinth!
 No, you can't redistribute this mod without my permission. You can only link back to this page.
 
 #### Can you port this to (Neo)Forge?
-No, but you might be able to use Sinytra Connector.
+No.

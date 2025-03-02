@@ -4,6 +4,9 @@ import cameratweaks.Freecam;
 import cameratweaks.Freelook;
 import cameratweaks.Keybinds;
 import cameratweaks.ThirdPerson;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.minecraft.client.option.SimpleOption;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -70,5 +73,12 @@ public abstract class CameraMixin {
         float distance = ThirdPerson.current.xOffset + ThirdPerson.distanceOffset * f;
         this.moveBy(ThirdPerson.current.collision? -clipToSpace(distance) : -distance, ThirdPerson.current.yOffset * f, ThirdPerson.current.zOffset * f);
         this.setRotation(this.yaw + ThirdPerson.current.yaw, this.pitch + ThirdPerson.current.pitch);
+    }
+
+    @WrapOperation(method = "getProjection", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/SimpleOption;getValue()Ljava/lang/Object;"))
+    private Object getFov(SimpleOption<Integer> instance, Operation<Integer> original) {
+        if (ThirdPerson.current != null && ThirdPerson.current.changedFov) return ThirdPerson.current.fov;
+        if (Keybinds.freecam.enabled()) return Freecam.pos.fov;
+        return original.call(instance);
     }
 }

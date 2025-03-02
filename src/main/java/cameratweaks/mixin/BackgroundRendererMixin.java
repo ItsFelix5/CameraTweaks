@@ -1,6 +1,6 @@
 package cameratweaks.mixin;
 
-import cameratweaks.Config;
+import cameratweaks.config.Config;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;

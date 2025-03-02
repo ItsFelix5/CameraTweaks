@@ -1,7 +1,7 @@
 package cameratweaks.mixin;
 
-import cameratweaks.Config;
 import cameratweaks.ThirdPerson;
+import cameratweaks.config.Config;
 import com.google.common.collect.ImmutableList;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.Option;
@@ -72,7 +72,7 @@ public abstract class OptionListWidgetMixin extends ElementListWidgetExt<OptionL
 
         @Inject(method = "<init>", at = @At("TAIL"))
         public void init(OptionListWidget this$0, OptionGroup group, Screen screen, CallbackInfo ci) {
-            TranslatableTextContent name = (TranslatableTextContent) group.name().getContent();
+            if(!(group.name().getContent() instanceof TranslatableTextContent name)) return;
             if(name.getKey().equals("cameratweaks.options.thirdperson.custom")) removeListButton = new TooltipButtonWidget(screen, this$0.getRowRight() - 20, -50, 20, 20,
                     Text.literal("X"), Text.translatable("yacl.list.remove"), btn -> {
                 ThirdPerson.pending.remove((int) name.getArgs()[0] + 1);

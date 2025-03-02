@@ -14,7 +14,9 @@
   "environment": "client",
   "entrypoints": {
     "main": ["cameratweaks.Main"],
-    "modmenu": ["cameratweaks.Config"]
+    "modmenu": [
+      "cameratweaks.config.ModMenu"
+    ]
   },
   "mixins": [
     "cameratweaks.mixins.json"
@@ -24,7 +26,10 @@
     "fabricloader": "*",
     "minecraft": "*",
     "fabric": "*",
-    "yet_another_config_lib_v3": "*",
-    "modmenu": "*"
+    "yet_another_config_lib_v3": "*"
+  },
+  "suggests": {
+    "modmenu": "*",
+    "stfu": "*"
   }
 }

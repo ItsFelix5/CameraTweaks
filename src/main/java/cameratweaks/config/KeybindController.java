@@ -1,4 +1,4 @@
-package cameratweaks;
+package cameratweaks.config;
 
 import dev.isxander.yacl3.api.Controller;
 import dev.isxander.yacl3.api.Option;

@@ -1,15 +1,16 @@
 package cameratweaks;
 
+import cameratweaks.config.Config;
 import net.minecraft.client.input.Input;
-import net.minecraft.client.input.KeyboardInput;
 import net.minecraft.client.render.Camera;
+import net.minecraft.entity.Entity;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.Vec3d;
 
-import static cameratweaks.Util.client;
+import static cameratweaks.Util.*;
 
 @SuppressWarnings("DataFlowIssue")
 public class Freecam {
-    private static final Input input = new KeyboardInput(client.options);
     private static final Util.Pos[] cameras = new Util.Pos[9];
     public static Util.Pos prev;
     public static Util.Pos pos;
@@ -18,7 +19,7 @@ public class Freecam {
     public static void enable() {
         client.chunkCullingEnabled = false;
         client.gameRenderer.setRenderHand(false);
-        speed = .5f;
+        speed = 1f;
         setPosition();
         if (!Keybinds.playerMovement.enabled()) cameraMovement();
     }
@@ -42,7 +43,11 @@ public class Freecam {
 
     public static void loadCamera(int i) {
         if (cameras[i] == null) {
-            client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.unknown", i + 1, Keybinds.playerMovement.getBoundKeyLocalizedText(), i + 1), true);
+            if(Config.HANDLER.instance().alternateFreecam) {
+                setPosition();
+                cameras[i] = pos.clone();
+                client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.saved", i + 1), true);
+            } else client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.unknown", i + 1, Keybinds.playerMovement.getBoundKeyLocalizedText(), i + 1), true);
             return;
         }
         if (cameras[i].dimension != client.world.getRegistryKey()) {
@@ -50,31 +55,38 @@ public class Freecam {
             return;
         }
         if (!Keybinds.freecam.enabled()) Keybinds.freecam.setEnabled(true);
-        pos = cameras[i];
+        prev = pos = cameras[i].clone();
     }
 
     public static void saveCamera(int i) {
-        setPosition();
-        cameras[i] = pos;
-        client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.saved", i + 1), true);
+        if(Config.HANDLER.instance().alternateFreecam) {
+            if(pos != null && pos.equals(cameras[i])) {
+                Entity camera = client.cameraEntity;
+                int fov = ThirdPerson.current == null || !ThirdPerson.current.changedFov? client.options.getFov().getValue() : ThirdPerson.current.fov;
+                cameras[i] = new Util.Pos(client.world.getRegistryKey(), camera.getEyePos(), camera.getPitch(), camera.getYaw(), fov);
+            } else if (cameras[i] != null){
+                cameras[i] = null;
+                client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.removed", i + 1), true);
+            }
+        } else {
+            setPosition();
+            cameras[i] = pos.clone();
+            client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.saved", i + 1), true);
+        }
     }
 
     private static void setPosition() {
         Camera camera = client.gameRenderer.getCamera();
-        prev = pos = new Util.Pos(client.world.getRegistryKey(), camera.getPos(), camera.getPitch(), camera.getYaw());
+        int fov = ThirdPerson.current == null || !ThirdPerson.current.changedFov? client.options.getFov().getValue() : ThirdPerson.current.fov;
+        prev = pos = new Util.Pos(client.world.getRegistryKey(), camera.getPos(), camera.getPitch(), camera.getYaw(), fov);
     }
 
-    public static void tick() {
+    public static void update(float delta) {
         if (!Keybinds.freecam.enabled() || Keybinds.playerMovement.enabled()) return;
-        input.tick(false, 0);
         prev = pos;
-        final double forward = input.movementForward * speed * (client.options.sprintKey.isPressed() ? 2 : 1);
-        final double sideways = input.movementSideways * speed;
-        final double vertical = (((input.jumping ? 1 : 0) - (input.sneaking ? 1 : 0))) * 1.5 * speed;
-        if (forward == 0 && sideways == 0 && vertical == 0) return;
-        final double sin = Math.sin(Math.toRadians(pos.yaw));
-        final double cos = Math.cos(Math.toRadians(pos.yaw));
-        pos.pos = pos.pos.add(cos * sideways - sin * forward, vertical, cos * forward + sin * sideways);
+        double vertical = (((input.jumping ? 1 : 0) - (input.playerInput.sneaking ? 1 : 0)));
+        if(!isMoving() && vertical == 0) return;
+        pos.pos = pos.pos.add(Util.rotate(new Vec3d(input.movementSideways, vertical, input.movementForward * (client.options.sprintKey.isPressed() ? 2 : 1)).multiply(delta * speed), pos.yaw));
     }
 
     public static void reset() {

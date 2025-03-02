@@ -1,11 +1,13 @@
 package cameratweaks;
 
+import cameratweaks.config.KeybindController;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;
 import dev.isxander.yacl3.api.OptionFlag;
 import dev.isxander.yacl3.api.OptionGroup;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder;
+import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import net.minecraft.text.Text;
 
@@ -31,6 +33,12 @@ public class ThirdPerson implements Cloneable {
     @SerialEntry
     public float yaw = 0.0F;
     @SerialEntry
+    public boolean changedFov = false;
+    @SerialEntry
+    public int fov;
+    @SerialEntry
+    public boolean rotatePlayer = true;
+    @SerialEntry
     public boolean invert = false;
     @SerialEntry
     public boolean collision = true;
@@ -40,7 +48,7 @@ public class ThirdPerson implements Cloneable {
         if (this == o) return true;
         if (!(o instanceof ThirdPerson that)) return false;
         return (keyCode == that.keyCode && Float.compare(xOffset, that.xOffset) == 0 && Float.compare(yOffset, that.yOffset) == 0 && Float.compare(zOffset, that.zOffset) == 0 &&
-                Float.compare(pitch, that.pitch) == 0 && Float.compare(yaw, that.yaw) == 0 && collision == that.collision);
+                Float.compare(pitch, that.pitch) == 0 && Float.compare(yaw, that.yaw) == 0 && Float.compare(fov, that.fov) == 0 && invert == that.invert && collision == that.collision);
     }
 
     @Override
@@ -50,6 +58,15 @@ public class ThirdPerson implements Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    public static void setCurrent(ThirdPerson current) {
+        if(ThirdPerson.current != null && !ThirdPerson.current.rotatePlayer) {
+            Keybinds.freelook.setEnabled(false);
+            Freelook.enabled = false;// Bye bye animation :(
+        }
+        if(current != null && !current.rotatePlayer) Keybinds.freelook.setEnabled(true);
+        ThirdPerson.current = current;
     }
 
     public static void modifyDistance(float amount) {
@@ -72,7 +89,7 @@ public class ThirdPerson implements Cloneable {
                 .name(Text.translatable("cameratweaks.options.thirdperson.x"))
                 .description(OptionDescription.of(Text.translatable("cameratweaks.options.thirdperson.x.description")))
                 .binding(4.0F, ()->xOffset, val->xOffset = val)
-                .controller(o-> FloatSliderControllerBuilder.create(o).range(0.5F, 50.0F).step(0.5F))
+                .controller(o-> FloatSliderControllerBuilder.create(o).range(0F, 50.0F).step(0.5F))
                 .flag(OptionFlag.WORLD_RENDER_UPDATE)
                 .build());
         builder.option(Option.<Float>createBuilder()
@@ -103,6 +120,20 @@ public class ThirdPerson implements Cloneable {
                 .binding(0.0F, ()->yaw, val->yaw = val)
                 .controller(o->FloatSliderControllerBuilder.create(o).range(-180F, 180F).step(1F))
                 .flag(OptionFlag.WORLD_RENDER_UPDATE)
+                .build());
+
+        builder.option(Option.<Integer>createBuilder()
+                .name(Text.translatable("cameratweaks.options.thirdperson.fov"))
+                .description(OptionDescription.of(Text.translatable("cameratweaks.options.thirdperson.fov.description")))
+                .binding(client.options.getFov().getValue(), ()->changedFov?fov:client.options.getFov().getValue(), val->{fov = val; changedFov = fov != client.options.getFov().getValue();})
+                .controller(o-> IntegerSliderControllerBuilder.create(o).range(10, 135).step(1))
+                .build());
+
+        builder.option(Option.<Boolean>createBuilder()
+                .name(Text.translatable("cameratweaks.options.thirdperson.rotatePlayer"))
+                .description(OptionDescription.of(Text.translatable("cameratweaks.options.thirdperson.rotatePlayer.description")))
+                .binding(true, ()->rotatePlayer, val->rotatePlayer = val)
+                .controller(BooleanControllerBuilder::create)
                 .build());
 
         if(i > 1) builder.option(Option.<Boolean>createBuilder()
