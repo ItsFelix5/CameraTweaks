@@ -24,7 +24,7 @@ public class MouseMixin {
     private Vector2i onScroll(Scroller instance, double horizontal, double vertical) {
         Vector2i vector2i = instance.update(horizontal, vertical);
         if (Keybinds.zoom.enabled()) Zoom.zoom(Zoom.zoom + vector2i.y * 0.1F * Zoom.zoom);
-        else if (ThirdPerson.current != null && Keybinds.thirdPersonModifier.enabled()) ThirdPerson.modifyDistance(vector2i.y * 0.1F);
+        else if (ThirdPerson.current != null && Keybinds.thirdPersonModifier.enabled()) ThirdPerson.modifyDistance(vector2i.y / 3F);
         else if (Keybinds.freecam.enabled() && !Keybinds.playerMovement.enabled()) client.player.sendMessage(Text.translatable("cameratweaks.freecam.speed",
                 (int) (20 * (Freecam.speed = MathHelper.clamp(Freecam.speed + (float) vector2i.y * 0.05F, 0.0F, 6F)))), true);
         else return vector2i;

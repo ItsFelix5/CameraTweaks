@@ -28,13 +28,13 @@ public class Config {
             .build();
 
     @SerialEntry
-    public boolean disableFog;
+    public boolean disableFog = false;
     @SerialEntry
-    public boolean fullbright;
+    public boolean fullbright = false;
     @SerialEntry
-    public boolean alternateFreecam;
+    public boolean alternateFreecam = false;
     @SerialEntry
-    public boolean zoomAnimation;
+    public boolean zoomAnimation = true;
     @SerialEntry
     public List<ThirdPerson> thirdPersons = List.of(new ThirdPerson(), new ThirdPerson());
 
