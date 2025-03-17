@@ -27,8 +27,6 @@ public class Freelook {
     }
 
     public static void tick() {
-        if(pauseTicks > 0) {
-            if(--pauseTicks == 0) Keybinds.freelook.setEnabled(true);
-        }
+        if(pauseTicks > 0 && --pauseTicks == 0 && ThirdPerson.current != null && !ThirdPerson.current.rotatePlayer) Keybinds.freelook.setEnabled(true);
     }
 }

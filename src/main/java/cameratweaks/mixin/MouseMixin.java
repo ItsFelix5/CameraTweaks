@@ -19,7 +19,7 @@ public class MouseMixin {
     @Redirect(method = "onMouseScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;scrollInHotbar(D)V"))
     private void onScroll(PlayerInventory instance, double scrollAmount) {
         if (Keybinds.zoom.enabled()) Zoom.zoom(Zoom.zoom + (float) scrollAmount * 0.1F * Zoom.zoom);
-        else if (ThirdPerson.current != null && Keybinds.thirdPersonModifier.enabled()) ThirdPerson.modifyDistance((float) scrollAmount * 0.1F);
+        else if (ThirdPerson.current != null && Keybinds.thirdPersonModifier.enabled()) ThirdPerson.modifyDistance((float) scrollAmount / 3F);
         else if (Keybinds.freecam.enabled() && !Keybinds.playerMovement.enabled()) client.player.sendMessage(Text.translatable("cameratweaks.freecam.speed",
                 (int) (20 * (Freecam.speed = MathHelper.clamp(Freecam.speed + (float) scrollAmount * 0.05F, 0.0F, 6F)))), true);
         else instance.scrollInHotbar(scrollAmount);
