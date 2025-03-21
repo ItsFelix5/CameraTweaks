@@ -2,6 +2,7 @@ package cameratweaks.config;
 
 import cameratweaks.ThirdPerson;
 import dev.isxander.yacl3.api.*;
+import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
@@ -35,6 +36,10 @@ public class Config {
     public boolean alternateFreecam = false;
     @SerialEntry
     public boolean zoomAnimation = true;
+    @SerialEntry
+    public int cloudHeight = 192;
+    @SerialEntry
+    public int cloudSize = 32;
     @SerialEntry
     public List<ThirdPerson> thirdPersons = List.of(new ThirdPerson(), new ThirdPerson());
 
@@ -72,6 +77,20 @@ public class Config {
                                 .description(OptionDescription.of(Text.translatable("cameratweaks.options.freecam_save_behaviour.description")))
                                 .binding(false, ()-> alternateFreecam, enabled-> alternateFreecam = enabled)
                                 .controller(TickBoxControllerBuilder::create)
+                                .build())
+                        .option(Option.<Integer>createBuilder()
+                                .name(Text.translatable("cameratweaks.options.cloudHeight"))
+                                .description(OptionDescription.of(Text.translatable("cameratweaks.options.cloudHeight.description")))
+                                .binding(192, ()-> cloudHeight, val-> cloudHeight = val)
+                                .controller(o-> IntegerSliderControllerBuilder.create(o).step(2).range(150, 400))
+                                .build())
+                        .option(Option.<Integer>createBuilder()
+                                .name(Text.translatable("cameratweaks.options.cloudSize"))
+                                .description(OptionDescription.of(Text.translatable("cameratweaks.options.cloudSize.description")))
+                                .binding(32, ()-> cloudSize, val-> {
+                                    cloudSize = val;
+                                    client.worldRenderer.getCloudRenderer().scheduleTerrainUpdate();
+                                }).controller(o-> IntegerSliderControllerBuilder.create(o).step(4).range(16, 256))
                                 .build())
                         .build())
                 .category(ConfigCategory.createBuilder()

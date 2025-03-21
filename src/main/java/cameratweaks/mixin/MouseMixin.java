@@ -46,7 +46,8 @@ public class MouseMixin {
         } else if(Keybinds.freelook.enabled()) {
             Freelook.pitch += (float) cursorDeltaY * 0.15F;
             Freelook.yaw += (float) cursorDeltaX * 0.15F;
-            if (ThirdPerson.current != null && !ThirdPerson.current.rotatePlayer) {
+            if(instance.isGliding()) instance.changeLookDirection(cursorDeltaX, cursorDeltaY);
+            else if (ThirdPerson.current != null && !ThirdPerson.current.rotatePlayer) {
                 Freelook.pitch = Math.clamp(Freelook.pitch, -90, 90);
                 if(Util.isMoving()) client.player.setPitch(Freelook.pitch);
             }

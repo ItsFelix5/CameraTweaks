@@ -26,6 +26,12 @@
   "cameratweaks.options.zoomAnimation": "Zoom Animation",
   "cameratweaks.options.zoomAnimation.description": "Do some fancy zoom interpolation to make zooming very smooth.",
 
+  "cameratweaks.options.cloudHeight": "Cloud Height",
+  "cameratweaks.options.cloudHeight.description": "The height clouds are rendered at.",
+
+  "cameratweaks.options.cloudSize": "Cloud Render Distance",
+  "cameratweaks.options.cloudSize.description": "How far away clouds are rendered.",
+
   "cameratweaks.options.fullbright": "Fullbright",
   "cameratweaks.options.fullbright.description": "Makes everything bright, regardless of light level.",
   "key.cameratweaks.fullbright": "Fullbright",

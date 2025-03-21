@@ -11,7 +11,7 @@ public class Main implements ModInitializer {
         Keybinds.init();
         ClientTickEvents.END_CLIENT_TICK.register(c -> {
             if(Config.HANDLER.instance().zoomAnimation) Zoom.tick();
-            Freelook.tick();
+            if(Freelook.enabled) Freelook.tick();
             Util.input.tick();
         });
     }

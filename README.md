@@ -48,6 +48,11 @@ You can set custom third person views and modify the existing ones in the config
 
 You can also set a key to temporarily modify the third person distance.
 
+## ☁️ Configurable Clouds
+You can configure your cloud render distance and height in the Camera Tweaks settings.
+
+<img src="https://cdn.modrinth.com/data/T1E4i1qj/images/200f63e7e2d383ecde4faded508496612ef25695.png" width="100%"/>
+
 ## ❓ Faq
 #### I have a suggestion for this mod!
 If you have any suggestions, feel free to [tell me](https://github.com/ItsFelix5/CameraTweaks/issues/new?assignees=itsfelix5&labels=enhancement&projects=&template=feature_request.yml&title=%5BSuggestion%5D+)!
