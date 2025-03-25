@@ -22,7 +22,7 @@ import static cameratweaks.Util.client;
 public class ClientMixin {
     @Inject(method = "render", at = @At("HEAD"))
     private void onRender(boolean tick, CallbackInfo ci) {
-        Freecam.update(client.getRenderTickCounter().getLastFrameDuration());
+        Freecam.update(client.getRenderTickCounter().getDynamicDeltaTicks());
     }
 
     @Redirect(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBinding;wasPressed()Z", ordinal = 0))

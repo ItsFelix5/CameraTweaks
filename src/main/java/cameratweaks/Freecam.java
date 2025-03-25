@@ -86,7 +86,7 @@ public class Freecam {
         prev = pos;
         double vertical = (((input.playerInput.jump() ? 1 : 0) - (input.playerInput.sneak() ? 1 : 0)));
         if(!isMoving() && vertical == 0) return;
-        pos.pos = pos.pos.add(Util.rotate(new Vec3d(input.movementSideways, vertical, input.movementForward * (input.playerInput.sprint() ? 2 : 1)).multiply(delta * speed), pos.yaw));
+        pos.pos = pos.pos.add(Util.rotate(new Vec3d(input.getMovementInput().x, vertical, input.getMovementInput().y * (input.playerInput.sprint() ? 2 : 1)).multiply(delta * speed), pos.yaw));
     }
 
     public static void reset() {

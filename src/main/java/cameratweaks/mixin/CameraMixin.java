@@ -31,7 +31,7 @@ public abstract class CameraMixin {
     @Shadow
     private boolean thirdPerson;
     @Shadow
-    private float lastTickDelta;
+    private float lastTickProgress;
     @Shadow
     private float yaw;
     @Shadow
@@ -48,16 +48,16 @@ public abstract class CameraMixin {
     @Shadow protected abstract float clipToSpace(float f);
 
     @Inject(method = "update", at = @At("HEAD"), cancellable = true)
-    private void update(BlockView area, Entity focusedEntity, boolean thirdPerson1, boolean inverseView, float tickDelta, CallbackInfo ci) {
+    private void update(BlockView area, Entity focusedEntity, boolean thirdPerson1, boolean inverseView, float tickProgress, CallbackInfo ci) {
         if (!Keybinds.freecam.enabled() || Freecam.pos == null) return;
         ci.cancel();
         this.ready = true;
         this.area = area;
         this.focusedEntity = focusedEntity;
         this.thirdPerson = true;
-        this.lastTickDelta = tickDelta;
-        setRotation(MathHelper.lerpAngleDegrees(tickDelta, Freecam.prev.yaw, Freecam.pos.yaw), MathHelper.lerp(tickDelta, Freecam.prev.pitch, Freecam.pos.pitch));
-        setPos(Freecam.prev.pos.lerp(Freecam.pos.pos, tickDelta));
+        this.lastTickProgress = tickProgress;
+        setRotation(MathHelper.lerpAngleDegrees(tickProgress, Freecam.prev.yaw, Freecam.pos.yaw), MathHelper.lerp(tickProgress, Freecam.prev.pitch, Freecam.pos.pitch));
+        setPos(Freecam.prev.pos.lerp(Freecam.pos.pos, tickProgress));
     }
 
     @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Camera;setRotation(FF)V", ordinal = 1))
