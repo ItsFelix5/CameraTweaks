@@ -53,6 +53,9 @@ You can configure your cloud render distance and height in the Camera Tweaks set
 
 <img src="https://cdn.modrinth.com/data/T1E4i1qj/images/200f63e7e2d383ecde4faded508496612ef25695.png" width="100%"/>
 
+## 🫲 See items in boats
+With Camera Tweaks you can see the items you are holding while moving in a boat.
+
 ## ❓ Faq
 #### I have a suggestion for this mod!
 If you have any suggestions, feel free to [tell me](https://github.com/ItsFelix5/CameraTweaks/issues/new?assignees=itsfelix5&labels=enhancement&projects=&template=feature_request.yml&title=%5BSuggestion%5D+)!
