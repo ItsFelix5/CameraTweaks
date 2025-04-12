@@ -70,8 +70,9 @@ public abstract class CameraMixin {
     private void modifyThirdperson(BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta, CallbackInfo ci) {
         ci.cancel();
         float f = focusedEntity instanceof LivingEntity livingEntity ? livingEntity.getScale() : 1.0F;
-        float distance = ThirdPerson.current.xOffset + ThirdPerson.distanceOffset * f;
-        this.moveBy(ThirdPerson.current.collision? -clipToSpace(distance) : -distance, ThirdPerson.current.yOffset * f, ThirdPerson.current.zOffset * f);
+        float distance = (ThirdPerson.current.xOffset + ThirdPerson.distanceOffset) * f;
+        this.moveBy(0, ThirdPerson.current.yOffset * f, ThirdPerson.current.zOffset * f);
+        this.moveBy(ThirdPerson.current.collision? -clipToSpace(distance) : -distance, 0, 0);
         this.setRotation(this.yaw + ThirdPerson.current.yaw, this.pitch + ThirdPerson.current.pitch);
     }
 
