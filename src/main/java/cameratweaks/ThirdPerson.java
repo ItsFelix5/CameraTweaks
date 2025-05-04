@@ -9,6 +9,7 @@ import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
+import net.minecraft.client.option.Perspective;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ public class ThirdPerson implements Cloneable {
     public static ThirdPerson current;
     public static ArrayList<ThirdPerson> pending;
 
+    @SerialEntry(required = false)
+    public boolean enabled = true;
     @SerialEntry(required = false)
     public int keyCode = -1;
     @SerialEntry
@@ -60,13 +63,22 @@ public class ThirdPerson implements Cloneable {
         }
     }
 
-    public static void setCurrent(ThirdPerson current) {
-        if(ThirdPerson.current != null && !ThirdPerson.current.rotatePlayer) {
+    public static void setCurrent(ThirdPerson thirdPerson) {
+        distanceOffset = 0.0F;
+        if(thirdPerson == null || !thirdPerson.enabled) {
+            client.options.setPerspective(Perspective.FIRST_PERSON);
+            client.gameRenderer.onCameraEntitySet(client.getCameraEntity());
+            thirdPerson = null;
+        } else {
+            client.options.setPerspective(thirdPerson.invert?Perspective.THIRD_PERSON_FRONT:Perspective.THIRD_PERSON_BACK);
+            client.gameRenderer.onCameraEntitySet(null);
+        }
+        if(current != null && !current.rotatePlayer) {
             Keybinds.freelook.setEnabled(false);
             Freelook.enabled = false;// Bye bye animation :(
         }
-        if(current != null && !current.rotatePlayer) Keybinds.freelook.setEnabled(true);
-        ThirdPerson.current = current;
+        if(thirdPerson != null && !thirdPerson.rotatePlayer) Keybinds.freelook.setEnabled(true);
+        current = thirdPerson;
     }
 
     public static void modifyDistance(float amount) {
@@ -78,6 +90,13 @@ public class ThirdPerson implements Cloneable {
         OptionGroup.Builder builder = OptionGroup.createBuilder()
                 .name(Text.translatable("cameratweaks.options.thirdperson."+ (i == 0? "back" : i == 1? "front" : "custom"), i - 1))
                 .collapsed(true);
+        if(i == 1) builder.option(Option.<Boolean>createBuilder()
+                .name(Text.translatable("cameratweaks.options.thirdperson.enabled"))
+                .description(OptionDescription.of(Text.translatable("cameratweaks.options.thirdperson.enabled.description")))
+                .binding(true, ()->enabled, key->enabled = key)
+                .controller(BooleanControllerBuilder::create)
+                .build());
+
         if(i > 1) builder.option(Option.<Integer>createBuilder()
                 .name(Text.translatable("cameratweaks.options.thirdperson.key"))
                 .description(OptionDescription.of(Text.translatable("cameratweaks.options.thirdperson.key.description")))
@@ -136,7 +155,7 @@ public class ThirdPerson implements Cloneable {
                 .controller(BooleanControllerBuilder::create)
                 .build());
 
-        if(i > 1) builder.option(Option.<Boolean>createBuilder()
+        builder.option(Option.<Boolean>createBuilder()
                 .name(Text.translatable("cameratweaks.options.thirdperson.invert"))
                 .description(OptionDescription.of(Text.translatable("cameratweaks.options.thirdperson.invert.description")))
                 .binding(false, ()->invert, val->invert = val)

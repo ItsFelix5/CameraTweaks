@@ -28,8 +28,6 @@ public class KeyboardMixin {
                         ThirdPerson.setCurrent(null);
                         break;
                     }
-                    client.options.setPerspective(thirdPerson.invert?Perspective.THIRD_PERSON_FRONT:Perspective.THIRD_PERSON_BACK);
-                    ThirdPerson.distanceOffset = 0.0F;
                     ThirdPerson.setCurrent(thirdPerson);
                     break;
                 }

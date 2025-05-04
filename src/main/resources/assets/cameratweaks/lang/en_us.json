@@ -56,6 +56,8 @@
   "cameratweaks.options.thirdperson.front": "Vanilla Front",
   "cameratweaks.options.thirdperson.custom": "Custom Third Person %s",
 
+  "cameratweaks.options.thirdperson.enabled": "Enabled",
+  "cameratweaks.options.thirdperson.enabled.description": "If you can use this third person",
   "cameratweaks.options.thirdperson.key": "Keybind",
   "cameratweaks.options.thirdperson.key.description": "The key used to trigger this",
 

@@ -1,6 +1,7 @@
 package cameratweaks.mixin;
 
 import cameratweaks.Freelook;
+import cameratweaks.Keybinds;
 import cameratweaks.ThirdPerson;
 import cameratweaks.Util;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -24,7 +25,7 @@ public abstract class EntityMixin {
     private Vec3d movementInputToVelocity(Vec3d movementInput, float speed, float yaw) {
         double d = movementInput.lengthSquared();
         if (d < 1.0E-7) return Vec3d.ZERO;
-        boolean isFree = Freelook.enabled && (this.getControllingPassenger() instanceof ClientPlayerEntity || (Object) this instanceof ClientPlayerEntity)
+        boolean isFree = Keybinds.freelook.enabled() && (this.getControllingPassenger() instanceof ClientPlayerEntity || (Object) this instanceof ClientPlayerEntity)
                 && ThirdPerson.current != null && !ThirdPerson.current.rotatePlayer;
         if (isFree) yaw = Freelook.yaw;
         Vec3d rotated = Util.rotate((d > 1.0 ? movementInput.normalize() : movementInput).multiply(speed), yaw);

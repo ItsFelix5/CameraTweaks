@@ -43,6 +43,10 @@ public class Config {
     @SerialEntry
     public List<ThirdPerson> thirdPersons = List.of(new ThirdPerson(), new ThirdPerson());
 
+    public Config() {
+        thirdPersons.get(1).invert = true;
+    }
+
     Screen generateScreen(Screen parentScreen) {
         return YetAnotherConfigLib.createBuilder()
                 .save(()->{

@@ -16,6 +16,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import static cameratweaks.Util.input;
+
 @Mixin(Mouse.class)
 public class MouseMixin {
     @Shadow @Final private MinecraftClient client;
@@ -49,7 +51,7 @@ public class MouseMixin {
             if(instance.isGliding()) instance.changeLookDirection(cursorDeltaX, cursorDeltaY);
             else if (ThirdPerson.current != null && !ThirdPerson.current.rotatePlayer) {
                 Freelook.pitch = Math.clamp(Freelook.pitch, -90, 90);
-                if(Util.isMoving()) client.player.setPitch(Freelook.pitch);
+                if(Util.isMoving()) client.player.setPitch(Freelook.pitch * (input.playerInput.backward()?-1:1));
             }
         } else {
             instance.changeLookDirection(cursorDeltaX, cursorDeltaY);

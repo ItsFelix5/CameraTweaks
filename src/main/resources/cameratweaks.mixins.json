@@ -11,6 +11,7 @@
     "DimensionEffectsMixin",
     "EntityMixin",
     "HeldItemRendererMixin",
+    "InputMixin",
     "KeyboardMixin",
     "LightmapTextureManagerMixin",
     "MouseMixin",
