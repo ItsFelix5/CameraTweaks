@@ -18,7 +18,6 @@ public class Freecam {
 
     public static void enable() {
         client.chunkCullingEnabled = false;
-        client.gameRenderer.setRenderHand(false);
         speed = 1f;
         setPosition();
         if (!Keybinds.playerMovement.enabled()) cameraMovement();
@@ -26,7 +25,6 @@ public class Freecam {
 
     public static void disable() {
         client.chunkCullingEnabled = true;
-        client.gameRenderer.setRenderHand(true);
         pos = null;
         if (!Keybinds.playerMovement.enabled()) playerMovement();
     }

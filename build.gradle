@@ -23,7 +23,7 @@ repositories {
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.minecraft_version}+build.${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc:fabric-loader:+"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}-fabric"
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
@@ -42,13 +42,9 @@ processResources {
     }
 }
 
-tasks.withType(JavaCompile).configureEach {
-    it.options.encoding = "UTF-8"
-    it.options.release.set(21)
-}
-
 java {
-    if (JavaVersion.current() < JavaVersion.toVersion(21)) toolchain.languageVersion = JavaLanguageVersion.of(21)
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
@@ -65,13 +61,3 @@ publishing {
         }
     }
 }
-
-modrinth {
-    token = System.getenv("MODRINTH_TOKEN")
-    projectId = "T1E4i1qj"
-    uploadFile = remapJar
-    loaders = ["fabric", "quilt"]
-    syncBodyFrom = rootProject.file("README.md").text
-}
-
-tasks.modrinth.dependsOn(tasks.modrinthSyncBody)

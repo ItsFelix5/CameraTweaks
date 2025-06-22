@@ -14,6 +14,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,6 +26,11 @@ public class RendererMixin {
     @Inject(method = "bobView", at = @At("HEAD"), cancellable = true)
     private void disableViewBobbing(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         if(Keybinds.freecam.enabled() || Zoom.currZoom > 5) ci.cancel();
+    }
+
+    @Inject(method = "renderHand", at = @At("HEAD"), cancellable = true)
+    private void renderHand(float tickProgress, boolean sleeping, Matrix4f positionMatrix, CallbackInfo ci) {
+        if(Keybinds.freecam.enabled()) ci.cancel();
     }
 
     @WrapOperation(method = "updateFovMultiplier", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/SimpleOption;getValue()Ljava/lang/Object;"))

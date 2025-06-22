@@ -39,8 +39,6 @@ public class Config {
     @SerialEntry
     public int cloudHeight = 192;
     @SerialEntry
-    public int cloudSize = 32;
-    @SerialEntry
     public List<ThirdPerson> thirdPersons = List.of(new ThirdPerson(), new ThirdPerson());
 
     public Config() {
@@ -87,14 +85,6 @@ public class Config {
                                 .description(OptionDescription.of(Text.translatable("cameratweaks.options.cloudHeight.description")))
                                 .binding(192, ()-> cloudHeight, val-> cloudHeight = val)
                                 .controller(o-> IntegerSliderControllerBuilder.create(o).step(2).range(150, 400))
-                                .build())
-                        .option(Option.<Integer>createBuilder()
-                                .name(Text.translatable("cameratweaks.options.cloudSize"))
-                                .description(OptionDescription.of(Text.translatable("cameratweaks.options.cloudSize.description")))
-                                .binding(32, ()-> cloudSize, val-> {
-                                    cloudSize = val;
-                                    client.worldRenderer.getCloudRenderer().scheduleTerrainUpdate();
-                                }).controller(o-> IntegerSliderControllerBuilder.create(o).step(4).range(16, 256))
                                 .build())
                         .build())
                 .category(ConfigCategory.createBuilder()
