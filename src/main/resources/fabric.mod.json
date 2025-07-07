@@ -19,7 +19,7 @@
   "mixins": ["cameratweaks.mixins.json"],
   "accessWidener": "cameratweaks.accesswidener",
   "depends": {
-    "minecraft": "1.21.6",
+    "minecraft": "*",
     "fabric": "*",
     "fabricloader": "*",
     "yet_another_config_lib_v3": "*"
