@@ -15,12 +15,12 @@ import java.util.function.Supplier;
 import static cameratweaks.Util.client;
 
 public class Keybinds {
-    public static final BetterKeybind freecam = new BetterKeybind("freecam", GLFW.GLFW_KEY_G)
+    public static final BetterKeybind freecam = new BetterKeybind("freecam", GLFW.GLFW_KEY_H)
             .toggle().onPress(Freecam::enable, Freecam::disable);
 
-    public static final BetterKeybind saveFreecam = new BetterKeybind("freecam.save", GLFW.GLFW_KEY_H);
+    public static final BetterKeybind saveFreecam = new BetterKeybind("freecam.save", GLFW.GLFW_KEY_J);
 
-    public static final BetterKeybind playerMovement = new BetterKeybind("freecam.movement", GLFW.GLFW_KEY_H)
+    public static final BetterKeybind playerMovement = new BetterKeybind("freecam.movement", GLFW.GLFW_KEY_J)
             .toggle().onPress(Freecam::playerMovement, Freecam::cameraMovement);
 
     public static final BetterKeybind zoom = new BetterKeybind("zoom", GLFW.GLFW_KEY_C).onPress(Zoom::start, Zoom::stop);

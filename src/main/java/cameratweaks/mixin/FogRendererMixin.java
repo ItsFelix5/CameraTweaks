@@ -1,6 +1,8 @@
 package cameratweaks.mixin;
 
 import cameratweaks.config.Config;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.render.fog.FogData;
 import net.minecraft.client.render.fog.FogRenderer;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,5 +19,10 @@ public class FogRendererMixin {
         if (Config.HANDLER.instance().disableFog) value.renderDistanceStart = value.renderDistanceEnd = value.environmentalStart = value.environmentalEnd = value.skyEnd = value.cloudEnd =
                 client.options.getClampedViewDistance() * 32;
         return value;
+    }
+
+    @WrapOperation(method = "getFogColor", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F"))
+    private float getFogColor(float delta, float start, float end, Operation<Float> original) {
+        return original.call(Config.HANDLER.instance().fullbright && Config.HANDLER.instance().nightVisionFullbright? 1F : delta, start, end);
     }
 }

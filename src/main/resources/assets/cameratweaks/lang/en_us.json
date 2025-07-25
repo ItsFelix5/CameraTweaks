@@ -38,6 +38,9 @@
   "cameratweaks.fullbright.on": "Enabled fullbright",
   "cameratweaks.fullbright.off": "Disabled fullbright",
 
+  "cameratweaks.options.fullbright.nightvision": "Use Night Vision For Fullbright",
+  "cameratweaks.options.fullbright.nightvision.description": "Use the night vision effect instead of gamma for fullbright, this works better with some shaders.",
+
   "key.cameratweaks.zoom": "Zoom",
   "cameratweaks.zoom.set": "x%s",
 

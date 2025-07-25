@@ -33,6 +33,8 @@ public class Config {
     @SerialEntry
     public boolean fullbright = false;
     @SerialEntry
+    public boolean nightVisionFullbright = false;
+    @SerialEntry
     public boolean alternateFreecam = false;
     @SerialEntry
     public boolean zoomAnimation = true;
@@ -67,6 +69,11 @@ public class Config {
                                     fullbright = enabled;
                                     client.gameRenderer.getLightmapTextureManager().dirty = true;
                                 }).controller(TickBoxControllerBuilder::create)
+                                .build())
+                        .option(Option.<Boolean>createBuilder()
+                                .name(Text.translatable("cameratweaks.options.fullbright.nightvision"))
+                                .description(OptionDescription.of(Text.translatable("cameratweaks.options.fullbright.nightvision.description")))
+                                .binding(false, ()->nightVisionFullbright, enabled->nightVisionFullbright = enabled).controller(TickBoxControllerBuilder::create)
                                 .build())
                         .option(Option.<Boolean>createBuilder()
                                 .name(Text.translatable("cameratweaks.options.zoomAnimation"))
