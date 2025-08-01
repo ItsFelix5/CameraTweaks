@@ -35,7 +35,7 @@ public record KeybindController(Option<Integer> option) implements Controller<In
         }
 
         @Override
-        public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        public boolean mouseClicked(double mouseX, double mouseY, int button, boolean bl) {
             if (!isMouseOver(mouseX, mouseY) || !isAvailable())
                 return false;
 
