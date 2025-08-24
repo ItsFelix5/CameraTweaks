@@ -9,10 +9,10 @@ public class Main implements ModInitializer {
     public void onInitialize() {
         Config.HANDLER.load();
         Keybinds.init();
-        ClientTickEvents.END_CLIENT_TICK.register(c -> {
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if(Config.HANDLER.instance().zoomAnimation) Zoom.tick();
             Freelook.tick();
-            Util.input.tick();
+            if (Keybinds.freecam.enabled() && !Keybinds.playerMovement.enabled()) Util.input.tick(false, 0F);
         });
     }
 }

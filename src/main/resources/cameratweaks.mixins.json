@@ -4,11 +4,12 @@
   "package": "cameratweaks.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
+    "AbstractHorseEntityMixin",
+    "BackgroundRendererMixin",
     "CameraMixin",
     "ClientMixin",
-    "DimensionTypeMixin",
+    "CloudRendererMixin",
     "EntityMixin",
-    "FogRendererMixin",
     "HeldItemRendererMixin",
     "InputMixin",
     "KeyboardMixin",
@@ -22,8 +23,5 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "mixins": [
-    "AbstractHorseEntityMixin"
-  ]
+  }
 }

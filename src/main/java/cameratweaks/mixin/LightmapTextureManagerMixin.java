@@ -1,9 +1,6 @@
 package cameratweaks.mixin;
 
 import cameratweaks.config.Config;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.mojang.blaze3d.buffers.Std140Builder;
 import net.minecraft.client.render.LightmapTextureManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -29,10 +26,5 @@ public class LightmapTextureManagerMixin {
             if(disableLightmap) ci.cancel();
             else disableLightmap = true;
         } else disableLightmap = false;
-    }
-
-    @WrapOperation(method = "update", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/buffers/Std140Builder;putFloat(F)Lcom/mojang/blaze3d/buffers/Std140Builder;", ordinal = 3))
-    private Std140Builder putFloat(Std140Builder instance, float value, Operation<Std140Builder> original) {
-        return original.call(instance, Config.HANDLER.instance().fullbright && Config.HANDLER.instance().nightVisionFullbright?1F:value);
     }
 }

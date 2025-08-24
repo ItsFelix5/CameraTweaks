@@ -7,9 +7,11 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.option.SimpleOption;
+import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -20,6 +22,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(GameRenderer.class)
 public class RendererMixin {
@@ -29,7 +32,7 @@ public class RendererMixin {
     }
 
     @Inject(method = "renderHand", at = @At("HEAD"), cancellable = true)
-    private void renderHand(float tickProgress, boolean sleeping, Matrix4f positionMatrix, CallbackInfo ci) {
+    private void renderHand(Camera camera, float tickDelta, Matrix4f matrix4f, CallbackInfo ci) {
         if(Keybinds.freecam.enabled()) ci.cancel();
     }
 
@@ -72,5 +75,10 @@ public class RendererMixin {
                     RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, instance));
         }
         return instance.raycast(maxDistance, tickDelta, false);
+    }
+
+    @Inject(method = "getNightVisionStrength", at = @At("HEAD"), cancellable = true)
+    private static void getNightVisionStrength(LivingEntity entity, float tickDelta, CallbackInfoReturnable<Float> cir) {
+        if (Config.HANDLER.instance().fullbright && Config.HANDLER.instance().nightVisionFullbright) cir.setReturnValue(1.0F);
     }
 }
