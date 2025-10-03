@@ -35,7 +35,7 @@ public record KeybindController(Option<Integer> option) implements Controller<In
         }
 
         @Override
-        public boolean mouseClicked(double mouseX, double mouseY, int button, boolean bl) {
+        public boolean onMouseClicked(double mouseX, double mouseY, int button) {
             if (!isMouseOver(mouseX, mouseY) || !isAvailable())
                 return false;
 
@@ -44,7 +44,7 @@ public record KeybindController(Option<Integer> option) implements Controller<In
         }
 
         @Override
-        public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        public boolean onKeyPressed(int keyCode, int scanCode, int modifiers) {
             if (!listening) return false;
             listening = false;
             if(keyCode != GLFW.GLFW_KEY_ESCAPE) control.option().requestSet(keyCode);

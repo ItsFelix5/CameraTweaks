@@ -88,8 +88,7 @@ public class ThirdPerson implements Cloneable {
 
     public OptionGroup toGroup(int i) {
         OptionGroup.Builder builder = OptionGroup.createBuilder()
-                .name(Text.translatable("cameratweaks.options.thirdperson."+ (i == 0? "back" : i == 1? "front" : "custom"), i - 1))
-                .collapsed(true);
+                .name(Text.translatable("cameratweaks.options.thirdperson."+ (i == 0? "back" : i == 1? "front" : "custom"), i - 1));
         if(i == 1) builder.option(Option.<Boolean>createBuilder()
                 .name(Text.translatable("cameratweaks.options.thirdperson.enabled"))
                 .description(OptionDescription.of(Text.translatable("cameratweaks.options.thirdperson.enabled.description")))

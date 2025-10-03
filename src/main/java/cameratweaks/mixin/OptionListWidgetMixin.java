@@ -3,11 +3,14 @@ package cameratweaks.mixin;
 import cameratweaks.ThirdPerson;
 import cameratweaks.config.Config;
 import com.google.common.collect.ImmutableList;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.isxander.yacl3.api.ConfigCategory;
-import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionGroup;
-import dev.isxander.yacl3.api.utils.Dimension;
-import dev.isxander.yacl3.gui.*;
+import dev.isxander.yacl3.gui.LowProfileButtonWidget;
+import dev.isxander.yacl3.gui.OptionListWidget;
+import dev.isxander.yacl3.gui.TooltipButtonWidget;
+import dev.isxander.yacl3.gui.YACLSelectionList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
@@ -23,46 +26,25 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(value = OptionListWidget.class, remap = false)
-public abstract class OptionListWidgetMixin extends ElementListWidgetExt<OptionListWidget.Entry> {
+public abstract class OptionListWidgetMixin extends YACLSelectionList<OptionListWidget.Entry> {
     @Shadow @Final private ConfigCategory category;
-    @Shadow @Final private YACLScreen yaclScreen;
 
-    @Shadow public abstract Dimension<Integer> getDefaultEntryDimension();
-
-    public OptionListWidgetMixin(MinecraftClient client, int x, int y, int width, int height, boolean smoothScrolling) {
-        super(client, x, y, width, height, smoothScrolling);
+    public OptionListWidgetMixin(MinecraftClient minecraft, int width, int height, int y) {
+        super(minecraft, width, height, y);
     }
-
-    @Inject(method = "refreshOptions", at = @At(value = "INVOKE", target = "Ldev/isxander/yacl3/gui/OptionListWidget;recacheViewableChildren()V"))
-    private void addThirdPersons(CallbackInfo ci) throws Exception {
-        if(!category.name().equals(Text.translatable("cameratweaks.options.thirdperson"))) return;
-
-        Constructor<OptionListWidget.GroupSeparatorEntry> groupSeparatorEntryConstructor = OptionListWidget.GroupSeparatorEntry.class.getDeclaredConstructor(OptionListWidget.class, OptionGroup.class, Screen.class);
-
+    
+    @WrapOperation(method = "refreshOptions", at = @At(value = "INVOKE", target = "Ldev/isxander/yacl3/api/ConfigCategory;groups()Lcom/google/common/collect/ImmutableList;"))
+    private ImmutableList<OptionGroup> groups(ConfigCategory instance, Operation<ImmutableList<OptionGroup>> original) {
+        if(!category.name().equals(Text.translatable("cameratweaks.options.thirdperson"))) return original.call(instance);
         if(ThirdPerson.pending == null) ThirdPerson.pending = new ArrayList<>(Config.HANDLER.instance().thirdPersons);
-        for (int i = 0; i < ThirdPerson.pending.size(); i++) {
-            OptionGroup group = ThirdPerson.pending.get(i).toGroup(i);
-
-            OptionListWidget.GroupSeparatorEntry groupSeparatorEntry = groupSeparatorEntryConstructor.newInstance(this, group, yaclScreen);
-            addEntry(groupSeparatorEntry);
-
-            List<OptionListWidget.Entry> optionEntries = new ArrayList<>();
-
-            for (Option<?> option : group.options()) {
-                option.addEventListener((opt, event) -> ((Runnable) yaclScreen).run());
-                OptionListWidget.OptionEntry entry = ((OptionListWidget) (Object) this).new OptionEntry(option, category, group, groupSeparatorEntry,
-                        option.controller().provideWidget(yaclScreen, getDefaultEntryDimension()));
-                addEntry(entry);
-                optionEntries.add(entry);
-            }
-
-            groupSeparatorEntry.setChildEntries(optionEntries);
-        }
+        ImmutableList.Builder<OptionGroup> builder = ImmutableList.builder();
+        builder.addAll(original.call(instance));
+        for (int i = 0; i < ThirdPerson.pending.size(); i++) builder.add(ThirdPerson.pending.get(i).toGroup(i));
+        return builder.build();
     }
 
     @Mixin(value = OptionListWidget.GroupSeparatorEntry.class, remap = false)
@@ -82,10 +64,10 @@ public abstract class OptionListWidgetMixin extends ElementListWidgetExt<OptionL
         }
 
         @Inject(method = "render", at = @At("TAIL"), remap = true)
-        public void render(DrawContext graphics, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta, CallbackInfo ci) {
+        public void render(DrawContext graphics, int mouseX, int mouseY, boolean hovered, float deltaTicks, CallbackInfo ci) {
             if(removeListButton != null) {
                 removeListButton.setY(expandMinimizeButton.getY());
-                removeListButton.render(graphics, mouseX, mouseY, tickDelta);
+                removeListButton.render(graphics, mouseX, mouseY, deltaTicks);
             }
         }
 

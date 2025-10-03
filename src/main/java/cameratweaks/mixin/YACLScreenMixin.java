@@ -9,7 +9,6 @@ import dev.isxander.yacl3.api.YetAnotherConfigLib;
 import dev.isxander.yacl3.api.utils.OptionUtils;
 import dev.isxander.yacl3.gui.OptionListWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
-import dev.isxander.yacl3.gui.tab.ListHolderWidget;
 import net.minecraft.client.gui.tab.TabManager;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Final;
@@ -41,8 +40,8 @@ public abstract class YACLScreenMixin implements Runnable {
             AtomicBoolean val = new AtomicBoolean(false);
             if(tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab tab && tab.getTitle().equals(Text.translatable("cameratweaks.options.thirdperson")))
                 tab.forEachChild(child -> {
-                    if(child instanceof ListHolderWidget<?> holder)
-                        ((OptionListWidget) holder.getList()).children().forEach(entry -> {
+                    if(child instanceof OptionListWidget list)
+                        list.children().forEach(entry -> {
                             if(entry instanceof OptionListWidget.OptionEntry optionEntry && !val.get()) val.set(func.apply(optionEntry.option));
                         });
                 });
@@ -56,8 +55,8 @@ public abstract class YACLScreenMixin implements Runnable {
     private void finishOrSave(YetAnotherConfigLib yacl, Consumer<Option<?>> consumer, Operation<Void> original) {
         if(tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab tab && tab.getTitle().equals(Text.translatable("cameratweaks.options.thirdperson")))
             tab.forEachChild(child -> {
-                if(child instanceof ListHolderWidget<?> holder)
-                    ((OptionListWidget) holder.getList()).children().forEach(entry -> {
+                if(child instanceof OptionListWidget list)
+                    list.children().forEach(entry -> {
                         if(entry instanceof OptionListWidget.OptionEntry optionEntry) consumer.accept(optionEntry.option);
                     });
             });
@@ -69,8 +68,8 @@ public abstract class YACLScreenMixin implements Runnable {
     private void cancel(YetAnotherConfigLib yacl, Consumer<Option<?>> consumer, Operation<Void> original) {
         if(tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab tab && tab.getTitle().equals(Text.translatable("cameratweaks.options.thirdperson")))
             tab.forEachChild(child -> {
-                if(child instanceof ListHolderWidget<?> holder)
-                    ((OptionListWidget) holder.getList()).children().forEach(entry -> {
+                if(child instanceof OptionListWidget list)
+                    list.children().forEach(entry -> {
                         if(entry instanceof OptionListWidget.OptionEntry optionEntry) consumer.accept(optionEntry.option);
                     });
             });
@@ -84,9 +83,10 @@ public abstract class YACLScreenMixin implements Runnable {
         if(tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab tab && tab.getTitle().equals(Text.translatable("cameratweaks.options.thirdperson"))){
             ThirdPerson.pending = new ArrayList<>(List.of(new ThirdPerson(), new ThirdPerson()));
             tab.forEachChild(child -> {
-                if(child instanceof ListHolderWidget<?> holder) ((OptionListWidget) holder.getList()).refreshOptions();
+                if(child instanceof OptionListWidget list) list.refreshOptions();
             });
-        } else original.call(yacl, consumer);
+        }
+        original.call(yacl, consumer);
     }
 
     @WrapOperation(method = "undo", at = @At(value = "INVOKE", target = "Ldev/isxander/yacl3/api/utils/OptionUtils;forEachOptions(Ldev/isxander/yacl3/api/YetAnotherConfigLib;" +
@@ -95,7 +95,7 @@ public abstract class YACLScreenMixin implements Runnable {
         if(tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab tab && tab.getTitle().equals(Text.translatable("cameratweaks.options.thirdperson"))){
             ThirdPerson.pending = new ArrayList<>(Config.HANDLER.instance().thirdPersons);
             tab.forEachChild(child -> {
-                if(child instanceof ListHolderWidget<?> holder) ((OptionListWidget) holder.getList()).refreshOptions();
+                if(child instanceof OptionListWidget list) list.refreshOptions();
             });
         } else original.call(yacl, consumer);
     }

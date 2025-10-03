@@ -2,19 +2,18 @@ package cameratweaks;
 
 import cameratweaks.config.Config;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.Map;
-import java.util.Set;
 import java.util.function.Supplier;
 
 import static cameratweaks.Util.client;
 
 public class Keybinds {
+    private static final KeyBinding.Category CATEGORY = KeyBinding.Category.create(Identifier.of("cameratweaks", "cameratweaks"));
+
     public static final BetterKeybind freecam = new BetterKeybind("freecam", GLFW.GLFW_KEY_H)
             .toggle().onPress(Freecam::enable, Freecam::disable);
 
@@ -55,7 +54,7 @@ public class Keybinds {
         private boolean used = false;
 
         private BetterKeybind(String translationKey, int keyCode) {
-            super("key.cameratweaks." + translationKey, keyCode, "category.cameratweaks.cameratweaks");
+            super("key.cameratweaks." + translationKey, keyCode, CATEGORY);
             KeyBindingHelper.registerKeyBinding(this);
         }
         
@@ -88,7 +87,7 @@ public class Keybinds {
                         if (used) used = false;
                         else {
                             setEnabled(!enabled);
-                            client.player.sendMessage(Text.translatable(getTranslationKey().substring(4) + (enabled ? ".on" : ".off")), true);
+                            client.player.sendMessage(Text.translatable(getId().substring(4) + (enabled ? ".on" : ".off")), true);
                         }
                     }
                 } else setEnabled(pressed);
@@ -107,17 +106,11 @@ public class Keybinds {
             else release.run();
         }
 
-        @SuppressWarnings("unchecked")
         public void setUsed() {
             used = true;
-            if(FabricLoader.getInstance().isModLoaded("stfu")) {
-                try {
-                    ((Map<InputUtil.Key, Set<KeyBinding>>) Class.forName("stfu.KeybindHolder").getDeclaredField("KEY_TO_BINDINGS").get(null))
-                            .get(KeyBindingHelper.getBoundKeyOf(this)).forEach(keyBinding -> {
-                                if(keyBinding instanceof BetterKeybind betterKeybind) betterKeybind.used = true;
-                            });
-                } catch (Exception ignored) {}
-            }
+            KeyBinding.KEY_TO_BINDINGS.get(KeyBindingHelper.getBoundKeyOf(this)).forEach(keyBinding -> {
+                if(keyBinding instanceof BetterKeybind betterKeybind) betterKeybind.used = true;
+            });
         }
     }
 }

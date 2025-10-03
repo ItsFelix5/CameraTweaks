@@ -9,7 +9,6 @@ import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import dev.isxander.yacl3.gui.OptionListWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
-import dev.isxander.yacl3.gui.tab.ListHolderWidget;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
@@ -47,7 +46,7 @@ public class Config {
         thirdPersons.get(1).invert = true;
     }
 
-    Screen generateScreen(Screen parentScreen) {
+    public Screen generateScreen(Screen parentScreen) {
         return YetAnotherConfigLib.createBuilder()
                 .save(()->{
                     HANDLER.instance().thirdPersons = ThirdPerson.pending.stream().map(ThirdPerson::clone).toList();
@@ -103,7 +102,7 @@ public class Config {
                                     ThirdPerson thirdPerson = new ThirdPerson();
                                     ThirdPerson.pending.add(thirdPerson);
                                     if(screen.tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab categoryTab) categoryTab.forEachChild(widget -> {
-                                        if(widget instanceof ListHolderWidget<?> holder) ((OptionListWidget) holder.getList()).refreshOptions();
+                                        if(widget instanceof OptionListWidget list) list.refreshOptions();
                                         ((Runnable) screen).run();
                                     });
                                 }).build())

@@ -59,7 +59,7 @@ public class Freecam {
     public static void saveCamera(int i) {
         if(Config.HANDLER.instance().alternateFreecam) {
             if(pos != null && pos.equals(cameras[i])) {
-                Entity camera = client.cameraEntity;
+                Entity camera = client.getCameraEntity();
                 int fov = ThirdPerson.current == null || !ThirdPerson.current.changedFov? client.options.getFov().getValue() : ThirdPerson.current.fov;
                 cameras[i] = new Util.Pos(client.world.getRegistryKey(), camera.getEyePos(), camera.getPitch(), camera.getYaw(), fov);
             } else if (cameras[i] != null){

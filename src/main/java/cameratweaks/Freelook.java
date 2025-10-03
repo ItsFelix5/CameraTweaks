@@ -9,8 +9,8 @@ public class Freelook {
 
     public static void start() {
         enabled = true;
-        yaw = client.cameraEntity.getYaw();
-        pitch = client.cameraEntity.getPitch();
+        yaw = client.getCameraEntity().getYaw();
+        pitch = client.getCameraEntity().getPitch();
     }
 
     public static void stop() {

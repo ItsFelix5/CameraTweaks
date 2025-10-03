@@ -51,13 +51,6 @@ public class RendererMixin {
         return original.call(instance);
     }
 
-    @WrapOperation(method = "renderWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/SimpleOption;getValue()Ljava/lang/Object;", ordinal = 2))
-    private Object renderWorld(SimpleOption<Integer> instance, Operation<Integer> original) {
-        if (ThirdPerson.current != null && ThirdPerson.current.changedFov) return ThirdPerson.current.fov;
-        if (Keybinds.freecam.enabled()) return Freecam.pos.fov;
-        return original.call(instance);
-    }
-
     @Redirect(method = "findCrosshairTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getRotationVec(F)Lnet/minecraft/util/math/Vec3d;"))
     private Vec3d getRotationVec(Entity instance, float tickDelta) {
         if(Freelook.enabled) return instance.getRotationVector(Freelook.pitch, Freelook.yaw);
@@ -68,7 +61,7 @@ public class RendererMixin {
     private HitResult raycast(Entity instance, double maxDistance, float tickDelta, boolean includeFluids) {
         if(Freelook.enabled) {
             Vec3d vec3d = instance.getCameraPosVec(tickDelta);
-            return instance.getWorld().raycast(new RaycastContext(vec3d, vec3d.add(instance.getRotationVector(Freelook.pitch, Freelook.yaw).multiply(maxDistance)),
+            return instance.getEntityWorld().raycast(new RaycastContext(vec3d, vec3d.add(instance.getRotationVector(Freelook.pitch, Freelook.yaw).multiply(maxDistance)),
                     RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, instance));
         }
         return instance.raycast(maxDistance, tickDelta, false);
