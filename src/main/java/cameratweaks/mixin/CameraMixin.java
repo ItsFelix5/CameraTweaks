@@ -10,6 +10,7 @@ import net.minecraft.client.option.SimpleOption;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockView;
@@ -69,8 +70,16 @@ public abstract class CameraMixin {
     @Inject(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Camera;clipToSpace(F)F"), cancellable = true)
     private void modifyThirdperson(BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta, CallbackInfo ci) {
         ci.cancel();
-        float f = focusedEntity instanceof LivingEntity livingEntity ? livingEntity.getScale() : 1.0F;
-        float distance = (ThirdPerson.current.xOffset + ThirdPerson.distanceOffset) * f;
+        float f = 4.0F;
+        if (focusedEntity instanceof LivingEntity livingEntity)
+            f = livingEntity.getScale() * (float)livingEntity.getAttributeValue(EntityAttributes.CAMERA_DISTANCE);
+
+        if (focusedEntity.hasVehicle() && focusedEntity.getVehicle() instanceof LivingEntity livingEntity2) {
+            float d = livingEntity2.getScale() *  (float)livingEntity2.getAttributeValue(EntityAttributes.CAMERA_DISTANCE);
+            if (d > f) f = d;
+        }
+
+        float distance = (ThirdPerson.current.xOffset + ThirdPerson.distanceOffset) * f / 4F;
         this.moveBy(0, ThirdPerson.current.yOffset * f, ThirdPerson.current.zOffset * f);
         this.moveBy(ThirdPerson.current.collision? -clipToSpace(distance) : -distance, 0, 0);
         this.setRotation(this.yaw + ThirdPerson.current.yaw, this.pitch + ThirdPerson.current.pitch);
