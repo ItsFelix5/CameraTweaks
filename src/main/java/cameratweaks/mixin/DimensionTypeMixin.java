@@ -13,6 +13,6 @@ import java.util.Optional;
 public class DimensionTypeMixin {
     @Inject(method = "cloudHeight", at = @At("TAIL"), cancellable = true)
     private void getCloudHeight(CallbackInfoReturnable<Optional<Integer>> cir) {
-        cir.setReturnValue(cir.getReturnValue().map(height -> height + Config.HANDLER.instance().cloudHeight - 192));
+        cir.setReturnValue(cir.getReturnValue().map(height -> height + Config.get().cloudHeight - 192));
     }
 }

@@ -7,10 +7,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.OptionGroup;
-import dev.isxander.yacl3.gui.LowProfileButtonWidget;
-import dev.isxander.yacl3.gui.OptionListWidget;
-import dev.isxander.yacl3.gui.TooltipButtonWidget;
-import dev.isxander.yacl3.gui.YACLSelectionList;
+import dev.isxander.yacl3.gui.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
@@ -33,17 +30,25 @@ import java.util.List;
 public abstract class OptionListWidgetMixin extends YACLSelectionList<OptionListWidget.Entry> {
     @Shadow @Final private ConfigCategory category;
 
+    @Shadow
+    @Final
+    private YACLScreen yaclScreen;
+
     public OptionListWidgetMixin(MinecraftClient minecraft, int width, int height, int y) {
         super(minecraft, width, height, y);
     }
-    
+
     @WrapOperation(method = "refreshOptions", at = @At(value = "INVOKE", target = "Ldev/isxander/yacl3/api/ConfigCategory;groups()Lcom/google/common/collect/ImmutableList;"))
     private ImmutableList<OptionGroup> groups(ConfigCategory instance, Operation<ImmutableList<OptionGroup>> original) {
         if(!category.name().equals(Text.translatable("cameratweaks.options.thirdperson"))) return original.call(instance);
-        if(ThirdPerson.pending == null) ThirdPerson.pending = new ArrayList<>(Config.HANDLER.instance().thirdPersons);
+        if(ThirdPerson.pending == null) ThirdPerson.pending = new ArrayList<>(Config.get().thirdPersons);
         ImmutableList.Builder<OptionGroup> builder = ImmutableList.builder();
         builder.addAll(original.call(instance));
-        for (int i = 0; i < ThirdPerson.pending.size(); i++) builder.add(ThirdPerson.pending.get(i).toGroup(i));
+        for (int i = 0; i < ThirdPerson.pending.size(); i++) {
+            OptionGroup group = ThirdPerson.pending.get(i).toGroup(i);
+            group.options().forEach(o->o.addEventListener((opt, event) -> ((Runnable) yaclScreen).run()));
+            builder.add(group);
+        }
         return builder.build();
     }
 

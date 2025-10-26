@@ -25,7 +25,13 @@
   "cameratweaks.options.freecam_save_behaviour.description": "This setting rebinds the save freecam button to delete or place at the players position when that slot is active and creates a new freecam when trying to load a empty slot.",
 
   "cameratweaks.options.zoomAnimation": "Zoom Animation",
-  "cameratweaks.options.zoomAnimation.description": "Do some fancy zoom interpolation to make zooming very smooth.",
+  "cameratweaks.options.zoomAnimation.description": "How zooming should be interpolated. See easings.net for more info.",
+
+  "cameratweaks.options.zoomSpeed": "Zoom Speed",
+  "cameratweaks.options.zoomSpeed.description": "How fast zooming should be.",
+
+  "cameratweaks.options.cinematicZoom": "Enable Cinematic Camera When Zooming",
+  "cameratweaks.options.cinematicZoom.description": "^^^",
 
   "cameratweaks.options.cloudHeight": "Cloud Height",
   "cameratweaks.options.cloudHeight.description": "The height clouds are rendered at.",

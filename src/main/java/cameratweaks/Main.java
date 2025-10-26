@@ -10,7 +10,7 @@ public class Main implements ModInitializer {
         Config.HANDLER.load();
         Keybinds.init();
         ClientTickEvents.END_CLIENT_TICK.register(c -> {
-            if(Config.HANDLER.instance().zoomAnimation) Zoom.tick();
+            Zoom.tick();
             Freelook.tick();
             Util.input.tick();
         });

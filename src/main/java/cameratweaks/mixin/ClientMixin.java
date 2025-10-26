@@ -32,9 +32,9 @@ public class ClientMixin {
 
     @Redirect(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/GameOptions;setPerspective(Lnet/minecraft/client/option/Perspective;)V"))
     private void preventPerspectiveChange(GameOptions instance, Perspective perspective) {
-        if (ThirdPerson.current == Config.HANDLER.instance().thirdPersons.get(0)) ThirdPerson.setCurrent(Config.HANDLER.instance().thirdPersons.get(1));
-        else if (ThirdPerson.current == Config.HANDLER.instance().thirdPersons.get(1)) ThirdPerson.setCurrent(null);
-        else ThirdPerson.setCurrent(Config.HANDLER.instance().thirdPersons.get(0));
+        if (ThirdPerson.current == Config.get().thirdPersons.get(0)) ThirdPerson.setCurrent(Config.get().thirdPersons.get(1));
+        else if (ThirdPerson.current == Config.get().thirdPersons.get(1)) ThirdPerson.setCurrent(null);
+        else ThirdPerson.setCurrent(Config.get().thirdPersons.get(0));
     }
 
     @Redirect(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBinding;wasPressed()Z", ordinal = 2))

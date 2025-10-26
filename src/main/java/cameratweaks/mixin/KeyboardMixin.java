@@ -22,7 +22,7 @@ public class KeyboardMixin {
     private void onKey(long window, int action, KeyInput input, CallbackInfo ci) {
         if (action == GLFW.GLFW_REPEAT && KeyBinding.KEY_TO_BINDINGS.get(InputUtil.fromKeyCode(input)) instanceof Keybinds.BetterKeybind) ci.cancel();
         if(action == GLFW.GLFW_PRESS && input.getKeycode() != -1) {
-            for (ThirdPerson thirdPerson : Config.HANDLER.instance().thirdPersons) {
+            for (ThirdPerson thirdPerson : Config.get().thirdPersons) {
                 if (thirdPerson.keyCode == input.getKeycode()) {
                     if(ThirdPerson.current == thirdPerson) {
                         client.options.setPerspective(Perspective.FIRST_PERSON);

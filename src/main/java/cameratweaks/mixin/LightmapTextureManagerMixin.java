@@ -19,13 +19,13 @@ public class LightmapTextureManagerMixin {
 
     @Redirect(method = "update", at = @At(value = "INVOKE", target = "Ljava/lang/Double;floatValue()F", ordinal = 1))
     private float updateGamma(Double instance) {
-        if (Config.HANDLER.instance().fullbright && !Config.HANDLER.instance().nightVisionFullbright) return 1250;
+        if (Config.get().fullbright && !Config.get().nightVisionFullbright) return 1250;
         return instance.floatValue();
     }
 
     @Inject(method = "update", at = @At("HEAD"), cancellable = true)
     private void update(CallbackInfo ci) {
-        if (Config.HANDLER.instance().fullbright && !Config.HANDLER.instance().nightVisionFullbright) {
+        if (Config.get().fullbright && !Config.get().nightVisionFullbright) {
             if(disableLightmap) ci.cancel();
             else disableLightmap = true;
         } else disableLightmap = false;
@@ -33,6 +33,6 @@ public class LightmapTextureManagerMixin {
 
     @WrapOperation(method = "update", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/buffers/Std140Builder;putFloat(F)Lcom/mojang/blaze3d/buffers/Std140Builder;", ordinal = 3))
     private Std140Builder putFloat(Std140Builder instance, float value, Operation<Std140Builder> original) {
-        return original.call(instance, Config.HANDLER.instance().fullbright && Config.HANDLER.instance().nightVisionFullbright?1F:value);
+        return original.call(instance, Config.get().fullbright && Config.get().nightVisionFullbright?1F:value);
     }
 }

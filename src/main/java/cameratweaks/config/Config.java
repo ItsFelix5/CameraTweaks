@@ -2,6 +2,8 @@ package cameratweaks.config;
 
 import cameratweaks.ThirdPerson;
 import dev.isxander.yacl3.api.*;
+import dev.isxander.yacl3.api.controller.CyclingListControllerBuilder;
+import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
@@ -36,7 +38,11 @@ public class Config {
     @SerialEntry
     public boolean alternateFreecam = false;
     @SerialEntry
-    public boolean zoomAnimation = true;
+    public TransitionType zoomTransition = TransitionType.SINE_IN;
+    @SerialEntry
+    public float zoomSpeed = 1F;
+    @SerialEntry
+    public boolean cinematicZoom = false;
     @SerialEntry
     public int cloudHeight = 192;
     @SerialEntry
@@ -46,10 +52,14 @@ public class Config {
         thirdPersons.get(1).invert = true;
     }
 
+    public static Config get() {
+        return HANDLER.instance();
+    }
+
     public Screen generateScreen(Screen parentScreen) {
         return YetAnotherConfigLib.createBuilder()
                 .save(()->{
-                    HANDLER.instance().thirdPersons = ThirdPerson.pending.stream().map(ThirdPerson::clone).toList();
+                    get().thirdPersons = ThirdPerson.pending.stream().map(ThirdPerson::clone).toList();
                     HANDLER.save();
                 })
                 .title(Text.translatable("category.cameratweaks.cameratweaks"))
@@ -74,10 +84,22 @@ public class Config {
                                 .description(OptionDescription.of(Text.translatable("cameratweaks.options.fullbright.nightvision.description")))
                                 .binding(false, ()->nightVisionFullbright, enabled->nightVisionFullbright = enabled).controller(TickBoxControllerBuilder::create)
                                 .build())
-                        .option(Option.<Boolean>createBuilder()
+                        .option(Option.<TransitionType>createBuilder()
                                 .name(Text.translatable("cameratweaks.options.zoomAnimation"))
                                 .description(OptionDescription.of(Text.translatable("cameratweaks.options.zoomAnimation.description")))
-                                .binding(true, ()->zoomAnimation, enabled->zoomAnimation = enabled)
+                                .binding(TransitionType.SINE_IN, ()->zoomTransition, val->zoomTransition = val)
+                                .controller(o->CyclingListControllerBuilder.create(o).values(TransitionType.values()).formatValue(easing-> Text.literal(easing.name())))
+                                .build())
+                        .option(Option.<Float>createBuilder()
+                                .name(Text.translatable("cameratweaks.options.zoomSpeed"))
+                                .description(OptionDescription.of(Text.translatable("cameratweaks.options.zoomSpeed.description")))
+                                .binding(1F, ()-> zoomSpeed, val-> zoomSpeed = val)
+                                .controller(o-> FloatSliderControllerBuilder.create(o).step(0.1F).range(0F, 2F))
+                                .build())
+                        .option(Option.<Boolean>createBuilder()
+                                .name(Text.translatable("cameratweaks.options.cinematicZoom"))
+                                .description(OptionDescription.of(Text.translatable("cameratweaks.options.cinematicZoom.description")))
+                                .binding(false, ()-> cinematicZoom, enabled-> cinematicZoom = enabled)
                                 .controller(TickBoxControllerBuilder::create)
                                 .build())
                         .option(Option.<Boolean>createBuilder()

@@ -25,7 +25,7 @@ public class MouseMixin {
     @Redirect(method = "onMouseScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/input/Scroller;update(DD)Lorg/joml/Vector2i;"))
     private Vector2i onScroll(Scroller instance, double horizontal, double vertical) {
         Vector2i vector2i = instance.update(horizontal, vertical);
-        if (Keybinds.zoom.enabled()) Zoom.zoom(Zoom.zoom + vector2i.y * 0.1F * Zoom.zoom);
+        if (Keybinds.zoom.enabled()) Zoom.zoom(vector2i.y > 0);
         else if (ThirdPerson.current != null && Keybinds.thirdPersonModifier.enabled()) ThirdPerson.modifyDistance(vector2i.y / 3F);
         else if (Keybinds.freecam.enabled() && !Keybinds.playerMovement.enabled()) client.player.sendMessage(Text.translatable("cameratweaks.freecam.speed",
                 (int) (20 * (Freecam.speed = MathHelper.clamp(Freecam.speed + (float) vector2i.y * 0.05F, 0.0F, 6F)))), true);
@@ -35,7 +35,7 @@ public class MouseMixin {
 
     @Redirect(method = "updateMouse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/SimpleOption;getValue()Ljava/lang/Object;", ordinal = 0))
     private Object changeSensitivity(SimpleOption<Double> instance) {
-        return instance.getValue() * (Zoom.currZoom <= 1?1:Math.tan(Math.PI / 4 / Zoom.currZoom));
+        return instance.getValue() * Math.pow(1.0 / Zoom.zoomDivisor(0F), 0.6);
     }
 
     @Redirect(method = "updateMouse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;changeLookDirection(DD)V"))

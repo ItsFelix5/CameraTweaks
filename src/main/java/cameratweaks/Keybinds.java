@@ -32,14 +32,14 @@ public class Keybinds {
     public static void init() {
         new BetterKeybind("freelook.hold", GLFW.GLFW_KEY_UNKNOWN)
                 .onPress(() -> freelook.setEnabled(true), () -> freelook.setEnabled(false)).condition(()->ThirdPerson.current == null || ThirdPerson.current.rotatePlayer);
-        new BetterKeybind("fullbright", GLFW.GLFW_KEY_Y).defaultEnabled(Config.HANDLER.instance().fullbright).toggle().onPress(
+        new BetterKeybind("fullbright", GLFW.GLFW_KEY_Y).defaultEnabled(Config.get().fullbright).toggle().onPress(
                 () -> {
-                    Config.HANDLER.instance().fullbright = true;
+                    Config.get().fullbright = true;
                     client.gameRenderer.getLightmapTextureManager().dirty = true;
                     Config.HANDLER.save();
                 },
                 () -> {
-                    Config.HANDLER.instance().fullbright = false;
+                    Config.get().fullbright = false;
                     client.gameRenderer.getLightmapTextureManager().dirty = true;
                     Config.HANDLER.save();
                 });

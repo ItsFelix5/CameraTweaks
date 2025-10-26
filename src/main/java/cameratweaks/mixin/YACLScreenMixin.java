@@ -33,7 +33,7 @@ public abstract class YACLScreenMixin implements Runnable {
     @Redirect(method = "onOptionChanged", at = @At(value = "INVOKE", target = "Ldev/isxander/yacl3/api/utils/OptionUtils;consumeOptions(Ldev/isxander/yacl3/api/YetAnotherConfigLib;Ljava/util/function/Function;)V", ordinal = 0))
     private void onOptionChanged(YetAnotherConfigLib yacl, Function<Option<?>, Boolean> func) {
         if(ThirdPerson.pending != null) {
-            if(ThirdPerson.pending.size() != Config.HANDLER.instance().thirdPersons.size()) {
+            if(ThirdPerson.pending.size() != Config.get().thirdPersons.size()) {
                 pendingChanges = true;
                 return;
             }
@@ -93,7 +93,7 @@ public abstract class YACLScreenMixin implements Runnable {
             "Ljava/util/function/Consumer;)V"))
     private void undo(YetAnotherConfigLib yacl, Consumer<Option<?>> consumer, Operation<Void> original) {
         if(tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab tab && tab.getTitle().equals(Text.translatable("cameratweaks.options.thirdperson"))){
-            ThirdPerson.pending = new ArrayList<>(Config.HANDLER.instance().thirdPersons);
+            ThirdPerson.pending = new ArrayList<>(Config.get().thirdPersons);
             tab.forEachChild(child -> {
                 if(child instanceof OptionListWidget list) list.refreshOptions();
             });

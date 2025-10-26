@@ -1,14 +1,13 @@
 package cameratweaks.mixin;
 
 import cameratweaks.*;
-import cameratweaks.config.Config;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.client.network.ClientPlayerLikeState;
 import net.minecraft.client.option.SimpleOption;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.MathHelper;
@@ -23,9 +22,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameRenderer.class)
 public class RendererMixin {
-    @Inject(method = "bobView", at = @At("HEAD"), cancellable = true)
-    private void disableViewBobbing(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
-        if(Keybinds.freecam.enabled() || Zoom.currZoom > 5) ci.cancel();
+    @WrapOperation(method = "bobView", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerLikeState;lerpMovement(F)F"))
+    private float disableViewBobbing(ClientPlayerLikeState instance, float tickProgress, Operation<Float> original) {
+        if(Keybinds.freecam.enabled()) return 0;
+        return original.call(instance, tickProgress) / MathHelper.lerp(0.2F, 1F, Zoom.zoomDivisor(0F));
     }
 
     @Inject(method = "renderHand", at = @At("HEAD"), cancellable = true)
@@ -41,7 +41,7 @@ public class RendererMixin {
 
     @ModifyReturnValue(method = "getFov", at = @At("RETURN"))
     private float applyZoom(float original, @Local(argsOnly = true) float tickDelta) {
-        return original / (Config.HANDLER.instance().zoomAnimation?MathHelper.lerp(tickDelta, Zoom.prevZoom, Zoom.currZoom) : Zoom.zoom);
+        return original / Zoom.zoomDivisor(tickDelta);
     }
 
     @WrapOperation(method = "getFov", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/SimpleOption;getValue()Ljava/lang/Object;", ordinal = 0))
