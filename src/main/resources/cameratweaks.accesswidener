@@ -1,6 +1,4 @@
 accessWidener v2 named
-accessible class net/minecraft/client/option/GameOptions$Visitor
-accessible field net/minecraft/client/option/KeyBinding KEY_TO_BINDINGS Ljava/util/Map;
-accessible field net/minecraft/client/render/LightmapTextureManager dirty Z
-accessible field net/minecraft/client/render/GameRenderer fogRenderer Lnet/minecraft/client/render/fog/FogRenderer;
-accessible method net/minecraft/world/waypoint/TrackedWaypoint <init> (Lcom/mojang/datafixers/util/Either;Lnet/minecraft/world/waypoint/Waypoint$Config;Lnet/minecraft/world/waypoint/TrackedWaypoint$Type;)V
+accessible field net/minecraft/client/renderer/LightTexture updateLightTexture Z
+accessible method net/minecraft/client/KeyMapping forAllKeyMappings (Lcom/mojang/blaze3d/platform/InputConstants$Key;Ljava/util/function/Consumer;)V
+accessible method net/minecraft/world/waypoints/TrackedWaypoint <init> (Lcom/mojang/datafixers/util/Either;Lnet/minecraft/world/waypoints/Waypoint$Icon;Lnet/minecraft/world/waypoints/TrackedWaypoint$Type;)V

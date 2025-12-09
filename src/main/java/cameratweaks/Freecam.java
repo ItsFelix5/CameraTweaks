@@ -3,16 +3,16 @@ package cameratweaks;
 import cameratweaks.config.Config;
 import com.mojang.datafixers.util.Either;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.input.Input;
-import net.minecraft.client.render.Camera;
-import net.minecraft.entity.Entity;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.world.waypoint.EntityTickProgress;
-import net.minecraft.world.waypoint.TrackedWaypoint;
-import net.minecraft.world.waypoint.Waypoint;
+import net.minecraft.client.Camera;
+import net.minecraft.client.player.ClientInput;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.waypoints.PartialTickSupplier;
+import net.minecraft.world.waypoints.TrackedWaypoint;
+import net.minecraft.world.waypoints.Waypoint;
 
 import static cameratweaks.Util.*;
 
@@ -23,17 +23,17 @@ public class Freecam {
     public static float speed;
 
     public static void enable() {
-        client.chunkCullingEnabled = false;
+        client.smartCull = false;
         speed = 1f;
         setPosition();
-        client.player.networkHandler.getWaypointHandler().onTrack(new FreecamWaypoint());
+        client.player.connection.getWaypointManager().trackWaypoint(new FreecamWaypoint());
         if (!Keybinds.playerMovement.enabled()) cameraMovement();
     }
 
     public static void disable() {
-        client.chunkCullingEnabled = true;
+        client.smartCull = true;
         pos = null;
-        client.player.networkHandler.getWaypointHandler().onUntrack(new FreecamWaypoint());
+        client.player.connection.getWaypointManager().untrackWaypoint(new FreecamWaypoint());
         if (!Keybinds.playerMovement.enabled()) playerMovement();
     }
 
@@ -44,7 +44,7 @@ public class Freecam {
 
     public static void cameraMovement() {
         if (!Keybinds.freecam.enabled()) return;
-        client.player.input = new Input();
+        client.player.input = new ClientInput();
     }
 
     public static void loadCamera(int i) {
@@ -52,12 +52,12 @@ public class Freecam {
             if(Config.get().alternateFreecam) {
                 setPosition();
                 cameras[i] = pos.toStatic();
-                client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.saved", i + 1), true);
-            } else client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.unknown", i + 1, Keybinds.playerMovement.getBoundKeyLocalizedText(), i + 1), true);
+                client.player.displayClientMessage(Component.translatable("cameratweaks.freecam.camera.saved", i + 1), true);
+            } else client.player.displayClientMessage(Component.translatable("cameratweaks.freecam.camera.unknown", i + 1, Keybinds.playerMovement.getTranslatedKeyMessage(), i + 1), true);
             return;
         }
-        if (cameras[i].dimension != client.world.getRegistryKey()) {
-            client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.incorrect_dimension", i + 1, cameras[i].dimension.getValue().getPath().replace('_', ' ')), true);
+        if (cameras[i].dimension != client.level.dimension()) {
+            client.player.displayClientMessage(Component.translatable("cameratweaks.freecam.camera.incorrect_dimension", i + 1, cameras[i].dimension.identifier().getPath().replace('_', ' ')), true);
             return;
         }
         if (!Keybinds.freecam.enabled()) Keybinds.freecam.setEnabled(true);
@@ -68,31 +68,31 @@ public class Freecam {
         if(Config.get().alternateFreecam) {
             if(pos != null && pos.equals(cameras[i])) {
                 Entity camera = client.getCameraEntity();
-                int fov = ThirdPerson.current == null || !ThirdPerson.current.changedFov? client.options.getFov().getValue() : ThirdPerson.current.fov;
-                cameras[i] = new Util.Pos(client.world.getRegistryKey(), camera.getEyePos(), camera.getPitch(), camera.getYaw(), fov);
+                int fov = ThirdPerson.current == null || !ThirdPerson.current.changedFov? client.options.fov().get() : ThirdPerson.current.fov;
+                cameras[i] = new Util.Pos(client.level.dimension(), camera.getEyePosition(), camera.getXRot(), camera.getYRot(), fov);
             } else if (cameras[i] != null){
                 cameras[i] = null;
-                client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.removed", i + 1), true);
+                client.player.displayClientMessage(Component.translatable("cameratweaks.freecam.camera.removed", i + 1), true);
             }
         } else {
             setPosition();
             cameras[i] = pos.toStatic();
-            client.player.sendMessage(Text.translatable("cameratweaks.freecam.camera.saved", i + 1), true);
+            client.player.displayClientMessage(Component.translatable("cameratweaks.freecam.camera.saved", i + 1), true);
         }
     }
 
     private static void setPosition() {
-        Camera camera = client.gameRenderer.getCamera();
-        int fov = ThirdPerson.current == null || !ThirdPerson.current.changedFov? client.options.getFov().getValue() : ThirdPerson.current.fov;
-        pos = new Util.LerpedPos(client.world.getRegistryKey(), camera.getPos(), camera.getPitch(), camera.getYaw(), fov);
+        Camera camera = client.gameRenderer.getMainCamera();
+        int fov = ThirdPerson.current == null || !ThirdPerson.current.changedFov? client.options.fov().get() : ThirdPerson.current.fov;
+        pos = new Util.LerpedPos(client.level.dimension(), camera.position(), camera.xRot(), camera.yaw(), fov);
     }
 
     public static void update(float delta) {
         if (!Keybinds.freecam.enabled() || Keybinds.playerMovement.enabled()) return;
         pos.tick();
-        double vertical = (((input.playerInput.jump() ? 1 : 0) - (input.playerInput.sneak() ? 1 : 0)));
+        double vertical = (((input.keyPresses.jump() ? 1 : 0) - (input.keyPresses.shift() ? 1 : 0)));
         if(!isMoving() && vertical == 0) return;
-        pos.pos = pos.pos.add(Util.rotate(new Vec3d(input.getMovementInput().x, vertical, input.getMovementInput().y * (input.playerInput.sprint() ? 2 : 1)).multiply(delta * speed), pos.yaw));
+        pos.pos = pos.pos.add(Util.rotate(new Vec3(input.getMoveVector().x, vertical, input.getMoveVector().y * (input.keyPresses.sprint() ? 2 : 1)).scale(delta * speed), pos.yaw));
     }
 
     public static void reset() {
@@ -103,35 +103,34 @@ public class Freecam {
 
     private static class FreecamWaypoint extends TrackedWaypoint {
         FreecamWaypoint() {
-            super(Either.right("freecamPlayer"), new Waypoint.Config().withTeamColorOf(client.player), null);
+            super(Either.right("freecamPlayer"), new Waypoint.Icon().cloneAndAssignStyle(client.player), null);
         }
 
         @Override
-        public void handleUpdate(TrackedWaypoint waypoint) {}
+        public void update(TrackedWaypoint waypoint) {}
         @Override
-        public void writeAdditionalDataToBuf(ByteBuf buf) {}
+        public void writeContents(ByteBuf buf) {}
 
         @Override
-        public double getRelativeYaw(World world, YawProvider yawProvider, EntityTickProgress tickProgress) {
-            Vec3d vec3d = yawProvider.getCameraPos().subtract(client.getCameraEntity().getEntityPos()).rotateYClockwise();
-            return MathHelper.subtractAngles(yawProvider.getCameraYaw(),
-                    (float) MathHelper.atan2(vec3d.getZ(), vec3d.getX()) * MathHelper.DEGREES_PER_RADIAN);
+        public double yawAngleToCamera(Level level, Camera camera, PartialTickSupplier partialTickSupplier) {
+            Vec3 vec3 = camera.position().subtract(client.getCameraEntity().position()).rotateClockwise90();
+            return Mth.degreesDifference(camera.yaw(), (float) Mth.atan2(vec3.z(), vec3.x()) * Mth.DEG_TO_RAD);
         }
 
         @Override
-        public Pitch getPitch(World world, PitchProvider cameraProvider, EntityTickProgress tickProgress) {
-            Vec3d vec3d = cameraProvider.project(client.getCameraEntity().getEntityPos());
-            boolean bl = vec3d.z > 1.0;
-            double d = bl ? -vec3d.y : vec3d.y;
-            if (d < -1.0 || (bl && vec3d.y < 0.0)) return TrackedWaypoint.Pitch.DOWN;
-            if (d > 1.0 || (bl && vec3d.y > 0.0)) return TrackedWaypoint.Pitch.UP;
+        public PitchDirection pitchDirectionToCamera(Level level, Projector projector, PartialTickSupplier partialTickSupplier) {
+            Vec3 vec3 = projector.projectPointToScreen(client.getCameraEntity().position());
+            boolean bl = vec3.z > 1.0;
+            double d = bl ? -vec3.y : vec3.y;
+            if (d < -1.0 || (bl && vec3.y < 0.0)) return TrackedWaypoint.PitchDirection.DOWN;
+            if (d > 1.0 || (bl && vec3.y > 0.0)) return TrackedWaypoint.PitchDirection.UP;
 
-            return TrackedWaypoint.Pitch.NONE;
+            return TrackedWaypoint.PitchDirection.NONE;
         }
 
         @Override
-        public double squaredDistanceTo(Entity receiver) {
-            return receiver.squaredDistanceTo(client.getCameraEntity().getEntityPos());
+        public double distanceSquared(Entity entity) {
+            return entity.distanceToSqr(client.getCameraEntity().position());
         }
     }
 }

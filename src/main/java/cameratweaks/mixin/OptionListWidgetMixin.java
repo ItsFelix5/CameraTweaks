@@ -8,12 +8,12 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.OptionGroup;
 import dev.isxander.yacl3.gui.*;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,13 +34,13 @@ public abstract class OptionListWidgetMixin extends YACLSelectionList<OptionList
     @Final
     private YACLScreen yaclScreen;
 
-    public OptionListWidgetMixin(MinecraftClient minecraft, int width, int height, int y) {
+    public OptionListWidgetMixin(Minecraft minecraft, int width, int height, int y) {
         super(minecraft, width, height, y);
     }
 
     @WrapOperation(method = "refreshOptions", at = @At(value = "INVOKE", target = "Ldev/isxander/yacl3/api/ConfigCategory;groups()Lcom/google/common/collect/ImmutableList;"))
     private ImmutableList<OptionGroup> groups(ConfigCategory instance, Operation<ImmutableList<OptionGroup>> original) {
-        if(!category.name().equals(Text.translatable("cameratweaks.options.thirdperson"))) return original.call(instance);
+        if(!category.name().equals(Component.translatable("cameratweaks.options.thirdperson"))) return original.call(instance);
         if(ThirdPerson.pending == null) ThirdPerson.pending = new ArrayList<>(Config.get().thirdPersons);
         ImmutableList.Builder<OptionGroup> builder = ImmutableList.builder();
         builder.addAll(original.call(instance));
@@ -59,17 +59,17 @@ public abstract class OptionListWidgetMixin extends YACLSelectionList<OptionList
 
         @Inject(method = "<init>", at = @At("TAIL"))
         public void init(OptionListWidget this$0, OptionGroup group, Screen screen, CallbackInfo ci) {
-            if(!(group.name().getContent() instanceof TranslatableTextContent name)) return;
+            if(!(group.name().getContents() instanceof TranslatableContents name)) return;
             if(name.getKey().equals("cameratweaks.options.thirdperson.custom")) removeListButton = new TooltipButtonWidget(screen, this$0.getRowRight() - 20, -50, 20, 20,
-                    Text.literal("X"), Text.translatable("yacl.list.remove"), btn -> {
+                    Component.literal("X"), Component.translatable("yacl.list.remove"), btn -> {
                 ThirdPerson.pending.remove((int) name.getArgs()[0] + 1);
                 this$0.refreshOptions();
                 ((Runnable) screen).run();
             });
         }
 
-        @Inject(method = "render", at = @At("TAIL"), remap = true)
-        public void render(DrawContext graphics, int mouseX, int mouseY, boolean hovered, float deltaTicks, CallbackInfo ci) {
+        @Inject(method = "renderContent", at = @At("TAIL"), remap = true)
+        public void render(GuiGraphics graphics, int mouseX, int mouseY, boolean hovered, float deltaTicks, CallbackInfo ci) {
             if(removeListButton != null) {
                 removeListButton.setY(expandMinimizeButton.getY());
                 removeListButton.render(graphics, mouseX, mouseY, deltaTicks);
@@ -77,7 +77,7 @@ public abstract class OptionListWidgetMixin extends YACLSelectionList<OptionList
         }
 
         @Inject(method = "children", at = @At("HEAD"), cancellable = true, remap = true)
-        public void children(CallbackInfoReturnable<List<? extends Element>> cir) {
+        public void children(CallbackInfoReturnable<List<? extends GuiEventListener>> cir) {
             if(removeListButton != null) cir.setReturnValue(ImmutableList.of(expandMinimizeButton, removeListButton));
         }
     }

@@ -1,13 +1,13 @@
 package cameratweaks.mixin;
 
 import cameratweaks.Freelook;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.command.OrderedRenderCommandQueue;
-import net.minecraft.client.render.item.HeldItemRenderer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathConstants;
-import net.minecraft.util.math.MathHelper;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Constants;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.ItemInHandRenderer;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,38 +18,38 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static cameratweaks.Util.client;
 
-@Mixin(HeldItemRenderer.class)
+@Mixin(ItemInHandRenderer.class)
 public class HeldItemRendererMixin {
-    @Shadow private float equipProgressMainHand;
-    @Shadow private float equipProgressOffHand;
+    @Shadow private float mainHandHeight;
+    @Shadow private float offHandHeight;
 
-    @Shadow private ItemStack mainHand;
-    @Shadow private ItemStack offHand;
+    @Shadow private ItemStack mainHandItem;
+    @Shadow private ItemStack offHandItem;
 
-    @Inject(method = "renderItem(FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/command/OrderedRenderCommandQueue;Lnet/minecraft/client/network/ClientPlayerEntity;I)V", at = @At("HEAD"))
-    private void rotateHand(float tickProgress, MatrixStack matrices, OrderedRenderCommandQueue orderedRenderCommandQueue, ClientPlayerEntity player, int light, CallbackInfo ci) {
+    @Inject(method = "renderHandsWithItems(FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/player/LocalPlayer;I)V", at = @At("HEAD"))
+    private void rotateHand(float tickProgress, PoseStack matrices, SubmitNodeCollector orderedRenderCommandQueue, LocalPlayer player, int light, CallbackInfo ci) {
         if (Freelook.enabled) {
-            matrices.multiply(new Quaternionf().rotationAxis((Freelook.yaw - player.getYaw(tickProgress)) * MathConstants.RADIANS_PER_DEGREE,
-                    new Vector3f(0f, 1f, 0f).rotateX(Freelook.pitch * MathConstants.RADIANS_PER_DEGREE)));
-            matrices.multiply(new Quaternionf().rotationX((Freelook.pitch - player.getPitch(tickProgress)) * MathConstants.RADIANS_PER_DEGREE));
+            matrices.mulPose(new Quaternionf().rotationAxis((Freelook.yaw - player.getViewYRot(tickProgress)) * Constants.DEG_TO_RAD,
+                    new Vector3f(0f, 1f, 0f).rotateX(Freelook.pitch * Constants.DEG_TO_RAD)));
+            matrices.mulPose(new Quaternionf().rotationX((Freelook.pitch - player.getViewXRot(tickProgress)) * Constants.DEG_TO_RAD));
         }
     }
 
-    @Inject(method = "updateHeldItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isRiding()Z"))
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isHandsBusy()Z"))
     private void updateHeldItems(CallbackInfo ci) {
-        ClientPlayerEntity clientPlayerEntity = client.player;
-        if(!clientPlayerEntity.isRiding()) return;
+        LocalPlayer clientPlayerEntity = client.player;
+        if(!clientPlayerEntity.isHandsBusy()) return;
 
-        ItemStack mainStack = clientPlayerEntity.getMainHandStack();
+        ItemStack mainStack = clientPlayerEntity.getMainHandItem();
         if (mainStack != ItemStack.EMPTY) {
-            float g = this.mainHand != mainStack ? 0.0F : 1.0F;
-            this.equipProgressMainHand += MathHelper.clamp(g - this.equipProgressMainHand, -0.4F, 0.4F) + 0.4F;
+            float g = this.mainHandItem != mainStack ? 0.0F : 1.0F;
+            this.mainHandHeight += Mth.clamp(g - this.mainHandHeight, -0.4F, 0.4F) + 0.4F;
         }
 
-        ItemStack offStack = clientPlayerEntity.getOffHandStack();
+        ItemStack offStack = clientPlayerEntity.getOffhandItem();
         if (offStack != ItemStack.EMPTY) {
-            float h = this.offHand != offStack ? 0.0F : 1.0F;
-            this.equipProgressOffHand += MathHelper.clamp(h - this.equipProgressOffHand, -0.4F, 0.4F) + 0.4F;
+            float h = this.offHandItem != offStack ? 0.0F : 1.0F;
+            this.offHandHeight += Mth.clamp(h - this.offHandHeight, -0.4F, 0.4F) + 0.4F;
         }
     }
 }

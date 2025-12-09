@@ -9,8 +9,8 @@ public class Freelook {
 
     public static void start() {
         enabled = true;
-        yaw = client.getCameraEntity().getYaw();
-        pitch = client.getCameraEntity().getPitch();
+        yaw = client.getCameraEntity().getYRot();
+        pitch = client.getCameraEntity().getXRot();
     }
 
     public static void stop() {
@@ -19,8 +19,8 @@ public class Freelook {
 
     public static void pause() {
         if(Freelook.enabled && ThirdPerson.current != null && !ThirdPerson.current.rotatePlayer) {
-            client.player.setPitch(Freelook.pitch);
-            client.player.setYaw(Freelook.yaw);
+            client.player.setXRot(Freelook.pitch);
+            client.player.setYRot(Freelook.yaw);
             Keybinds.freelook.setEnabled(false);
             pauseTicks = 60;
         }

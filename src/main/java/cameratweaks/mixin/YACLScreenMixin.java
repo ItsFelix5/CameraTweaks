@@ -9,8 +9,8 @@ import dev.isxander.yacl3.api.YetAnotherConfigLib;
 import dev.isxander.yacl3.api.utils.OptionUtils;
 import dev.isxander.yacl3.gui.OptionListWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
-import net.minecraft.client.gui.tab.TabManager;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.components.tabs.TabManager;
+import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -38,8 +38,8 @@ public abstract class YACLScreenMixin implements Runnable {
                 return;
             }
             AtomicBoolean val = new AtomicBoolean(false);
-            if(tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab tab && tab.getTitle().equals(Text.translatable("cameratweaks.options.thirdperson")))
-                tab.forEachChild(child -> {
+            if(tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab tab && tab.getTabTitle().equals(Component.translatable("cameratweaks.options.thirdperson")))
+                tab.visitChildren(child -> {
                     if(child instanceof OptionListWidget list)
                         list.children().forEach(entry -> {
                             if(entry instanceof OptionListWidget.OptionEntry optionEntry && !val.get()) val.set(func.apply(optionEntry.option));
@@ -53,8 +53,8 @@ public abstract class YACLScreenMixin implements Runnable {
     @WrapOperation(method = "finishOrSave", at = @At(value = "INVOKE", target = "Ldev/isxander/yacl3/api/utils/OptionUtils;forEachOptions(Ldev/isxander/yacl3/api/YetAnotherConfigLib;" +
             "Ljava/util/function/Consumer;)V", ordinal = 0))
     private void finishOrSave(YetAnotherConfigLib yacl, Consumer<Option<?>> consumer, Operation<Void> original) {
-        if(tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab tab && tab.getTitle().equals(Text.translatable("cameratweaks.options.thirdperson")))
-            tab.forEachChild(child -> {
+        if(tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab tab && tab.getTabTitle().equals(Component.translatable("cameratweaks.options.thirdperson")))
+            tab.visitChildren(child -> {
                 if(child instanceof OptionListWidget list)
                     list.children().forEach(entry -> {
                         if(entry instanceof OptionListWidget.OptionEntry optionEntry) consumer.accept(optionEntry.option);
@@ -66,8 +66,8 @@ public abstract class YACLScreenMixin implements Runnable {
     @WrapOperation(method = "cancelOrReset", at = @At(value = "INVOKE", target = "Ldev/isxander/yacl3/api/utils/OptionUtils;forEachOptions(Ldev/isxander/yacl3/api/YetAnotherConfigLib;" +
             "Ljava/util/function/Consumer;)V", ordinal = 0))
     private void cancel(YetAnotherConfigLib yacl, Consumer<Option<?>> consumer, Operation<Void> original) {
-        if(tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab tab && tab.getTitle().equals(Text.translatable("cameratweaks.options.thirdperson")))
-            tab.forEachChild(child -> {
+        if(tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab tab && tab.getTabTitle().equals(Component.translatable("cameratweaks.options.thirdperson")))
+            tab.visitChildren(child -> {
                 if(child instanceof OptionListWidget list)
                     list.children().forEach(entry -> {
                         if(entry instanceof OptionListWidget.OptionEntry optionEntry) consumer.accept(optionEntry.option);
@@ -80,9 +80,9 @@ public abstract class YACLScreenMixin implements Runnable {
     @WrapOperation(method = "cancelOrReset", at = @At(value = "INVOKE", target = "Ldev/isxander/yacl3/api/utils/OptionUtils;forEachOptions(Ldev/isxander/yacl3/api/YetAnotherConfigLib;" +
             "Ljava/util/function/Consumer;)V", ordinal = 1))
     private void reset(YetAnotherConfigLib yacl, Consumer<Option<?>> consumer, Operation<Void> original) {
-        if(tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab tab && tab.getTitle().equals(Text.translatable("cameratweaks.options.thirdperson"))){
+        if(tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab tab && tab.getTabTitle().equals(Component.translatable("cameratweaks.options.thirdperson"))){
             ThirdPerson.pending = new ArrayList<>(List.of(new ThirdPerson(), new ThirdPerson()));
-            tab.forEachChild(child -> {
+            tab.visitChildren(child -> {
                 if(child instanceof OptionListWidget list) list.refreshOptions();
             });
         }
@@ -92,9 +92,9 @@ public abstract class YACLScreenMixin implements Runnable {
     @WrapOperation(method = "undo", at = @At(value = "INVOKE", target = "Ldev/isxander/yacl3/api/utils/OptionUtils;forEachOptions(Ldev/isxander/yacl3/api/YetAnotherConfigLib;" +
             "Ljava/util/function/Consumer;)V"))
     private void undo(YetAnotherConfigLib yacl, Consumer<Option<?>> consumer, Operation<Void> original) {
-        if(tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab tab && tab.getTitle().equals(Text.translatable("cameratweaks.options.thirdperson"))){
+        if(tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab tab && tab.getTabTitle().equals(Component.translatable("cameratweaks.options.thirdperson"))){
             ThirdPerson.pending = new ArrayList<>(Config.get().thirdPersons);
-            tab.forEachChild(child -> {
+            tab.visitChildren(child -> {
                 if(child instanceof OptionListWidget list) list.refreshOptions();
             });
         } else original.call(yacl, consumer);

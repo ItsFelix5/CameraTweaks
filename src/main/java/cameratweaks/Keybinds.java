@@ -2,9 +2,9 @@ package cameratweaks;
 
 import cameratweaks.config.Config;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.function.Supplier;
@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 import static cameratweaks.Util.client;
 
 public class Keybinds {
-    private static final KeyBinding.Category CATEGORY = KeyBinding.Category.create(Identifier.of("cameratweaks", "cameratweaks"));
+    private static final KeyMapping.Category CATEGORY = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("cameratweaks", "cameratweaks"));
 
     public static final BetterKeybind freecam = new BetterKeybind("freecam", GLFW.GLFW_KEY_H)
             .toggle().onPress(Freecam::enable, Freecam::disable);
@@ -35,17 +35,17 @@ public class Keybinds {
         new BetterKeybind("fullbright", GLFW.GLFW_KEY_Y).defaultEnabled(Config.get().fullbright).toggle().onPress(
                 () -> {
                     Config.get().fullbright = true;
-                    client.gameRenderer.getLightmapTextureManager().dirty = true;
+                    client.gameRenderer.lightTexture().updateLightTexture = true;
                     Config.HANDLER.save();
                 },
                 () -> {
                     Config.get().fullbright = false;
-                    client.gameRenderer.getLightmapTextureManager().dirty = true;
+                    client.gameRenderer.lightTexture().updateLightTexture = true;
                     Config.HANDLER.save();
                 });
     }
 
-    public static class BetterKeybind extends KeyBinding {
+    public static class BetterKeybind extends KeyMapping {
         private Runnable press = ()->{};
         private Runnable release = ()->{};
         private boolean toggle = false;
@@ -80,19 +80,19 @@ public class Keybinds {
         }
 
         @Override
-        public void setPressed(boolean pressed) {
+        public void setDown(boolean pressed) {
             if(condition.get()) {
                 if (toggle) {
-                    if (!pressed && isPressed()) {
+                    if (!pressed && isDown()) {
                         if (used) used = false;
                         else {
                             setEnabled(!enabled);
-                            client.player.sendMessage(Text.translatable(getId().substring(4) + (enabled ? ".on" : ".off")), true);
+                            client.player.displayClientMessage(Component.translatable(getName().substring(4) + (enabled ? ".on" : ".off")), true);
                         }
                     }
                 } else setEnabled(pressed);
             }
-            super.setPressed(pressed);
+            super.setDown(pressed);
         }
 
         public boolean enabled() {
@@ -108,8 +108,8 @@ public class Keybinds {
 
         public void setUsed() {
             used = true;
-            KeyBinding.KEY_TO_BINDINGS.get(KeyBindingHelper.getBoundKeyOf(this)).forEach(keyBinding -> {
-                if(keyBinding instanceof BetterKeybind betterKeybind) betterKeybind.used = true;
+            KeyMapping.forAllKeyMappings(KeyBindingHelper.getBoundKeyOf(this), KeyMapping -> {
+                if(KeyMapping instanceof BetterKeybind betterKeybind) betterKeybind.used = true;
             });
         }
     }

@@ -5,10 +5,10 @@ import cameratweaks.Keybinds;
 import java.util.function.Function;
 
 import static java.lang.StrictMath.*;
-import static net.minecraft.util.math.MathHelper.PI;
-import static net.minecraft.util.math.MathHelper.cos;
-import static net.minecraft.util.math.MathHelper.sin;
-import static net.minecraft.util.math.MathHelper.sqrt;
+import static net.minecraft.util.Mth.PI;
+import static net.minecraft.util.Mth.cos;
+import static net.minecraft.util.Mth.sin;
+import static net.minecraft.util.Mth.sqrt;
 
 // Based on https://easings.net
 public enum TransitionType {

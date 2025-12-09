@@ -1,28 +1,28 @@
 package cameratweaks;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.input.Input;
-import net.minecraft.client.input.KeyboardInput;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.ClientInput;
+import net.minecraft.client.player.KeyboardInput;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Objects;
 import java.util.function.Function;
 
 public class Util {
-    public static final MinecraftClient client = MinecraftClient.getInstance();
-    public static final Input input = new KeyboardInput(client.options);
+    public static final Minecraft client = Minecraft.getInstance();
+    public static final ClientInput input = new KeyboardInput(client.options);
 
     public static boolean isMoving() {
-        return input.playerInput.forward() || input.playerInput.backward() || input.playerInput.left() || input.playerInput.right();
+        return input.keyPresses.forward() || input.keyPresses.backward() || input.keyPresses.left() || input.keyPresses.right();
     }
 
-    public static Vec3d rotate(Vec3d vec, double yaw) {
+    public static Vec3 rotate(Vec3 vec, double yaw) {
         final double sin = Math.sin(Math.toRadians(yaw));
         final double cos = Math.cos(Math.toRadians(yaw));
-        return new Vec3d(cos * vec.x - sin * vec.z, vec.y, cos * vec.z + sin * vec.x);
+        return new Vec3(cos * vec.x - sin * vec.z, vec.y, cos * vec.z + sin * vec.x);
     }
 
     public static float approach(float value, float target, float step) {
@@ -32,13 +32,13 @@ public class Util {
     }
 
     public static class Pos {
-        public final RegistryKey<World> dimension;
-        public Vec3d pos;
+        public final ResourceKey<Level> dimension;
+        public Vec3 pos;
         public float pitch;
         public float yaw;
         public int fov;
 
-        public Pos(RegistryKey<World> dimension, Vec3d pos, float pitch, float yaw, int fov) {
+        public Pos(ResourceKey<Level> dimension, Vec3 pos, float pitch, float yaw, int fov) {
             this.dimension = dimension;
             this.pos = pos;
             this.pitch = pitch;
@@ -59,11 +59,11 @@ public class Util {
     }
 
     public static class LerpedPos extends Pos {
-        public Vec3d prevPos;
+        public Vec3 prevPos;
         public float prevPitch;
         public float prevYaw;
 
-        public LerpedPos(RegistryKey<World> dimension, Vec3d pos, float pitch, float yaw, int fov) {
+        public LerpedPos(ResourceKey<Level> dimension, Vec3 pos, float pitch, float yaw, int fov) {
             super(dimension, pos, pitch, yaw, fov);
             this.prevPos = pos;
             this.prevPitch = pitch;
@@ -80,16 +80,16 @@ public class Util {
             this.prevYaw = this.yaw;
         }
 
-        public Vec3d getPos(float tickDelta) {
+        public Vec3 getPos(float tickDelta) {
             return prevPos.lerp(pos, tickDelta);
         }
 
         public float getPitch(float tickDelta) {
-            return MathHelper.lerpAngleDegrees(tickDelta, prevPitch, pitch);
+            return Mth.rotLerp(tickDelta, prevPitch, pitch);
         }
 
         public float getYaw(float tickDelta) {
-            return MathHelper.lerpAngleDegrees(tickDelta, prevYaw, yaw);
+            return Mth.rotLerp(tickDelta, prevYaw, yaw);
         }
     }
 
@@ -108,7 +108,7 @@ public class Util {
         }
 
         public float get(float tickDelta) {
-            return MathHelper.lerp(tickDelta, prev, current);
+            return Mth.lerp(tickDelta, prev, current);
         }
     }
 }

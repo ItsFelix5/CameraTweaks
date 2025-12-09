@@ -1,20 +1,20 @@
 package cameratweaks.config;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.isxander.yacl3.api.Controller;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.AbstractWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.ControllerWidget;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 
-public record KeybindController(Option<Integer> option) implements Controller<Integer> {
+public record KeymappingController(Option<Integer> option) implements Controller<Integer> {
     @Override
-    public Text formatValue() {
-        return InputUtil.Type.KEYSYM.createFromCode(option.pendingValue()).getLocalizedText();
+    public Component formatValue() {
+        return InputConstants.Type.KEYSYM.getOrCreate(option.pendingValue()).getDisplayName();
     }
 
     @Override
@@ -22,10 +22,10 @@ public record KeybindController(Option<Integer> option) implements Controller<In
         return new KeyBindingWidget(this, screen, widgetDimension);
     }
 
-    public static class KeyBindingWidget extends ControllerWidget<KeybindController> {
+    public static class KeyBindingWidget extends ControllerWidget<KeymappingController> {
         private boolean listening = false;
 
-        public KeyBindingWidget(KeybindController control, YACLScreen screen, Dimension<Integer> dim) {
+        public KeyBindingWidget(KeymappingController control, YACLScreen screen, Dimension<Integer> dim) {
             super(control, screen, dim);
         }
 
@@ -52,11 +52,11 @@ public record KeybindController(Option<Integer> option) implements Controller<In
         }
 
         @Override
-        protected Text getValueText() {
-            if(listening) return Text.literal("> ")
-                    .append(control.formatValue().copy().formatted(Formatting.WHITE, Formatting.UNDERLINE))
+        protected Component getValueText() {
+            if(listening) return Component.literal("> ")
+                    .append(control.formatValue().copy().withStyle(ChatFormatting.WHITE, ChatFormatting.UNDERLINE))
                     .append(" <")
-                    .formatted(Formatting.YELLOW);
+                    .withStyle(ChatFormatting.YELLOW);
             return control.formatValue();
         }
     }

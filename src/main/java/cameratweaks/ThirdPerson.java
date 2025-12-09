@@ -1,6 +1,6 @@
 package cameratweaks;
 
-import cameratweaks.config.KeybindController;
+import cameratweaks.config.KeymappingController;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;
 import dev.isxander.yacl3.api.OptionFlag;
@@ -9,8 +9,8 @@ import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
-import net.minecraft.client.option.Perspective;
-import net.minecraft.text.Text;
+import net.minecraft.client.CameraType;
+import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 
@@ -66,12 +66,12 @@ public class ThirdPerson implements Cloneable {
     public static void setCurrent(ThirdPerson thirdPerson) {
         distanceOffset = 0.0F;
         if(thirdPerson == null || !thirdPerson.enabled) {
-            client.options.setPerspective(Perspective.FIRST_PERSON);
-            client.gameRenderer.onCameraEntitySet(client.getCameraEntity());
+            client.options.setCameraType(CameraType.FIRST_PERSON);
+            client.gameRenderer.checkEntityPostEffect(client.getCameraEntity());
             thirdPerson = null;
         } else {
-            client.options.setPerspective(thirdPerson.invert?Perspective.THIRD_PERSON_FRONT:Perspective.THIRD_PERSON_BACK);
-            client.gameRenderer.onCameraEntitySet(null);
+            client.options.setCameraType(thirdPerson.invert?CameraType.THIRD_PERSON_FRONT:CameraType.THIRD_PERSON_BACK);
+            client.gameRenderer.checkEntityPostEffect(null);
         }
         if(current != null && !current.rotatePlayer) {
             Keybinds.freelook.setEnabled(false);
@@ -83,87 +83,87 @@ public class ThirdPerson implements Cloneable {
 
     public static void modifyDistance(float amount) {
         distanceOffset += amount;
-        client.player.sendMessage(Text.translatable("cameratweaks.thirdperson.distance", Math.round(current.xOffset + distanceOffset)), true);
+        client.player.displayClientMessage(Component.translatable("cameratweaks.thirdperson.distance", Math.round(current.xOffset + distanceOffset)), true);
     }
 
     public OptionGroup toGroup(int i) {
         OptionGroup.Builder builder = OptionGroup.createBuilder()
-                .name(Text.translatable("cameratweaks.options.thirdperson."+ (i == 0? "back" : i == 1? "front" : "custom"), i - 1));
+                .name(Component.translatable("cameratweaks.options.thirdperson."+ (i == 0? "back" : i == 1? "front" : "custom"), i - 1));
         if(i == 1) builder.option(Option.<Boolean>createBuilder()
-                .name(Text.translatable("cameratweaks.options.thirdperson.enabled"))
-                .description(OptionDescription.of(Text.translatable("cameratweaks.options.thirdperson.enabled.description")))
+                .name(Component.translatable("cameratweaks.options.thirdperson.enabled"))
+                .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.enabled.description")))
                 .binding(true, ()->enabled, key->enabled = key)
                 .controller(BooleanControllerBuilder::create)
                 .build());
 
         if(i > 1) builder.option(Option.<Integer>createBuilder()
-                .name(Text.translatable("cameratweaks.options.thirdperson.key"))
-                .description(OptionDescription.of(Text.translatable("cameratweaks.options.thirdperson.key.description")))
+                .name(Component.translatable("cameratweaks.options.thirdperson.key"))
+                .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.key.description")))
                 .binding(-1, ()->keyCode, key->keyCode = key)
-                .customController(KeybindController::new)
+                .customController(KeymappingController::new)
                 .build());
 
         builder.option(Option.<Float>createBuilder()
-                .name(Text.translatable("cameratweaks.options.thirdperson.x"))
-                .description(OptionDescription.of(Text.translatable("cameratweaks.options.thirdperson.x.description")))
+                .name(Component.translatable("cameratweaks.options.thirdperson.x"))
+                .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.x.description")))
                 .binding(4.0F, ()->xOffset, val->xOffset = val)
                 .controller(o-> FloatSliderControllerBuilder.create(o).range(0F, 50.0F).step(0.5F))
                 .flag(OptionFlag.WORLD_RENDER_UPDATE)
                 .build());
         builder.option(Option.<Float>createBuilder()
-                .name(Text.translatable("cameratweaks.options.thirdperson.y"))
-                .description(OptionDescription.of(Text.translatable("cameratweaks.options.thirdperson.y.description")))
+                .name(Component.translatable("cameratweaks.options.thirdperson.y"))
+                .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.y.description")))
                 .binding(0.0F, ()->yOffset, val->yOffset = val)
                 .controller(o->FloatSliderControllerBuilder.create(o).range(-10F, 10F).step(0.5F))
                 .flag(OptionFlag.WORLD_RENDER_UPDATE)
                 .build());
         builder.option(Option.<Float>createBuilder()
-                .name(Text.translatable("cameratweaks.options.thirdperson.z"))
-                .description(OptionDescription.of(Text.translatable("cameratweaks.options.thirdperson.z.description")))
+                .name(Component.translatable("cameratweaks.options.thirdperson.z"))
+                .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.z.description")))
                 .binding(0.0F, ()->zOffset, val->zOffset = val)
                 .controller(o->FloatSliderControllerBuilder.create(o).range(-10F, 10F).step(0.5F))
                 .flag(OptionFlag.WORLD_RENDER_UPDATE)
                 .build());
 
         builder.option(Option.<Float>createBuilder()
-                .name(Text.translatable("cameratweaks.options.thirdperson.pitch"))
-                .description(OptionDescription.of(Text.translatable("cameratweaks.options.thirdperson.pitch.description")))
+                .name(Component.translatable("cameratweaks.options.thirdperson.pitch"))
+                .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.pitch.description")))
                 .binding(0.0F, ()->pitch, val->pitch = val)
                 .controller(o->FloatSliderControllerBuilder.create(o).range(-90F, 90F).step(1F))
                 .flag(OptionFlag.WORLD_RENDER_UPDATE)
                 .build());
         builder.option(Option.<Float>createBuilder()
-                .name(Text.translatable("cameratweaks.options.thirdperson.yaw"))
-                .description(OptionDescription.of(Text.translatable("cameratweaks.options.thirdperson.yaw.description")))
+                .name(Component.translatable("cameratweaks.options.thirdperson.yaw"))
+                .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.yaw.description")))
                 .binding(0.0F, ()->yaw, val->yaw = val)
                 .controller(o->FloatSliderControllerBuilder.create(o).range(-180F, 180F).step(1F))
                 .flag(OptionFlag.WORLD_RENDER_UPDATE)
                 .build());
 
         builder.option(Option.<Integer>createBuilder()
-                .name(Text.translatable("cameratweaks.options.thirdperson.fov"))
-                .description(OptionDescription.of(Text.translatable("cameratweaks.options.thirdperson.fov.description")))
-                .binding(client.options.getFov().getValue(), ()->changedFov?fov:client.options.getFov().getValue(), val->{fov = val; changedFov = fov != client.options.getFov().getValue();})
+                .name(Component.translatable("cameratweaks.options.thirdperson.fov"))
+                .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.fov.description")))
+                .binding(client.options.fov().get(), ()->changedFov?fov:client.options.fov().get(), val->{fov = val; changedFov = fov != client.options.fov().get();})
                 .controller(o-> IntegerSliderControllerBuilder.create(o).range(10, 135).step(1))
                 .build());
 
         builder.option(Option.<Boolean>createBuilder()
-                .name(Text.translatable("cameratweaks.options.thirdperson.rotatePlayer"))
-                .description(OptionDescription.of(Text.translatable("cameratweaks.options.thirdperson.rotatePlayer.description")))
+                .name(Component.translatable("cameratweaks.options.thirdperson.rotatePlayer"))
+                .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.rotatePlayer.description")))
                 .binding(true, ()->rotatePlayer, val->rotatePlayer = val)
                 .controller(BooleanControllerBuilder::create)
                 .build());
 
         builder.option(Option.<Boolean>createBuilder()
-                .name(Text.translatable("cameratweaks.options.thirdperson.invert"))
-                .description(OptionDescription.of(Text.translatable("cameratweaks.options.thirdperson.invert.description")))
+                .name(Component.translatable("cameratweaks.options.thirdperson.invert"))
+                .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.invert.description")))
                 .binding(false, ()->invert, val->invert = val)
                 .controller(BooleanControllerBuilder::create)
                 .flag(OptionFlag.WORLD_RENDER_UPDATE)
                 .build());
         builder.option(Option.<Boolean>createBuilder()
-                .name(Text.translatable("cameratweaks.options.thirdperson.collision"))
-                .description(OptionDescription.of(Text.translatable("cameratweaks.options.thirdperson.collision.description")))
+                .name(Component.translatable("cameratweaks.options.thirdperson.collision"))
+                .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.collision.description")))
                 .binding(true, ()->collision, val->collision = val)
                 .controller(BooleanControllerBuilder::create)
                 .flag(OptionFlag.WORLD_RENDER_UPDATE)
