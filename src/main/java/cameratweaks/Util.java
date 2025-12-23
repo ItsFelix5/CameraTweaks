@@ -25,12 +25,6 @@ public class Util {
         return new Vec3(cos * vec.x - sin * vec.z, vec.y, cos * vec.z + sin * vec.x);
     }
 
-    public static float approach(float value, float target, float step) {
-        if (target > value) return Math.min(value + step, target);
-        if (target < value) return Math.max(value - step, target);
-        return target;
-    }
-
     public static class Pos {
         public final ResourceKey<Level> dimension;
         public Vec3 pos;
@@ -96,6 +90,12 @@ public class Util {
     public static class Lerped {
         private float prev = 0F;
         private float current = 0F;
+
+        public void approach(float target, float step) {
+            if (Float.isNaN(step) || Float.isInfinite(step)) prev = current = target;
+            else if (target > current) tick(Math.min(current + step, target));
+            else tick(Math.max(current - step, target));
+        }
 
         public void tick(float newValue) {
             this.prev = this.current;

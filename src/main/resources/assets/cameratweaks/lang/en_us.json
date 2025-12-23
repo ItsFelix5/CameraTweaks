@@ -17,21 +17,36 @@
 
   "key.cameratweaks.freecam.save": "Save freecam position (+ Number)",
   "cameratweaks.freecam.camera.unknown": "Camera slot %s is empty, Press %s + %s to save your current freecam position",
-  "cameratweaks.freecam.camera.incorrect_dimension": "Camera %s is in %s.",
+  "cameratweaks.freecam.camera.incorrectDimension": "Camera %s is in %s.",
   "cameratweaks.freecam.camera.saved": "Saved camera %s.",
   "cameratweaks.freecam.camera.removed": "Removed camera %s.",
 
-  "cameratweaks.options.freecam_save_behaviour": "Use Alternate Freecam Keymap",
-  "cameratweaks.options.freecam_save_behaviour.description": "This setting rebinds the save freecam button to delete or place at the players position when that slot is active and creates a new freecam when trying to load a empty slot.",
+  "cameratweaks.options.freecamSaveBehaviour": "Use Alternate Freecam Keymap",
+  "cameratweaks.options.freecamSaveBehaviour.description": "This setting rebinds the save freecam button to delete or place at the players position when that slot is active and creates a new freecam when trying to load a empty slot.",
+
+  "cameratweaks.options.disableFreecamOnDamage": "Disable Freecam On Damage",
+  "cameratweaks.options.disableFreecamOnDamage.description": "Automatically disable freecam when the player takes damage.",
 
   "cameratweaks.options.zoomAnimation": "Zoom Animation",
   "cameratweaks.options.zoomAnimation.description": "How zooming should be interpolated. See easings.net for more info.",
 
-  "cameratweaks.options.zoomSpeed": "Zoom Speed",
-  "cameratweaks.options.zoomSpeed.description": "How fast zooming should be.",
+  "cameratweaks.options.zoomInSpeed": "Zoom In Duration",
+  "cameratweaks.options.zoomInSpeed.description": "How fast zoom activation should animate.",
+
+  "cameratweaks.options.zoomOutSpeed": "Zoom Out Duration",
+  "cameratweaks.options.zoomOutSpeed.description": "How fast zoom deactivation should animate.",
+
+  "cameratweaks.options.zoomScrollSpeed": "Zoom Scroll Duration",
+  "cameratweaks.options.zoomScrollSpeed.description": "How fast scrolling should be interpolated.",
 
   "cameratweaks.options.cinematicZoom": "Enable Cinematic Camera When Zooming",
-  "cameratweaks.options.cinematicZoom.description": "^^^",
+  "cameratweaks.options.cinematicZoom.description": "Whether to smoothen camera movements when zoomed in.",
+
+  "cameratweaks.options.rememberZoom": "Remember Zoom Level",
+  "cameratweaks.options.rememberZoom.description": "Keeps the zoom level after disabling zoom.",
+
+  "cameratweaks.options.defaultZoom": "Default Zoom Level",
+  "cameratweaks.options.defaultZoom.description": "The default zoom level used when Remember Zoom Level is off.",
 
   "cameratweaks.options.cloudHeight": "Cloud Height",
   "cameratweaks.options.cloudHeight.description": "The height clouds are rendered at.",
@@ -53,6 +68,9 @@
 
   "cameratweaks.options.disableFog": "Disable Fog",
   "cameratweaks.options.disableFog.description": "Disable terrain fog allowing you to see further.",
+  "key.cameratweaks.disableFog": "Disable Fog",
+  "cameratweaks.disableFog.on": "Disabled Fog",
+  "cameratweaks.disableFog.off": "Enabled Fog",
 
   "key.cameratweaks.thirdPersonModifier": "Third Person Distance Modifier",
   "cameratweaks.thirdperson.distance": "Third person distance: %s blocks",
@@ -61,6 +79,9 @@
   "key.cameratweaks.freelook.hold": "Freelook (Hold)",
   "cameratweaks.freelook.on": "Freelooking",
   "cameratweaks.freelook.off": "Stopped freelooking",
+
+  "cameratweaks.options.freelookTogglePerspective": "Toggle Perspective In Freelook",
+  "cameratweaks.options.freelookTogglePerspective.description": "Automatically go into F5 when freelooking.",
 
   "cameratweaks.options.thirdperson.back": "Vanilla Back",
   "cameratweaks.options.thirdperson.front": "Vanilla Front",
@@ -92,5 +113,4 @@
   "cameratweaks.options.thirdperson.invert.description": "If the camera should be looking at the players face",
   "cameratweaks.options.thirdperson.collision": "Collision",
   "cameratweaks.options.thirdperson.collision.description": "If the camera should collide with blocks\nWARNING: Some things may not be visible because of smartcull"
-
 }

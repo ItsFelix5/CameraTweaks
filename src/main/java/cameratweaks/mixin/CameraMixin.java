@@ -46,15 +46,15 @@ public abstract class CameraMixin {
     @Inject(method = "setup", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;isPassenger()Z"), cancellable = true)
     private void update(Level level, Entity entity, boolean bl, boolean bl2, float tickProgress, CallbackInfo ci) {
         if (!Keybinds.freecam.enabled() || Freecam.pos == null) return;
-        ci.cancel();
         this.detached = true;
+        ci.cancel();
         setRotation(Freecam.pos.getYaw(tickProgress), Freecam.pos.getPitch(tickProgress));
         setPosition(Freecam.pos.getPos(tickProgress));
     }
 
     @Redirect(method = "setup", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;setRotation(FF)V", ordinal = 1))
     private void changeRotation(Camera instance, float yaw, float pitch) {
-        if (Freelook.enabled) this.setRotation(Freelook.yaw, Freelook.pitch);
+        if (Freelook.state.active()) this.setRotation(Freelook.yaw, Freelook.pitch);
         else this.setRotation(yaw, pitch);
     }
 

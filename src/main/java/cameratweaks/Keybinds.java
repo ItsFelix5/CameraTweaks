@@ -27,12 +27,12 @@ public class Keybinds {
     public static final BetterKeybind thirdPersonModifier = new BetterKeybind("thirdPersonModifier", GLFW.GLFW_KEY_UNKNOWN);
 
     public static final BetterKeybind freelook = new BetterKeybind("freelook", GLFW.GLFW_KEY_UNKNOWN)
-            .toggle().onPress(Freelook::start, Freelook::stop).condition(()->ThirdPerson.current == null || ThirdPerson.current.rotatePlayer);
+            .toggle().onPress(Freelook::start, Freelook::stop).condition(()->Freelook.state != Freelook.State.THIRD_PERSON);
 
     public static void init() {
         new BetterKeybind("freelook.hold", GLFW.GLFW_KEY_UNKNOWN)
-                .onPress(() -> freelook.setEnabled(true), () -> freelook.setEnabled(false)).condition(()->ThirdPerson.current == null || ThirdPerson.current.rotatePlayer);
-        new BetterKeybind("fullbright", GLFW.GLFW_KEY_Y).defaultEnabled(Config.get().fullbright).toggle().onPress(
+                .onPress(() -> freelook.setEnabled(true), () -> freelook.setEnabled(false)).condition(()->Freelook.state != Freelook.State.THIRD_PERSON);
+        new BetterKeybind("fullbright", GLFW.GLFW_KEY_Y).toggle().defaultEnabled(Config.get().fullbright).onPress(
                 () -> {
                     Config.get().fullbright = true;
                     client.gameRenderer.lightTexture().updateLightTexture = true;
@@ -41,6 +41,15 @@ public class Keybinds {
                 () -> {
                     Config.get().fullbright = false;
                     client.gameRenderer.lightTexture().updateLightTexture = true;
+                    Config.HANDLER.save();
+                });
+        new BetterKeybind("disableFog", GLFW.GLFW_KEY_UNKNOWN).toggle().defaultEnabled(Config.get().disableFog).onPress(
+                () -> {
+                    Config.get().disableFog = true;
+                    Config.HANDLER.save();
+                },
+                () -> {
+                    Config.get().disableFog = false;
                     Config.HANDLER.save();
                 });
     }

@@ -1,7 +1,6 @@
 package cameratweaks.mixin;
 
-import cameratweaks.Keybinds;
-import cameratweaks.ThirdPerson;
+import cameratweaks.Freelook;
 import net.minecraft.client.player.ClientInput;
 import net.minecraft.world.phys.Vec2;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,6 +15,6 @@ public class InputMixin {
 
     @Inject(method = "hasForwardImpulse", at = @At("HEAD"), cancellable = true)
     private void hasForwardMovement(CallbackInfoReturnable<Boolean> cir) {
-        if(Keybinds.freelook.enabled() && ThirdPerson.current != null && !ThirdPerson.current.rotatePlayer) cir.setReturnValue(moveVector.lengthSquared() > 1.0E-10F);
+        if(Freelook.state == Freelook.State.THIRD_PERSON) cir.setReturnValue(moveVector.lengthSquared() > 1.0E-10F);
     }
 }

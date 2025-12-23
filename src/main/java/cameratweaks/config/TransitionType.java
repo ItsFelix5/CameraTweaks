@@ -1,7 +1,5 @@
 package cameratweaks.config;
 
-import cameratweaks.Keybinds;
-
 import java.util.function.Function;
 
 import static java.lang.StrictMath.*;
@@ -12,7 +10,6 @@ import static net.minecraft.util.Mth.sqrt;
 
 // Based on https://easings.net
 public enum TransitionType {
-    INSTANT(x->Keybinds.zoom.enabled() ? 1F : 0F),
     LINEAR(x -> x),
 
     SINE_IN(x -> 1F - cos(x * PI / 2F), x -> (float) acos(-x + 1.0) * 2F / PI),

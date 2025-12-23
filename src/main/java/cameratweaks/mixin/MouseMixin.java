@@ -45,10 +45,10 @@ public class MouseMixin {
         if (Keybinds.freecam.enabled() && !Keybinds.playerMovement.enabled()) {
             Freecam.pos.yaw += (float) cursorDeltaX * 0.15F;
             Freecam.pos.pitch = Mth.clamp(Freecam.pos.pitch + (float) cursorDeltaY * 0.15F, -90.0F, 90.0F);
-        } else if(Keybinds.freelook.enabled()) {
+        } else if(Freelook.state == Freelook.State.FREELOOKING || Freelook.state == Freelook.State.THIRD_PERSON) {
             Freelook.pitch += (float) cursorDeltaY * 0.15F;
             Freelook.yaw += (float) cursorDeltaX * 0.15F;
-            if (ThirdPerson.current != null && !ThirdPerson.current.rotatePlayer) {
+            if (Freelook.state == Freelook.State.THIRD_PERSON) {
                 if(instance.isFallFlying()) instance.turn(cursorDeltaX, cursorDeltaY);
                 else {
                     Freelook.pitch = Math.clamp(Freelook.pitch, -90, 90);
@@ -57,11 +57,11 @@ public class MouseMixin {
             }
         } else {
             instance.turn(cursorDeltaX, cursorDeltaY);
-            if(Freelook.enabled) {
+            if(Freelook.state == Freelook.State.ANIMATING) {
                 Freelook.pitch = Mth.wrapDegrees(Mth.rotLerp(0.35f, Freelook.pitch, entity.getXRot()));
                 Freelook.yaw = Mth.wrapDegrees(Mth.rotLerp(0.35f, Freelook.yaw, entity.getYRot()));
 
-                if (Math.abs((Mth.wrapDegrees(entity.getXRot()) - Freelook.pitch) + (Mth.wrapDegrees(entity.getYRot()) - Freelook.yaw)) < 0.4f) Freelook.enabled = false;
+                if (Math.abs((Mth.wrapDegrees(entity.getXRot()) - Freelook.pitch) + (Mth.wrapDegrees(entity.getYRot()) - Freelook.yaw)) < 0.4f) Freelook.state = Freelook.State.INACTIVE;
             }
         }
     }

@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GameRenderer.class)
 public class RendererMixin {
     @WrapOperation(method = "bobView", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/ClientAvatarState;getInterpolatedBob(F)F"))
-    private float disableViewBobbing(ClientAvatarState instance, float tickProgress, Operation<Float> original) {
+    private float bobView(ClientAvatarState instance, float tickProgress, Operation<Float> original) {
         if(Keybinds.freecam.enabled()) return 0;
         return original.call(instance, tickProgress) / Mth.lerp(0.2F, 1F, Zoom.zoomDivisor(0F));
     }

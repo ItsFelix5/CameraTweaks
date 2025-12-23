@@ -57,7 +57,7 @@ public class Freecam {
             return;
         }
         if (cameras[i].dimension != client.level.dimension()) {
-            client.player.displayClientMessage(Component.translatable("cameratweaks.freecam.camera.incorrect_dimension", i + 1, cameras[i].dimension.identifier().getPath().replace('_', ' ')), true);
+            client.player.displayClientMessage(Component.translatable("cameratweaks.freecam.camera.incorrectDimension", i + 1, cameras[i].dimension.identifier().getPath().replace('_', ' ')), true);
             return;
         }
         if (!Keybinds.freecam.enabled()) Keybinds.freecam.setEnabled(true);
@@ -114,12 +114,12 @@ public class Freecam {
         @Override
         public double yawAngleToCamera(Level level, Camera camera, PartialTickSupplier partialTickSupplier) {
             Vec3 vec3 = camera.position().subtract(client.getCameraEntity().position()).rotateClockwise90();
-            return Mth.degreesDifference(camera.yaw(), (float) Mth.atan2(vec3.z(), vec3.x()) * Mth.DEG_TO_RAD);
+            return Mth.degreesDifference(camera.yaw(), (float) Mth.atan2(vec3.z(), vec3.x()) * Mth.RAD_TO_DEG);
         }
 
         @Override
         public PitchDirection pitchDirectionToCamera(Level level, Projector projector, PartialTickSupplier partialTickSupplier) {
-            Vec3 vec3 = projector.projectPointToScreen(client.getCameraEntity().position());
+            Vec3 vec3 = projector.projectPointToScreen(client.getCameraEntity().getEyePosition());
             boolean bl = vec3.z > 1.0;
             double d = bl ? -vec3.y : vec3.y;
             if (d < -1.0 || (bl && vec3.y < 0.0)) return TrackedWaypoint.PitchDirection.DOWN;

@@ -38,15 +38,27 @@ public class Config {
     @SerialEntry
     public boolean alternateFreecam = false;
     @SerialEntry
+    public boolean disableFreecamOnDamage = false;
+    @SerialEntry
     public TransitionType zoomTransition = TransitionType.SINE_IN;
     @SerialEntry
-    public float zoomSpeed = 1F;
+    public float zoomInSpeed = 1F;
+    @SerialEntry
+    public float zoomOutSpeed = 1F;
+    @SerialEntry
+    public float zoomScrollSpeed = 1F;
     @SerialEntry
     public boolean cinematicZoom = false;
+    @SerialEntry
+    public boolean rememberZoom = false;
+    @SerialEntry
+    public int defaultZoom = 5;
     @SerialEntry
     public int cloudHeight = 0;
     @SerialEntry
     public List<ThirdPerson> thirdPersons = List.of(new ThirdPerson(), new ThirdPerson());
+    @SerialEntry
+    public boolean freelookTogglePerspective = false;
 
     public Config() {
         thirdPersons.get(1).invert = true;
@@ -91,10 +103,22 @@ public class Config {
                                 .controller(o->CyclingListControllerBuilder.create(o).values(TransitionType.values()).formatValue(easing-> Component.literal(easing.name())))
                                 .build())
                         .option(Option.<Float>createBuilder()
-                                .name(Component.translatable("cameratweaks.options.zoomSpeed"))
-                                .description(OptionDescription.of(Component.translatable("cameratweaks.options.zoomSpeed.description")))
-                                .binding(1F, ()-> zoomSpeed, val-> zoomSpeed = val)
-                                .controller(o-> FloatSliderControllerBuilder.create(o).step(0.1F).range(0F, 2F))
+                                .name(Component.translatable("cameratweaks.options.zoomInSpeed"))
+                                .description(OptionDescription.of(Component.translatable("cameratweaks.options.zoomInSpeed.description")))
+                                .binding(1F, ()-> zoomInSpeed, val-> zoomInSpeed = val)
+                                .controller(o-> FloatSliderControllerBuilder.create(o).step(0.1F).range(0F, 3F))
+                                .build())
+                        .option(Option.<Float>createBuilder()
+                                .name(Component.translatable("cameratweaks.options.zoomOutSpeed"))
+                                .description(OptionDescription.of(Component.translatable("cameratweaks.options.zoomOutSpeed.description")))
+                                .binding(1F, ()-> zoomOutSpeed, val-> zoomOutSpeed = val)
+                                .controller(o-> FloatSliderControllerBuilder.create(o).step(0.1F).range(0F, 3F))
+                                .build())
+                        .option(Option.<Float>createBuilder()
+                                .name(Component.translatable("cameratweaks.options.zoomScrollSpeed"))
+                                .description(OptionDescription.of(Component.translatable("cameratweaks.options.zoomScrollSpeed.description")))
+                                .binding(1F, ()-> zoomScrollSpeed, val-> zoomScrollSpeed = val)
+                                .controller(o-> FloatSliderControllerBuilder.create(o).step(0.1F).range(0F, 3F))
                                 .build())
                         .option(Option.<Boolean>createBuilder()
                                 .name(Component.translatable("cameratweaks.options.cinematicZoom"))
@@ -103,9 +127,27 @@ public class Config {
                                 .controller(TickBoxControllerBuilder::create)
                                 .build())
                         .option(Option.<Boolean>createBuilder()
-                                .name(Component.translatable("cameratweaks.options.freecam_save_behaviour"))
-                                .description(OptionDescription.of(Component.translatable("cameratweaks.options.freecam_save_behaviour.description")))
+                                .name(Component.translatable("cameratweaks.options.rememberZoom"))
+                                .description(OptionDescription.of(Component.translatable("cameratweaks.options.rememberZoom.description")))
+                                .binding(false, ()-> rememberZoom, enabled-> rememberZoom = enabled)
+                                .controller(TickBoxControllerBuilder::create)
+                                .build())
+                        .option(Option.<Integer>createBuilder()
+                                .name(Component.translatable("cameratweaks.options.defaultZoom"))
+                                .description(OptionDescription.of(Component.translatable("cameratweaks.options.defaultZoom.description")))
+                                .binding(5, ()-> defaultZoom, val-> defaultZoom = val)
+                                .controller(o-> IntegerSliderControllerBuilder.create(o).step(1).range(1, 100))
+                                .build())
+                        .option(Option.<Boolean>createBuilder()
+                                .name(Component.translatable("cameratweaks.options.freecamSaveBehaviour"))
+                                .description(OptionDescription.of(Component.translatable("cameratweaks.options.freecamSaveBehaviour.description")))
                                 .binding(false, ()-> alternateFreecam, enabled-> alternateFreecam = enabled)
+                                .controller(TickBoxControllerBuilder::create)
+                                .build())
+                        .option(Option.<Boolean>createBuilder()
+                                .name(Component.translatable("cameratweaks.options.disableFreecamOnDamage"))
+                                .description(OptionDescription.of(Component.translatable("cameratweaks.options.disableFreecamOnDamage.description")))
+                                .binding(false, ()-> disableFreecamOnDamage, enabled-> disableFreecamOnDamage = enabled)
                                 .controller(TickBoxControllerBuilder::create)
                                 .build())
                         .option(Option.<Integer>createBuilder()
@@ -113,6 +155,12 @@ public class Config {
                                 .description(OptionDescription.of(Component.translatable("cameratweaks.options.cloudHeight.description")))
                                 .binding(0, ()-> cloudHeight, val-> cloudHeight = val)
                                 .controller(o-> IntegerSliderControllerBuilder.create(o).step(2).range(-200, 300))
+                                .build())
+                        .option(Option.<Boolean>createBuilder()
+                                .name(Component.translatable("cameratweaks.options.freelookTogglePerspective"))
+                                .description(OptionDescription.of(Component.translatable("cameratweaks.options.freelookTogglePerspective.description")))
+                                .binding(false, ()-> freelookTogglePerspective, enabled-> freelookTogglePerspective = enabled)
+                                .controller(TickBoxControllerBuilder::create)
                                 .build())
                         .build())
                 .category(ConfigCategory.createBuilder()

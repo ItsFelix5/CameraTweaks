@@ -73,11 +73,11 @@ public class ThirdPerson implements Cloneable {
             client.options.setCameraType(thirdPerson.invert?CameraType.THIRD_PERSON_FRONT:CameraType.THIRD_PERSON_BACK);
             client.gameRenderer.checkEntityPostEffect(null);
         }
-        if(current != null && !current.rotatePlayer) {
-            Keybinds.freelook.setEnabled(false);
-            Freelook.enabled = false;// Bye bye animation :(
+        if(current != null && !current.rotatePlayer) Freelook.state = Freelook.State.INACTIVE;
+        if(thirdPerson != null && !thirdPerson.rotatePlayer && Freelook.state != Freelook.State.FREELOOKING) {
+            Freelook.state = Freelook.State.THIRD_PERSON;
+            Freelook.enable();
         }
-        if(thirdPerson != null && !thirdPerson.rotatePlayer) Keybinds.freelook.setEnabled(true);
         current = thirdPerson;
     }
 

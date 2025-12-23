@@ -28,7 +28,7 @@ public class HeldItemRendererMixin {
 
     @Inject(method = "renderHandsWithItems(FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/player/LocalPlayer;I)V", at = @At("HEAD"))
     private void rotateHand(float tickProgress, PoseStack matrices, SubmitNodeCollector orderedRenderCommandQueue, LocalPlayer player, int light, CallbackInfo ci) {
-        if (Freelook.enabled) {
+        if (Freelook.state.active()) {
             matrices.mulPose(new Quaternionf().rotationAxis((Freelook.yaw - player.getViewYRot(tickProgress)) * Constants.DEG_TO_RAD,
                     new Vector3f(0f, 1f, 0f).rotateX(Freelook.pitch * Constants.DEG_TO_RAD)));
             matrices.mulPose(new Quaternionf().rotationX((Freelook.pitch - player.getViewXRot(tickProgress)) * Constants.DEG_TO_RAD));

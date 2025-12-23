@@ -10,7 +10,7 @@ import static cameratweaks.Util.client;
 public class Zoom {
     private static final Util.Lerped initial = new Util.Lerped();
     private static final Util.Lerped scroll = new Util.Lerped();
-    private static int zoom = 0;
+    private static int zoom = 5;
     private static boolean in = true;
 
     private static TransitionType transition() {
@@ -23,29 +23,29 @@ public class Zoom {
     }
 
     public static void stop() {
-        zoom = 0;
+        if (!Config.get().rememberZoom) zoom = Config.get().defaultZoom;
         if (Config.get().cinematicZoom) client.options.smoothCamera = false;
         if (transition().hasInverse()) initial.modify(transition()::inverse);
     }
 
     public static void zoom(boolean in) {
-        zoom = Math.clamp(zoom + (in? 1:-1) * Math.max(1, zoom / 3), 0, 95);
-        client.player.displayClientMessage(Component.translatable("cameratweaks.zoom.set", 5 + zoom), true);
+        zoom = Math.clamp(zoom + (in ? 1 : -1) * Math.max(1, zoom / 3), 1, 100);
+        client.player.displayClientMessage(Component.translatable("cameratweaks.zoom.set", zoom), true);
     }
 
     public static void tick() {
+        float delta = client.getDeltaTracker().getGameTimeDeltaTicks();
         float targetZoom = Keybinds.zoom.enabled() ? 1F : 0F;
         in = targetZoom > initial.get(1F);
 
-        initial.tick(Util.approach(initial.get(1F), targetZoom, client.getDeltaTracker().getGameTimeDeltaTicks() / Config.get().zoomSpeed));
+        initial.approach(targetZoom, delta / (in ? Config.get().zoomInSpeed : Config.get().zoomOutSpeed));
 
-        targetZoom = zoom / 95F;
-
-        scroll.tick(Util.approach(scroll.get(1F), targetZoom, Math.abs(targetZoom - scroll.get(1F)) / 0.5F * client.getDeltaTracker().getGameTimeDeltaTicks()));
+        targetZoom = zoom / 100F;
+        scroll.approach(targetZoom, Math.abs(targetZoom - scroll.get(1F)) * delta / Config.get().zoomScrollSpeed);
     }
 
     public static float zoomDivisor(float tickDelta) {
-        return Mth.lerp(transition().apply(initial.get(tickDelta)), 1F, 5F)
-                + Mth.lerp(scroll.get(tickDelta), 0F, 95F * 6F);
+        if (initial.get(tickDelta) != 0F && initial.get(tickDelta) != 1F) System.out.println("Initial: " + initial.get(tickDelta) + " Scroll: " + scroll.get(tickDelta));
+        return Mth.lerp(scroll.get(tickDelta), 0F, 100F) * transition().apply(initial.get(tickDelta)) + 1F;
     }
 }

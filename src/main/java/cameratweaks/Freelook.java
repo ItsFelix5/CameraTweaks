@@ -1,32 +1,57 @@
 package cameratweaks;
 
+import cameratweaks.config.Config;
+
 import static cameratweaks.Util.client;
 
+// spaghetti
 public class Freelook {
-    public static boolean enabled = false;
+    public static State state = State.INACTIVE;
     public static float yaw, pitch;
     public static int pauseTicks;
 
     public static void start() {
-        enabled = true;
+        state = State.FREELOOKING;
+        enable();
+        if(Config.get().freelookTogglePerspective) ThirdPerson.setCurrent(Config.get().thirdPersons.getFirst());
+    }
+
+    public static void enable() {
         yaw = client.getCameraEntity().getYRot();
         pitch = client.getCameraEntity().getXRot();
     }
 
     public static void stop() {
+        state = State.ANIMATING;
         pauseTicks = 0;
+        if(Config.get().freelookTogglePerspective) ThirdPerson.setCurrent(null);
     }
 
     public static void pause() {
-        if(Freelook.enabled && ThirdPerson.current != null && !ThirdPerson.current.rotatePlayer) {
+        if(Freelook.state == State.THIRD_PERSON) {
             client.player.setXRot(Freelook.pitch);
             client.player.setYRot(Freelook.yaw);
-            Keybinds.freelook.setEnabled(false);
+            state = State.PAUSED;
             pauseTicks = 60;
         }
     }
 
     public static void tick() {
-        if(pauseTicks > 0 && --pauseTicks == 0 && ThirdPerson.current != null && !ThirdPerson.current.rotatePlayer) Keybinds.freelook.setEnabled(true);
+        if(state == State.PAUSED && --pauseTicks == 0) {
+            state = State.THIRD_PERSON;
+            enable();
+        }
+    }
+
+    public enum State {
+        INACTIVE,
+        FREELOOKING,
+        PAUSED,
+        ANIMATING,
+        THIRD_PERSON;
+
+        public boolean active() {
+            return this != INACTIVE && this != PAUSED;
+        }
     }
 }
