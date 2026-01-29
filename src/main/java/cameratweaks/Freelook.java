@@ -4,7 +4,6 @@ import cameratweaks.config.Config;
 
 import static cameratweaks.Util.client;
 
-// spaghetti
 public class Freelook {
     public static State state = State.INACTIVE;
     public static float yaw, pitch;

@@ -13,13 +13,15 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.waypoints.PartialTickSupplier;
 import net.minecraft.world.waypoints.TrackedWaypoint;
 import net.minecraft.world.waypoints.Waypoint;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import static cameratweaks.Util.*;
 
 @SuppressWarnings("DataFlowIssue")
 public class Freecam {
     private static final Util.Pos[] cameras = new Util.Pos[9];
-    public static Util.LerpedPos pos;
+    public static Util.@Nullable LerpedPos pos;
     public static float speed;
 
     public static void enable() {
@@ -107,18 +109,18 @@ public class Freecam {
         }
 
         @Override
-        public void update(TrackedWaypoint waypoint) {}
+        public void update(@NonNull TrackedWaypoint waypoint) {}
         @Override
-        public void writeContents(ByteBuf buf) {}
+        public void writeContents(@NonNull ByteBuf buf) {}
 
         @Override
-        public double yawAngleToCamera(Level level, Camera camera, PartialTickSupplier partialTickSupplier) {
+        public double yawAngleToCamera(@NonNull Level level, Camera camera, @NonNull PartialTickSupplier partialTickSupplier) {
             Vec3 vec3 = camera.position().subtract(client.getCameraEntity().position()).rotateClockwise90();
             return Mth.degreesDifference(camera.yaw(), (float) Mth.atan2(vec3.z(), vec3.x()) * Mth.RAD_TO_DEG);
         }
 
         @Override
-        public PitchDirection pitchDirectionToCamera(Level level, Projector projector, PartialTickSupplier partialTickSupplier) {
+        public @NonNull PitchDirection pitchDirectionToCamera(@NonNull Level level, Projector projector, @NonNull PartialTickSupplier partialTickSupplier) {
             Vec3 vec3 = projector.projectPointToScreen(client.getCameraEntity().getEyePosition());
             boolean bl = vec3.z > 1.0;
             double d = bl ? -vec3.y : vec3.y;

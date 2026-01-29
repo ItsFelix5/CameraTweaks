@@ -11,6 +11,7 @@ import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import net.minecraft.client.CameraType;
 import net.minecraft.network.chat.Component;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -18,7 +19,7 @@ import static cameratweaks.Util.client;
 
 public class ThirdPerson implements Cloneable {
     public static float distanceOffset = 0F;
-    public static ThirdPerson current;
+    public static @Nullable ThirdPerson current;
     public static ArrayList<ThirdPerson> pending;
 
     @SerialEntry(required = false)

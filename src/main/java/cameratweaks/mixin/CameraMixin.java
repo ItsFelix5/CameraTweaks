@@ -60,6 +60,7 @@ public abstract class CameraMixin {
 
     @Inject(method = "setup", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;getMaxZoom(F)F"), cancellable = true)
     private void modifyThirdperson(Level level, Entity entity, boolean bl, boolean bl2, float tickProgress, CallbackInfo ci) {
+        if(ThirdPerson.current == null) return;
         ci.cancel();
         float f = 4.0F;
         if (entity instanceof LivingEntity livingEntity)
@@ -79,7 +80,7 @@ public abstract class CameraMixin {
     @WrapOperation(method = "getNearPlane", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/OptionInstance;get()Ljava/lang/Object;"))
     private Object getFov(OptionInstance<?> instance, Operation<Object> original) {
         if (ThirdPerson.current != null && ThirdPerson.current.changedFov) return ThirdPerson.current.fov;
-        if (Keybinds.freecam.enabled()) return Freecam.pos.fov;
+        if (Keybinds.freecam.enabled() && Freecam.pos != null) return Freecam.pos.fov;
         return original.call(instance);
     }
 }
