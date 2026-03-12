@@ -65,6 +65,7 @@ public class ThirdPerson implements Cloneable {
     }
 
     public static void setCurrent(ThirdPerson thirdPerson) {
+        if(thirdPerson == current) return;
         distanceOffset = 0.0F;
         if(thirdPerson == null || !thirdPerson.enabled) {
             client.options.setCameraType(CameraType.FIRST_PERSON);
@@ -74,7 +75,10 @@ public class ThirdPerson implements Cloneable {
             client.options.setCameraType(thirdPerson.invert?CameraType.THIRD_PERSON_FRONT:CameraType.THIRD_PERSON_BACK);
             client.gameRenderer.checkEntityPostEffect(null);
         }
-        if(current != null && !current.rotatePlayer) Freelook.state = Freelook.State.INACTIVE;
+        if(current != null && !current.rotatePlayer) {
+            Keybinds.freelook.setEnabled(false);
+            Freelook.state = Freelook.State.INACTIVE;
+        }
         if(thirdPerson != null && !thirdPerson.rotatePlayer && Freelook.state != Freelook.State.FREELOOKING) {
             Freelook.state = Freelook.State.THIRD_PERSON;
             Freelook.enable();
@@ -115,14 +119,14 @@ public class ThirdPerson implements Cloneable {
                 .name(Component.translatable("cameratweaks.options.thirdperson.y"))
                 .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.y.description")))
                 .binding(0.0F, ()->yOffset, val->yOffset = val)
-                .controller(o->FloatSliderControllerBuilder.create(o).range(-10F, 10F).step(0.5F))
+                .controller(o->FloatSliderControllerBuilder.create(o).range(-10F, 10F).step(0.25F))
                 .flag(OptionFlag.WORLD_RENDER_UPDATE)
                 .build());
         builder.option(Option.<Float>createBuilder()
                 .name(Component.translatable("cameratweaks.options.thirdperson.z"))
                 .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.z.description")))
                 .binding(0.0F, ()->zOffset, val->zOffset = val)
-                .controller(o->FloatSliderControllerBuilder.create(o).range(-10F, 10F).step(0.5F))
+                .controller(o->FloatSliderControllerBuilder.create(o).range(-10F, 10F).step(0.25F))
                 .flag(OptionFlag.WORLD_RENDER_UPDATE)
                 .build());
 

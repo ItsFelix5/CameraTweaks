@@ -45,7 +45,6 @@ public class Zoom {
     }
 
     public static float zoomDivisor(float tickDelta) {
-        if (initial.get(tickDelta) != 0F && initial.get(tickDelta) != 1F) System.out.println("Initial: " + initial.get(tickDelta) + " Scroll: " + scroll.get(tickDelta));
         return Mth.lerp(scroll.get(tickDelta), 0F, 100F) * transition().apply(initial.get(tickDelta)) + 1F;
     }
 }

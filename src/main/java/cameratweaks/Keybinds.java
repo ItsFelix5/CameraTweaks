@@ -27,7 +27,7 @@ public class Keybinds {
     public static final BetterKeybind thirdPersonModifier = new BetterKeybind("thirdPersonModifier", GLFW.GLFW_KEY_UNKNOWN);
 
     public static final BetterKeybind freelook = new BetterKeybind("freelook", GLFW.GLFW_KEY_UNKNOWN)
-            .toggle().onPress(Freelook::start, Freelook::stop).condition(()->Freelook.state != Freelook.State.THIRD_PERSON);
+            .toggle().onPress(Freelook::start, Freelook::stop);
 
     public static void init() {
         new BetterKeybind("freelook.hold", GLFW.GLFW_KEY_UNKNOWN)

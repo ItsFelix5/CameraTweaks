@@ -7,10 +7,11 @@ import static cameratweaks.Util.client;
 public class Freelook {
     public static State state = State.INACTIVE;
     public static float yaw, pitch;
-    public static int pauseTicks;
+    private static ThirdPerson thirdPerson;
 
     public static void start() {
         state = State.FREELOOKING;
+        thirdPerson = ThirdPerson.current;
         enable();
         if(Config.get().freelookTogglePerspective) ThirdPerson.setCurrent(Config.get().thirdPersons.getFirst());
     }
@@ -18,12 +19,16 @@ public class Freelook {
     public static void enable() {
         yaw = client.getCameraEntity().getYRot();
         pitch = client.getCameraEntity().getXRot();
+        if (client.options.keyUse.isDown()) pause();
     }
 
     public static void stop() {
         state = State.ANIMATING;
-        pauseTicks = 0;
-        if(Config.get().freelookTogglePerspective) ThirdPerson.setCurrent(null);
+        if(Config.get().freelookTogglePerspective) ThirdPerson.setCurrent(thirdPerson);
+        if (ThirdPerson.current != null && !ThirdPerson.current.rotatePlayer) {
+            Freelook.state = State.THIRD_PERSON;
+            if(client.options.keyUse.isDown()) pause();
+        }
     }
 
     public static void pause() {
@@ -31,12 +36,11 @@ public class Freelook {
             client.player.setXRot(Freelook.pitch);
             client.player.setYRot(Freelook.yaw);
             state = State.PAUSED;
-            pauseTicks = 60;
         }
     }
 
     public static void tick() {
-        if(state == State.PAUSED && --pauseTicks == 0) {
+        if(state == State.PAUSED && !client.options.keyUse.isDown()) {
             state = State.THIRD_PERSON;
             enable();
         }

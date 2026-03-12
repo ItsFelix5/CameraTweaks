@@ -62,18 +62,17 @@ public abstract class CameraMixin {
     private void modifyThirdperson(Level level, Entity entity, boolean bl, boolean bl2, float tickProgress, CallbackInfo ci) {
         if(ThirdPerson.current == null) return;
         ci.cancel();
-        float f = 4.0F;
+        float f = 1.0F;
         if (entity instanceof LivingEntity livingEntity)
-            f = livingEntity.getScale() * (float)livingEntity.getAttributeValue(Attributes.CAMERA_DISTANCE);
+            f = livingEntity.getScale() * (float)livingEntity.getAttributeValue(Attributes.CAMERA_DISTANCE) / 4F;
 
         if (entity.isPassenger() && entity.getVehicle() instanceof LivingEntity livingEntity2) {
             float d = livingEntity2.getScale() *  (float)livingEntity2.getAttributeValue(Attributes.CAMERA_DISTANCE);
-            if (d > f) f = d;
+            if (d > f) f = d / 4F;
         }
 
-        float distance = (ThirdPerson.current.xOffset + ThirdPerson.distanceOffset) * f / 4F;
-        this.move(0, ThirdPerson.current.yOffset * f, ThirdPerson.current.zOffset * f);
-        this.move(ThirdPerson.current.collision? -getMaxZoom(distance) : -distance, 0, 0);
+        float distance = (ThirdPerson.current.xOffset + ThirdPerson.distanceOffset) * f;
+        this.move(ThirdPerson.current.collision? -getMaxZoom(distance) : -distance, ThirdPerson.current.yOffset * f, ThirdPerson.current.zOffset * f);
         this.setRotation(this.yRot + ThirdPerson.current.yaw, this.xRot + ThirdPerson.current.pitch);
     }
 
