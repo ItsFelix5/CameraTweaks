@@ -64,7 +64,7 @@ public class ClientMixin {
         Freecam.reset();
     }
 
-    @Inject(method = {"startUseItem", "pickBlock"}, at = @At("HEAD"))
+    @Inject(method = {"startUseItem", "pickBlockOrEntity"}, at = @At("HEAD"))
     private void doItemUse(CallbackInfo ci) {
         Freelook.pause();
     }

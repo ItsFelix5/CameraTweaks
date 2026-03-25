@@ -9,7 +9,7 @@ import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.OptionGroup;
 import dev.isxander.yacl3.gui.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -46,7 +46,7 @@ public abstract class OptionListWidgetMixin extends YACLSelectionList<OptionList
         builder.addAll(original.call(instance));
         for (int i = 0; i < ThirdPerson.pending.size(); i++) {
             OptionGroup group = ThirdPerson.pending.get(i).toGroup(i);
-            group.options().forEach(o->o.addEventListener((opt, event) -> ((Runnable) yaclScreen).run()));
+            group.options().forEach(o->o.addEventListener((_, _) -> ((Runnable) yaclScreen).run()));
             builder.add(group);
         }
         return builder.build();
@@ -61,18 +61,18 @@ public abstract class OptionListWidgetMixin extends YACLSelectionList<OptionList
         public void init(OptionListWidget this$0, OptionGroup group, Screen screen, CallbackInfo ci) {
             if(!(group.name().getContents() instanceof TranslatableContents name)) return;
             if(name.getKey().equals("cameratweaks.options.thirdperson.custom")) removeListButton = new TooltipButtonWidget(screen, this$0.getRowRight() - 20, -50, 20, 20,
-                    Component.literal("X"), Component.translatable("yacl.list.remove"), btn -> {
+                    Component.literal("X"), Component.translatable("yacl.list.remove"), _ -> {
                 ThirdPerson.pending.remove((int) name.getArgs()[0] + 1);
                 this$0.refreshOptions();
                 ((Runnable) screen).run();
             });
         }
 
-        @Inject(method = "renderContent", at = @At("TAIL"), remap = true)
-        public void render(GuiGraphics graphics, int mouseX, int mouseY, boolean hovered, float deltaTicks, CallbackInfo ci) {
+        @Inject(method = "extractContent", at = @At("TAIL"), remap = true)
+        public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hovered, float a, CallbackInfo ci) {
             if(removeListButton != null) {
                 removeListButton.setY(expandMinimizeButton.getY());
-                removeListButton.render(graphics, mouseX, mouseY, deltaTicks);
+                removeListButton.extractRenderState(graphics, mouseX, mouseY, a);
             }
         }
 

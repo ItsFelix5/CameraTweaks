@@ -20,7 +20,7 @@
   "accessWidener": "cameratweaks.accesswidener",
   "depends": {
     "minecraft": "*",
-    "fabric": "*",
+    "fabric-api": "*",
     "fabricloader": "*",
     "yet_another_config_lib_v3": "*"
   },

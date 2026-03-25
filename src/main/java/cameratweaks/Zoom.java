@@ -30,7 +30,7 @@ public class Zoom {
 
     public static void zoom(boolean in) {
         zoom = Math.clamp(zoom + (in ? 1 : -1) * Math.max(1, zoom / 3), 1, 100);
-        client.player.displayClientMessage(Component.translatable("cameratweaks.zoom.set", zoom), true);
+        client.player.sendOverlayMessage(Component.translatable("cameratweaks.zoom.set", zoom));
     }
 
     public static void tick() {

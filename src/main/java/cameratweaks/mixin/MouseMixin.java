@@ -27,8 +27,8 @@ public class MouseMixin {
         Vector2i vector2i = instance.onMouseScroll(horizontal, vertical);
         if (Keybinds.zoom.enabled()) Zoom.zoom(vector2i.y > 0);
         else if (ThirdPerson.current != null && Keybinds.thirdPersonModifier.enabled()) ThirdPerson.modifyDistance(vector2i.y / 3F);
-        else if (Keybinds.freecam.enabled() && !Keybinds.playerMovement.enabled()) minecraft.player.displayClientMessage(Component.translatable("cameratweaks.freecam.speed",
-                (int) (20 * (Freecam.speed = Mth.clamp(Freecam.speed + (float) vector2i.y * 0.05F, 0.0F, 6F)))), true);
+        else if (Keybinds.freecam.enabled() && !Keybinds.playerMovement.enabled()) minecraft.player.sendOverlayMessage(Component.translatable("cameratweaks.freecam.speed",
+                (int) (20 * (Freecam.speed = Mth.clamp(Freecam.speed + (float) vector2i.y * 0.05F, 0.0F, 6F)))));
         else return vector2i;
         return new Vector2i(0, 0);
     }

@@ -1,7 +1,7 @@
 package cameratweaks;
 
 import cameratweaks.config.Config;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -35,12 +35,12 @@ public class Keybinds {
         new BetterKeybind("fullbright", GLFW.GLFW_KEY_Y).toggle().defaultEnabled(Config.get().fullbright).onPress(
                 () -> {
                     Config.get().fullbright = true;
-                    client.gameRenderer.lightTexture().updateLightTexture = true;
+                    client.gameRenderer.getGameRenderState().lightmapRenderState.needsUpdate = true;
                     Config.HANDLER.save();
                 },
                 () -> {
                     Config.get().fullbright = false;
-                    client.gameRenderer.lightTexture().updateLightTexture = true;
+                    client.gameRenderer.getGameRenderState().lightmapRenderState.needsUpdate = true;
                     Config.HANDLER.save();
                 });
         new BetterKeybind("disableFog", GLFW.GLFW_KEY_UNKNOWN).toggle().defaultEnabled(Config.get().disableFog).onPress(
@@ -64,7 +64,7 @@ public class Keybinds {
 
         private BetterKeybind(String translationKey, int keyCode) {
             super("key.cameratweaks." + translationKey, keyCode, CATEGORY);
-            KeyBindingHelper.registerKeyBinding(this);
+            KeyMappingHelper.registerKeyMapping(this);
         }
         
         public BetterKeybind onPress(Runnable press, Runnable release) {
@@ -96,7 +96,7 @@ public class Keybinds {
                         if (used) used = false;
                         else {
                             setEnabled(!enabled);
-                            client.player.displayClientMessage(Component.translatable(getName().substring(4) + (enabled ? ".on" : ".off")), true);
+                            client.player.sendOverlayMessage(Component.translatable(getName().substring(4) + (enabled ? ".on" : ".off")));
                         }
                     }
                 } else setEnabled(pressed);
@@ -117,7 +117,7 @@ public class Keybinds {
 
         public void setUsed() {
             used = true;
-            KeyMapping.forAllKeyMappings(KeyBindingHelper.getBoundKeyOf(this), KeyMapping -> {
+            KeyMapping.forAllKeyMappings(KeyMappingHelper.getBoundKeyOf(this), KeyMapping -> {
                 if(KeyMapping instanceof BetterKeybind betterKeybind) betterKeybind.used = true;
             });
         }

@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '+'
+    id 'net.fabricmc.fabric-loom' version '+'
     id 'maven-publish'
 }
 
@@ -12,20 +12,20 @@ base {
 
 repositories {
     maven {
-        url 'https://maven.isxander.dev/releases'
-    }
-    maven {
         url = "https://maven.terraformersmc.com/"
     }
+    maven {
+        url = "https://maven.quiltmc.org/repository/release/"
+    }
+    mavenCentral()
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:+"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}-fabric"
-    modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+    implementation "net.fabricmc:fabric-loader:+"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    implementation "dev.isxander:yet-another-config-lib:${project.yacl_version}-fabric"
+    implementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 }
 
 loom {
@@ -42,8 +42,8 @@ processResources {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 jar {

@@ -54,12 +54,12 @@ public class Freecam {
             if(Config.get().alternateFreecam) {
                 setPosition();
                 cameras[i] = pos.toStatic();
-                client.player.displayClientMessage(Component.translatable("cameratweaks.freecam.camera.saved", i + 1), true);
-            } else client.player.displayClientMessage(Component.translatable("cameratweaks.freecam.camera.unknown", i + 1, Keybinds.playerMovement.getTranslatedKeyMessage(), i + 1), true);
+                client.player.sendOverlayMessage(Component.translatable("cameratweaks.freecam.camera.saved", i + 1));
+            } else client.player.sendOverlayMessage(Component.translatable("cameratweaks.freecam.camera.unknown", i + 1, Keybinds.playerMovement.getTranslatedKeyMessage(), i + 1));
             return;
         }
         if (cameras[i].dimension != client.level.dimension()) {
-            client.player.displayClientMessage(Component.translatable("cameratweaks.freecam.camera.incorrectDimension", i + 1, cameras[i].dimension.identifier().getPath().replace('_', ' ')), true);
+            client.player.sendOverlayMessage(Component.translatable("cameratweaks.freecam.camera.incorrectDimension", i + 1, cameras[i].dimension.identifier().getPath().replace('_', ' ')));
             return;
         }
         if (!Keybinds.freecam.enabled()) Keybinds.freecam.setEnabled(true);
@@ -74,12 +74,12 @@ public class Freecam {
                 cameras[i] = new Util.Pos(client.level.dimension(), camera.getEyePosition(), camera.getXRot(), camera.getYRot(), fov);
             } else if (cameras[i] != null){
                 cameras[i] = null;
-                client.player.displayClientMessage(Component.translatable("cameratweaks.freecam.camera.removed", i + 1), true);
+                client.player.sendOverlayMessage(Component.translatable("cameratweaks.freecam.camera.removed", i + 1));
             }
         } else {
             setPosition();
             cameras[i] = pos.toStatic();
-            client.player.displayClientMessage(Component.translatable("cameratweaks.freecam.camera.saved", i + 1), true);
+            client.player.sendOverlayMessage(Component.translatable("cameratweaks.freecam.camera.saved", i + 1));
         }
     }
 

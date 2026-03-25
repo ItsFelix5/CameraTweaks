@@ -1,18 +1,17 @@
 package cameratweaks.mixin;
 
-import cameratweaks.Freecam;
-import cameratweaks.Freelook;
-import cameratweaks.Keybinds;
-import cameratweaks.ThirdPerson;
+import cameratweaks.*;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.Camera;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -43,23 +42,26 @@ public abstract class CameraMixin {
     @Shadow
     protected abstract void move(float f, float g, float h);
 
-    @Inject(method = "setup", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;isPassenger()Z"), cancellable = true)
-    private void update(Level level, Entity entity, boolean bl, boolean bl2, float tickProgress, CallbackInfo ci) {
+    @Shadow
+    private @Nullable Entity entity;
+
+    @Inject(method = "alignWithEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;isPassenger()Z"), cancellable = true)
+    private void update(float partialTicks, CallbackInfo ci) {
         if (!Keybinds.freecam.enabled() || Freecam.pos == null) return;
         this.detached = true;
         ci.cancel();
-        setRotation(Freecam.pos.getYaw(tickProgress), Freecam.pos.getPitch(tickProgress));
-        setPosition(Freecam.pos.getPos(tickProgress));
+        setRotation(Freecam.pos.getYaw(partialTicks), Freecam.pos.getPitch(partialTicks));
+        setPosition(Freecam.pos.getPos(partialTicks));
     }
 
-    @Redirect(method = "setup", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;setRotation(FF)V", ordinal = 1))
+    @Redirect(method = "alignWithEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;setRotation(FF)V", ordinal = 1))
     private void changeRotation(Camera instance, float yaw, float pitch) {
         if (Freelook.state.active()) this.setRotation(Freelook.yaw, Freelook.pitch);
         else this.setRotation(yaw, pitch);
     }
 
-    @Inject(method = "setup", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;getMaxZoom(F)F"), cancellable = true)
-    private void modifyThirdperson(Level level, Entity entity, boolean bl, boolean bl2, float tickProgress, CallbackInfo ci) {
+    @Inject(method = "alignWithEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;getMaxZoom(F)F"), cancellable = true)
+    private void modifyThirdperson(float partialTicks, CallbackInfo ci) {
         if(ThirdPerson.current == null) return;
         ci.cancel();
         float f = 1.0F;
@@ -76,10 +78,21 @@ public abstract class CameraMixin {
         this.setRotation(this.yRot + ThirdPerson.current.yaw, this.xRot + ThirdPerson.current.pitch);
     }
 
-    @WrapOperation(method = "getNearPlane", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/OptionInstance;get()Ljava/lang/Object;"))
-    private Object getFov(OptionInstance<?> instance, Operation<Object> original) {
+    @WrapOperation(method = "tickFov", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/OptionInstance;get()Ljava/lang/Object;"))
+    public Object updateFovMultiplier(OptionInstance<?> instance, Operation<?> original){
+        if(Keybinds.freecam.enabled()) return 0D;
+        return original.call(instance);
+    }
+
+    @ModifyReturnValue(method = "modifyFovBasedOnDeathOrFluid", at = @At(value = "RETURN"))
+    private float applyZoom(float original, @Local(argsOnly = true, ordinal = 0) final float partialTicks) {
+        return original / Zoom.zoomDivisor(partialTicks);
+    }
+
+    @WrapOperation(method = "calculateFov", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/OptionInstance;get()Ljava/lang/Object;"))
+    private Object getFov(OptionInstance<Integer> instance, Operation<Integer> original) {
         if (ThirdPerson.current != null && ThirdPerson.current.changedFov) return ThirdPerson.current.fov;
-        if (Keybinds.freecam.enabled() && Freecam.pos != null) return Freecam.pos.fov;
+        if (Keybinds.freecam.enabled()) return Freecam.pos.fov;
         return original.call(instance);
     }
 }

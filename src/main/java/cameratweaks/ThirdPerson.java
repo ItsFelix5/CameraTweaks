@@ -88,7 +88,7 @@ public class ThirdPerson implements Cloneable {
 
     public static void modifyDistance(float amount) {
         distanceOffset += amount;
-        client.player.displayClientMessage(Component.translatable("cameratweaks.thirdperson.distance", Math.round(current.xOffset + distanceOffset)), true);
+        client.player.sendOverlayMessage(Component.translatable("cameratweaks.thirdperson.distance", Math.round(current.xOffset + distanceOffset)));
     }
 
     public OptionGroup toGroup(int i) {

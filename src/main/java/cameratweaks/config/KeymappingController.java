@@ -8,7 +8,10 @@ import dev.isxander.yacl3.gui.AbstractWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.ControllerWidget;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
+import org.jspecify.annotations.NonNull;
 import org.lwjgl.glfw.GLFW;
 
 public record KeymappingController(Option<Integer> option) implements Controller<Integer> {
@@ -35,8 +38,8 @@ public record KeymappingController(Option<Integer> option) implements Controller
         }
 
         @Override
-        public boolean onMouseClicked(double mouseX, double mouseY, int button) {
-            if (!isMouseOver(mouseX, mouseY) || !isAvailable())
+        public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+            if (!isMouseOver(event.x(), event.y()) || !isAvailable())
                 return false;
 
             listening = !listening;
@@ -44,10 +47,10 @@ public record KeymappingController(Option<Integer> option) implements Controller
         }
 
         @Override
-        public boolean onKeyPressed(int keyCode, int scanCode, int modifiers) {
+        public boolean keyPressed(@NonNull KeyEvent event) {
             if (!listening) return false;
             listening = false;
-            if(keyCode != GLFW.GLFW_KEY_ESCAPE) control.option().requestSet(keyCode);
+            if(event.key() != GLFW.GLFW_KEY_ESCAPE) control.option().requestSet(event.key());
             return true;
         }
 

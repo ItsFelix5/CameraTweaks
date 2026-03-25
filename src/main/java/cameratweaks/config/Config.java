@@ -88,7 +88,7 @@ public class Config {
                                 .description(OptionDescription.of(Component.translatable("cameratweaks.options.fullbright.description")))
                                 .binding(false, ()->fullbright, enabled->{
                                     fullbright = enabled;
-                                    client.gameRenderer.lightTexture().updateLightTexture = true;
+                                    client.gameRenderer.getGameRenderState().lightmapRenderState.needsUpdate = true;
                                 }).controller(TickBoxControllerBuilder::create)
                                 .build())
                         .option(Option.<Boolean>createBuilder()
@@ -106,19 +106,19 @@ public class Config {
                                 .name(Component.translatable("cameratweaks.options.zoomInSpeed"))
                                 .description(OptionDescription.of(Component.translatable("cameratweaks.options.zoomInSpeed.description")))
                                 .binding(1F, ()-> zoomInSpeed, val-> zoomInSpeed = val)
-                                .controller(o-> FloatSliderControllerBuilder.create(o).step(0.1F).range(0F, 3F))
+                                .controller(o-> FloatSliderControllerBuilder.create(o).step(0.1F).range(0F, 5F))
                                 .build())
                         .option(Option.<Float>createBuilder()
                                 .name(Component.translatable("cameratweaks.options.zoomOutSpeed"))
                                 .description(OptionDescription.of(Component.translatable("cameratweaks.options.zoomOutSpeed.description")))
                                 .binding(1F, ()-> zoomOutSpeed, val-> zoomOutSpeed = val)
-                                .controller(o-> FloatSliderControllerBuilder.create(o).step(0.1F).range(0F, 3F))
+                                .controller(o-> FloatSliderControllerBuilder.create(o).step(0.1F).range(0F, 5F))
                                 .build())
                         .option(Option.<Float>createBuilder()
                                 .name(Component.translatable("cameratweaks.options.zoomScrollSpeed"))
                                 .description(OptionDescription.of(Component.translatable("cameratweaks.options.zoomScrollSpeed.description")))
                                 .binding(1F, ()-> zoomScrollSpeed, val-> zoomScrollSpeed = val)
-                                .controller(o-> FloatSliderControllerBuilder.create(o).step(0.1F).range(0F, 3F))
+                                .controller(o-> FloatSliderControllerBuilder.create(o).step(0.1F).range(0F, 5F))
                                 .build())
                         .option(Option.<Boolean>createBuilder()
                                 .name(Component.translatable("cameratweaks.options.cinematicZoom"))
@@ -154,7 +154,7 @@ public class Config {
                                 .name(Component.translatable("cameratweaks.options.cloudHeight"))
                                 .description(OptionDescription.of(Component.translatable("cameratweaks.options.cloudHeight.description")))
                                 .binding(0, ()-> cloudHeight, val-> cloudHeight = val)
-                                .controller(o-> IntegerSliderControllerBuilder.create(o).step(2).range(-200, 300))
+                                .controller(o-> IntegerSliderControllerBuilder.create(o).step(2).range(-200, 400))
                                 .build())
                         .option(Option.<Boolean>createBuilder()
                                 .name(Component.translatable("cameratweaks.options.freelookTogglePerspective"))
@@ -168,7 +168,7 @@ public class Config {
                         .option(ButtonOption.createBuilder()
                                 .name(Component.translatable("cameratweaks.options.new"))
                                 .text(Component.empty())
-                                .action((screen, button)->{
+                                .action((screen, _)->{
                                     ThirdPerson thirdPerson = new ThirdPerson();
                                     ThirdPerson.pending.add(thirdPerson);
                                     if(screen.tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab categoryTab) {

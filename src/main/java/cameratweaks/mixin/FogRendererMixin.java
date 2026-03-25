@@ -18,8 +18,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(FogRenderer.class)
 public abstract class FogRendererMixin {
-    @Inject(method = "setupFog", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;getDevice()Lcom/mojang/blaze3d/systems/GpuDevice;"))
-    private void getFogBuffer(Camera camera, int viewDistance, DeltaTracker deltaTracker, float f, ClientLevel clientLevel, CallbackInfoReturnable<Vector4f> cir, @Local FogData data) {
+    @Inject(method = "setupFog", at = @At("RETURN"))
+    private void getFogBuffer(Camera camera, int viewDistance, DeltaTracker deltaTracker, float f, ClientLevel clientLevel, CallbackInfoReturnable<Vector4f> cir, @Local(name = "fog") FogData data) {
         if (!Config.get().disableFog) return;
         data.environmentalStart = data.environmentalEnd = data.renderDistanceStart = data.renderDistanceEnd
                 = viewDistance * 64;
