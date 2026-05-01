@@ -5,6 +5,8 @@ import cameratweaks.Freelook;
 import cameratweaks.Keybinds;
 import cameratweaks.ThirdPerson;
 import cameratweaks.config.Config;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -25,9 +27,9 @@ public class ClientMixin {
         Freecam.update(client.getDeltaTracker().getRealtimeDeltaTicks());
     }
 
-    @Redirect(method = "handleKeybinds", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/KeyMapping;consumeClick()Z", ordinal = 0))
-    private boolean preventPerspectiveChange(KeyMapping instance) {
-        return !Keybinds.freecam.enabled() && instance.consumeClick();
+    @WrapOperation(method = "handleKeybinds", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/KeyMapping;consumeClick()Z", ordinal = 0))
+    private boolean preventPerspectiveChange(KeyMapping instance, Operation<Boolean> original) {
+        return !Keybinds.freecam.enabled() && original.call(instance);
     }
 
     @Redirect(method = "handleKeybinds", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Options;setCameraType(Lnet/minecraft/client/CameraType;)V"))
@@ -37,9 +39,9 @@ public class ClientMixin {
         else ThirdPerson.setCurrent(Config.get().thirdPersons.get(0));
     }
 
-    @Redirect(method = "handleKeybinds", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/KeyMapping;consumeClick()Z", ordinal = 2))
-    private boolean activateCamera(KeyMapping instance) {
-        if (!instance.consumeClick()) return false;
+    @WrapOperation(method = "handleKeybinds", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/KeyMapping;consumeClick()Z", ordinal = 2))
+    private boolean activateCamera(KeyMapping instance, Operation<Boolean> original) {
+        if (!original.call(instance)) return false;
         if (Keybinds.freecam.isDown()) {
             for (int i = 0; i < client.options.keyHotbarSlots.length; i++)
                 if (client.options.keyHotbarSlots[i].equals(instance)) {

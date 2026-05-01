@@ -8,14 +8,13 @@ import net.minecraft.client.renderer.state.LightmapRenderState;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(LightmapRenderStateExtractor.class)
 public class LightmapTextureManagerMixin {
-    @Redirect(method = "extract", at = @At(value = "INVOKE", target = "Ljava/lang/Double;floatValue()F", ordinal = 0))
-    private float updateGamma(Double instance) {
+    @WrapOperation(method = "extract", at = @At(value = "INVOKE", target = "Ljava/lang/Double;floatValue()F", ordinal = 0))
+    private float updateGamma(Double instance, Operation<Float> original) {
         if (Config.get().fullbright && !Config.get().nightVisionFullbright) return 1250;
-        return instance.floatValue();
+        return original.call(instance);
     }
 
     @WrapOperation(method = "extract", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/state/LightmapRenderState;nightVisionEffectIntensity:F", opcode = Opcodes.PUTFIELD))

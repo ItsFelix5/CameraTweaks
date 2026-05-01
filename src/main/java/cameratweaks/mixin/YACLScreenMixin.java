@@ -6,7 +6,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.YetAnotherConfigLib;
-import dev.isxander.yacl3.api.utils.OptionUtils;
 import dev.isxander.yacl3.gui.OptionListWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
 import net.minecraft.client.gui.components.tabs.TabManager;
@@ -15,7 +14,6 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +28,8 @@ public abstract class YACLScreenMixin implements Runnable {
 
     @Shadow @Final public TabManager tabManager;
 
-    @Redirect(method = "onOptionChanged", at = @At(value = "INVOKE", target = "Ldev/isxander/yacl3/api/utils/OptionUtils;consumeOptions(Ldev/isxander/yacl3/api/YetAnotherConfigLib;Ljava/util/function/Function;)V", ordinal = 0))
-    private void onOptionChanged(YetAnotherConfigLib yacl, Function<Option<?>, Boolean> func) {
+    @WrapOperation(method = "onOptionChanged", at = @At(value = "INVOKE", target = "Ldev/isxander/yacl3/api/utils/OptionUtils;consumeOptions(Ldev/isxander/yacl3/api/YetAnotherConfigLib;Ljava/util/function/Function;)V", ordinal = 0))
+    private void onOptionChanged(YetAnotherConfigLib yacl, Function<Option<?>, Boolean> func, Operation<Void> original) {
         if(ThirdPerson.pending != null) {
             if(ThirdPerson.pending.size() != Config.get().thirdPersons.size()) {
                 pendingChanges = true;
@@ -47,7 +45,7 @@ public abstract class YACLScreenMixin implements Runnable {
                 });
             if(val.get()) return;
         }
-        OptionUtils.consumeOptions(yacl, func);
+        original.call(yacl, func);
     }
 
     @WrapOperation(method = "finishOrSave", at = @At(value = "INVOKE", target = "Ldev/isxander/yacl3/api/utils/OptionUtils;forEachOptions(Ldev/isxander/yacl3/api/YetAnotherConfigLib;" +

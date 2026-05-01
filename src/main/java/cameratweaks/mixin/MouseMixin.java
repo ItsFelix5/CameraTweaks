@@ -1,6 +1,8 @@
 package cameratweaks.mixin;
 
 import cameratweaks.*;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.OptionInstance;
@@ -22,9 +24,9 @@ import static cameratweaks.Util.input;
 public class MouseMixin {
     @Shadow @Final private Minecraft minecraft;
 
-    @Redirect(method = "onScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/ScrollWheelHandler;onMouseScroll(DD)Lorg/joml/Vector2i;"))
-    private Vector2i onScroll(ScrollWheelHandler instance, double horizontal, double vertical) {
-        Vector2i vector2i = instance.onMouseScroll(horizontal, vertical);
+    @WrapOperation(method = "onScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/ScrollWheelHandler;onMouseScroll(DD)Lorg/joml/Vector2i;"))
+    private Vector2i onScroll(ScrollWheelHandler instance, double horizontal, double vertical, Operation<Vector2i> original) {
+        Vector2i vector2i = original.call(instance, horizontal, vertical);
         if (Keybinds.zoom.enabled()) Zoom.zoom(vector2i.y > 0);
         else if (ThirdPerson.current != null && Keybinds.thirdPersonModifier.enabled()) ThirdPerson.modifyDistance(vector2i.y / 3F);
         else if (Keybinds.freecam.enabled() && !Keybinds.playerMovement.enabled()) minecraft.player.sendOverlayMessage(Component.translatable("cameratweaks.freecam.speed",
@@ -33,9 +35,9 @@ public class MouseMixin {
         return new Vector2i(0, 0);
     }
 
-    @Redirect(method = "turnPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/OptionInstance;get()Ljava/lang/Object;", ordinal = 0))
-    private Object changeSensitivity(OptionInstance<Double> instance) {
-        return instance.get() * Math.pow(1.0 / Zoom.zoomDivisor(0F), 0.6);
+    @WrapOperation(method = "turnPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/OptionInstance;get()Ljava/lang/Object;", ordinal = 0))
+    private Object changeSensitivity(OptionInstance<Double> instance, Operation<Double> original) {
+        return original.call(instance) * Math.pow(1.0 / Zoom.zoomDivisor(0F), 0.6);
     }
 
     @Redirect(method = "turnPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;turn(DD)V"))

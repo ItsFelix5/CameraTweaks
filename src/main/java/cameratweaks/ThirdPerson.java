@@ -112,7 +112,7 @@ public class ThirdPerson implements Cloneable {
                 .name(Component.translatable("cameratweaks.options.thirdperson.x"))
                 .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.x.description")))
                 .binding(4.0F, ()->xOffset, val->xOffset = val)
-                .controller(o-> FloatSliderControllerBuilder.create(o).range(0F, 50.0F).step(0.5F))
+                .controller(o-> FloatSliderControllerBuilder.create(o).range(-25F, 50.0F).step(0.5F))
                 .flag(OptionFlag.WORLD_RENDER_UPDATE)
                 .build());
         builder.option(Option.<Float>createBuilder()
