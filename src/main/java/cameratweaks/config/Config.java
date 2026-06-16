@@ -88,7 +88,7 @@ public class Config {
                                 .description(OptionDescription.of(Component.translatable("cameratweaks.options.fullbright.description")))
                                 .binding(false, ()->fullbright, enabled->{
                                     fullbright = enabled;
-                                    client.gameRenderer.getGameRenderState().lightmapRenderState.needsUpdate = true;
+                                    client.gameRenderer.gameRenderState().lightmapRenderState.needsUpdate = true;
                                 }).controller(TickBoxControllerBuilder::create)
                                 .build())
                         .option(Option.<Boolean>createBuilder()

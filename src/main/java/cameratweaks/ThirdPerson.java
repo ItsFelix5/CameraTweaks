@@ -3,7 +3,6 @@ package cameratweaks;
 import cameratweaks.config.KeymappingController;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;
-import dev.isxander.yacl3.api.OptionFlag;
 import dev.isxander.yacl3.api.OptionGroup;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder;
@@ -113,21 +112,18 @@ public class ThirdPerson implements Cloneable {
                 .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.x.description")))
                 .binding(4.0F, ()->xOffset, val->xOffset = val)
                 .controller(o-> FloatSliderControllerBuilder.create(o).range(-25F, 50.0F).step(0.5F))
-                .flag(OptionFlag.WORLD_RENDER_UPDATE)
                 .build());
         builder.option(Option.<Float>createBuilder()
                 .name(Component.translatable("cameratweaks.options.thirdperson.y"))
                 .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.y.description")))
                 .binding(0.0F, ()->yOffset, val->yOffset = val)
                 .controller(o->FloatSliderControllerBuilder.create(o).range(-10F, 10F).step(0.25F))
-                .flag(OptionFlag.WORLD_RENDER_UPDATE)
                 .build());
         builder.option(Option.<Float>createBuilder()
                 .name(Component.translatable("cameratweaks.options.thirdperson.z"))
                 .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.z.description")))
                 .binding(0.0F, ()->zOffset, val->zOffset = val)
                 .controller(o->FloatSliderControllerBuilder.create(o).range(-10F, 10F).step(0.25F))
-                .flag(OptionFlag.WORLD_RENDER_UPDATE)
                 .build());
 
         builder.option(Option.<Float>createBuilder()
@@ -135,14 +131,12 @@ public class ThirdPerson implements Cloneable {
                 .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.pitch.description")))
                 .binding(0.0F, ()->pitch, val->pitch = val)
                 .controller(o->FloatSliderControllerBuilder.create(o).range(-90F, 90F).step(1F))
-                .flag(OptionFlag.WORLD_RENDER_UPDATE)
                 .build());
         builder.option(Option.<Float>createBuilder()
                 .name(Component.translatable("cameratweaks.options.thirdperson.yaw"))
                 .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.yaw.description")))
                 .binding(0.0F, ()->yaw, val->yaw = val)
                 .controller(o->FloatSliderControllerBuilder.create(o).range(-180F, 180F).step(1F))
-                .flag(OptionFlag.WORLD_RENDER_UPDATE)
                 .build());
 
         builder.option(Option.<Integer>createBuilder()
@@ -164,14 +158,12 @@ public class ThirdPerson implements Cloneable {
                 .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.invert.description")))
                 .binding(false, ()->invert, val->invert = val)
                 .controller(BooleanControllerBuilder::create)
-                .flag(OptionFlag.WORLD_RENDER_UPDATE)
                 .build());
         builder.option(Option.<Boolean>createBuilder()
                 .name(Component.translatable("cameratweaks.options.thirdperson.collision"))
                 .description(OptionDescription.of(Component.translatable("cameratweaks.options.thirdperson.collision.description")))
                 .binding(true, ()->collision, val->collision = val)
                 .controller(BooleanControllerBuilder::create)
-                .flag(OptionFlag.WORLD_RENDER_UPDATE)
                 .build());
         return builder.build();
     }

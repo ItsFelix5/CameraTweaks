@@ -25,7 +25,7 @@ public class DebugEntryCameraPosition implements DebugScreenEntry {
 
     @Override
     public void display(@NotNull DebugScreenDisplayer debugScreenDisplayer, @Nullable Level level, @Nullable LevelChunk levelChunk, @Nullable LevelChunk levelChunk2) {
-        Camera camera = client.gameRenderer.getMainCamera();
+        Camera camera = client.gameRenderer.mainCamera();
         Entity entity = client.getCameraEntity();
         Direction direction = Direction.fromYRot(camera.yRot());
         String string = switch (direction) {

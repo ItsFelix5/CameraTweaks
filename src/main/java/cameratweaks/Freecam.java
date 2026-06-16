@@ -84,7 +84,7 @@ public class Freecam {
     }
 
     private static void setPosition() {
-        Camera camera = client.gameRenderer.getMainCamera();
+        Camera camera = client.gameRenderer.mainCamera();
         int fov = ThirdPerson.current == null || !ThirdPerson.current.changedFov? client.options.fov().get() : ThirdPerson.current.fov;
         pos = new Util.LerpedPos(client.level.dimension(), camera.position(), camera.xRot(), camera.yaw(), fov);
     }

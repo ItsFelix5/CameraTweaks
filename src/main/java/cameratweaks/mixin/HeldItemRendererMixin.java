@@ -3,10 +3,12 @@ package cameratweaks.mixin;
 import cameratweaks.Freelook;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Constants;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -26,12 +28,12 @@ public class HeldItemRendererMixin {
     @Shadow private ItemStack mainHandItem;
     @Shadow private ItemStack offHandItem;
 
-    @Inject(method = "renderHandsWithItems(FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/player/LocalPlayer;I)V", at = @At("HEAD"))
-    private void rotateHand(float tickProgress, PoseStack matrices, SubmitNodeCollector orderedRenderCommandQueue, LocalPlayer player, int light, CallbackInfo ci) {
+    @Inject(method = "submitArmWithItem", at = @At("HEAD"))
+    private void rotateHand(AbstractClientPlayer player, float frameInterp, float xRot, InteractionHand hand, float attack, ItemStack itemStack, float inverseArmHeight, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, CallbackInfo ci) {
         if (Freelook.state.active()) {
-            matrices.mulPose(new Quaternionf().rotationAxis((Freelook.yaw - player.getViewYRot(tickProgress)) * Constants.DEG_TO_RAD,
+            poseStack.mulPose(new Quaternionf().rotationAxis((Freelook.yaw - player.getViewYRot(frameInterp)) * Constants.DEG_TO_RAD,
                     new Vector3f(0f, 1f, 0f).rotateX(Freelook.pitch * Constants.DEG_TO_RAD)));
-            matrices.mulPose(new Quaternionf().rotationX((Freelook.pitch - player.getViewXRot(tickProgress)) * Constants.DEG_TO_RAD));
+            poseStack.mulPose(new Quaternionf().rotationX((Freelook.pitch - player.getViewXRot(frameInterp)) * Constants.DEG_TO_RAD));
         }
     }
 

@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {
-    @WrapOperation(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;addCloudsPass(Lcom/mojang/blaze3d/framegraph/FrameGraphBuilder;Lnet/minecraft/client/CloudStatus;Lnet/minecraft/world/phys/Vec3;JFIFI)V"))
+    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;addCloudsPass(Lcom/mojang/blaze3d/framegraph/FrameGraphBuilder;Lnet/minecraft/client/CloudStatus;Lnet/minecraft/world/phys/Vec3;JFIFI)V"))
     private void getCloudHeight(LevelRenderer instance, FrameGraphBuilder frame, CloudStatus cloudStatus, Vec3 cameraPosition, long gameTime, float partialTicks, int cloudColor, float cloudHeight, int cloudRange, Operation<Void> original) {
         original.call(instance, frame, cloudStatus, cameraPosition, gameTime, partialTicks, cloudColor, cloudHeight + Config.get().cloudHeight, cloudRange);
     }

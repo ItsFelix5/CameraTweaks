@@ -35,12 +35,12 @@ public class Keybinds {
         new BetterKeybind("fullbright", GLFW.GLFW_KEY_Y).toggle().defaultEnabled(Config.get().fullbright).onPress(
                 () -> {
                     Config.get().fullbright = true;
-                    client.gameRenderer.getGameRenderState().lightmapRenderState.needsUpdate = true;
+                    client.gameRenderer.gameRenderState().lightmapRenderState.needsUpdate = true;
                     Config.HANDLER.save();
                 },
                 () -> {
                     Config.get().fullbright = false;
-                    client.gameRenderer.getGameRenderState().lightmapRenderState.needsUpdate = true;
+                    client.gameRenderer.gameRenderState().lightmapRenderState.needsUpdate = true;
                     Config.HANDLER.save();
                 });
         new BetterKeybind("disableFog", GLFW.GLFW_KEY_UNKNOWN).toggle().defaultEnabled(Config.get().disableFog).onPress(
